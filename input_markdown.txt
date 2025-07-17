@@ -1,0 +1,499 @@
+OVHcloud hiring (Senior) Python Developer M/W/D in Hamburg, Germany | LinkedIn
+LinkedIn and 3rd parties use essential and non-essential cookies to provide, secure, analyze and improve our Services, and to show you relevant ads (including **professional and job ads**) on and off LinkedIn. Learn more in our Cookie Policy.
+Select Accept to consent or Reject to decline non-essential cookies for this use. You can update your choices at any time in your settings.
+Accept
+Reject
+Skip to main content
+LinkedIn
+(Senior) Python Developer M/W/D in Hamburg
+Expand search
+Jobs
+This button displays the currently selected search type. When expanded it provides a list of search options that will switch the search inputs to match the current selection.
+* Jobs
+* People
+* Learning
+Clear text
+Clear text
+Clear text
+Clear text
+Clear text
+Join now
+Sign in
+### (Senior) Python Developer M/W/D
+OVHcloud
+Hamburg, Germany
+Apply
+(Senior) Python Developer M/W/D
+===============================
+#### OVHcloud Hamburg, Germany 1 day ago 60 applicants See who OVHcloud has hired for this role
+Apply
+Save
+* Report this job
+### Use AI to assess how you fit
+Get AI-powered advice on this job and more exclusive features.
+Am I a good fit for this job?
+Tailor my resume
+Welcome
+-------
+Email or phone
+Password
+Show
+Forgot password?
+Continue
+or
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+New to LinkedIn? Join now
+Welcome
+-------
+Email or phone
+Password
+Show
+Forgot password?
+Continue
+or
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+New to LinkedIn? Join now
+Welcome
+-------
+Email or phone
+Password
+Show
+Forgot password?
+Continue
+or
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+New to LinkedIn? Join now
+**Bei uns gilt #OneTeam**
+Du bist Python Developer mit Leidenschaft – aber klassische Ticketabarbeitung ist nicht dein Ding?
+Du möchtest nicht nur Code schreiben, sondern aktiv mitgestalten, wie moderne Software entsteht? Du hast Lust, mit den neuesten Tools zu arbeiten und KI nicht nur als Buzzword zu verstehen, sondern als echten Beschleuniger in der Entwicklung einzusetzen? Dann komm zu uns!
+Wir suchen einen kreativen, technisch neugierigen Kopf mit Spaß am Experimentieren, Mitdenken und Erforschen – und idealerweise ersten Erfahrungen im Umfeld von AI Assisted Development. Bei uns gestaltest du aktiv neue Ansätze, evaluierst modernste Tools, baust Skeletons, testest, reviewst – und arbeitest mit uns daran, das beste aus Cutting Edge Ansätzen herauszuholen in einem Greenfield Projekt ohne Altlasten.
+**Deine wichtigsten Aufgaben**
+* Implementieren von neuen Features inklusive Design der Lösungen für unsere eigene Software
+* Mitgestaltung bei Software-Designentscheidungen und sogar bei den Prozessen der Entwicklung selbst
+* Einsatz und Weiterentwicklung von KI-gestützten Tools zur Unterstützung bei Code-Design, -Review und -Erstellung (z. B. Expertensysteme mit LLMs)
+* Verbesserung unserer Build- und DeploymentnProzesse unter Einsatz moderner DevOps-Praktiken
+* Automatisierung von allem, was sich automatisieren lässt – von CI/CD bis hin zu Entwicklungshilfen
+**Erforderliche Kompetenzen**
+* Du bringst eine Ausbildung oder ein Studium im Bereich Fachinformatik oder in einem ähnlichen Gebiet mit
+* Wichtiger als Deine Ausbildung ist uns Deine Berufserfahrung. Du bringst mindestens 4 Jahre Erfahrung in der Softwareentwicklung mit, insbesondere mit Python
+* Du hast Interesse oder Erfahrung im Einsatz von KI/LLMs
+* Du bist erfahren im Umgang mit Containern in der Softwareentwicklung und begeisterst Dich für Kubernetes
+* Auch im Schreiben von Tests für selbstentwickelten Code bist Du geübt und git verwendest Du in Deiner täglichen Arbeit als Versionierungstool
+* Du hast Erfahrung mit modernen Software Architekturen
+* Du hast Teamspirit, Neugier und den Wunsch, dich kontinuierlich weiterzuentwickeln
+* Du bringst sehr gute Englischkenntnisse mit, Deutsch ist kein Muss
+**Das bietet dir OVHcloud**
+* Außergewöhnlicher Teamspirit über alle Fachbereiche und Landesgrenzen hinweg; Wir leben #OneTeam
+* Spannende Tätigkeit in einem hochinnovativen und internationalen Umfeld mit modernsten Technologien
+* 32 Urlaubstage, die sich im Laufe der Betriebszugehörigkeit erhöhen
+* Flexible Arbeitszeiten, Home Office sowie eine zukunftssichere Festanstellung mit markt- und leistungsorientierter Vergütung
+* Arbeitgeberfinanzierte Altersvorsorge sowie ein attraktives Versicherungspaket
+* 50% Kostenübernahme durch OVHcloud bei der Nutzung öffentlicher Verkehrsmittel
+* Bis zu 400 € jährliche finanzielle Beteiligung von OVHcloud an sportlichen Aktivitäten (Fitnessstudio, Sportkurse etc.)
+* Durch Corporate Benefits erhältst du attraktive Rabatte bei zahlreichen Shops und Firmen
+* Wir beteiligen uns am Leasing deines Lastenrads
+* Regelmäßige Firmenevents und kostenlose Kalt- und Heißgetränke
+Show more
+Show less
+* ### Seniority level
+Mid-Senior level
+* ### Employment type
+Full-time
+* ### Job function
+Information Technology
+* ### Industries
+Information Services
+Referrals increase your chances of interviewing at OVHcloud by 2x
+See who you know
+Get notified when a new job is posted.
+Set alert
+Welcome
+-------
+Email or phone
+Password
+Show
+Forgot password?
+Continue
+or
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+New to LinkedIn? Join now
+Similar jobs
+------------
+* Full-stack Developer Python (m/f/d), AI-Based Cancer Diagnostics
+### Full-stack Developer Python (m/f/d), AI-Based Cancer Diagnostics
+#### Mindpeak GmbH
+Hamburg, Hamburg, Germany
+2 months ago
+* Senior Software Developer (Python)
+### Senior Software Developer (Python)
+#### reeeliance
+Hamburg, Germany
+2 weeks ago
+* Senior Backend Engineer - Django / AWS (f/m/x)
+### Senior Backend Engineer - Django / AWS (f/m/x)
+#### atmio
+Hamburg, Hamburg, Germany
+1 week ago
+* Backend AI Developer (m/w/d)
+### Backend AI Developer (m/w/d)
+#### Hanse Haus GmbH
+Hamburg, Hamburg, Germany
+1 week ago
+* Back End Developer
+### Back End Developer
+#### 3D Spark
+Hamburg, Hamburg, Germany
+1 month ago
+* Backend Developer (m/w/d)
+### Backend Developer (m/w/d)
+#### OWNLY
+Hamburg, Hamburg, Germany
+6 months ago
+* (Senior) Backend Developer Python (m/f/d), AI-Based Cancer Diagnostics
+### (Senior) Backend Developer Python (m/f/d), AI-Based Cancer Diagnostics
+#### Mindpeak GmbH
+Hamburg, Hamburg, Germany
+3 weeks ago
+* Senior Python-Developer / Data Engineer (w/m/d)
+### Senior Python-Developer / Data Engineer (w/m/d)
+#### Netfonds AG
+Hamburg, Hamburg, Germany
+3 months ago
+* Web Developer (all genders)
+### Web Developer (all genders)
+#### Grabarz & Partner
+Hamburg, Hamburg, Germany
+2 days ago
+* Full Stack Engineer (Hybrid)
+### Full Stack Engineer (Hybrid)
+#### Cozero
+Hamburg, Hamburg, Germany
+1 year ago
+* Software Engineer - Python - Ubuntu Pro client - graduate level
+### Software Engineer - Python - Ubuntu Pro client - graduate level
+#### Canonical
+Hamburg, Hamburg, Germany
+1 month ago
+* Backend Developer
+### Backend Developer
+#### Zellerfeld Shoe Company Inc.
+Hamburg, Hamburg, Germany
+4 months ago
+* Python Developer (all genders) – Gestalte mit uns die digitale Zukunft im Gesundheitswesen!
+### Python Developer (all genders) – Gestalte mit uns die digitale Zukunft im Gesundheitswesen!
+#### Universitätsklinikum Hamburg Eppendorf
+Hamburg, Hamburg, Germany
+2 months ago
+* Web Developer Javascript
+(m/w/d)
+### Web Developer Javascript (m/w/d)
+#### DIGIMONDO GmbH
+Hamburg, Hamburg, Germany
+3 months ago
+* Backend AI Developer (m/w/d) für den Standort Hamburg
+### Backend AI Developer (m/w/d) für den Standort Hamburg
+#### Bien-Zenker GmbH
+Hamburg, Hamburg, Germany
+1 week ago
+* Backend Engineer (All genders)
+### Backend Engineer (All genders)
+#### Holisticon AG
+Hamburg, Hamburg, Germany
+1 month ago
+* Software Engineer (Python/Linux/Packaging)
+### Software Engineer (Python/Linux/Packaging)
+#### Canonical
+Hamburg, Hamburg, Germany
+8 months ago
+* Working Student Web Developer
+### Working Student Web Developer
+#### Rabot Energy
+Hamburg, Hamburg, Germany
+1 month ago
+* Full Stack Developer (all genders)
+### Full Stack Developer (all genders)
+#### Zellerfeld Shoe Company Inc.
+Hamburg, Hamburg, Germany
+4 months ago
+* Junior Software Developer - Observability
+### Junior Software Developer - Observability
+#### Canonical
+Hamburg, Hamburg, Germany
+4 months ago
+* Backend Web Developer (w/m/d)
+### Backend Web Developer (w/m/d)
+#### Forschungsgruppe g/d/p
+Hamburg, Hamburg, Germany
+2 weeks ago
+* Senior Full Stack Developer | 40% Yearly Growth!
+### Senior Full Stack Developer | 40% Yearly Growth!
+#### Eurobase People
+Hamburg, Hamburg, Germany
+2 weeks ago
+* Software Engineer - Python - Container Images
+### Software Engineer - Python - Container Images
+#### Canonical
+Hamburg, Hamburg, Germany
+3 weeks ago
+* Software Engineer - Python/Golang - Kubernetes
+### Software Engineer - Python/Golang - Kubernetes
+#### Canonical
+Hamburg, Hamburg, Germany
+1 month ago
+* Python and Kubernetes Software Engineer - Data, AI/ML & Analytics
+### Python and Kubernetes Software Engineer - Data, AI/ML & Analytics
+#### Canonical
+Hamburg, Hamburg, Germany
+5 months ago
+* Software Engineer - Python - Container Images
+### Software Engineer - Python - Container Images
+#### Canonical
+Hamburg, Hamburg, Germany
+2 months ago
+* Software Engineer - Python - Container Images
+### Software Engineer - Python - Container Images
+#### Canonical
+Hamburg, Hamburg, Germany
+1 month ago
+Show more jobs like this
+Show fewer jobs like this
+People also viewed
+------------------
+* Senior Backend Engineer (all genders welcome)
+### Senior Backend Engineer (all genders welcome)
+goodBytz
+Hamburg, Hamburg, Germany
+4 days ago
+* Web Developer
+### Web Developer
+Canonical
+Hamburg, Hamburg, Germany
+2 months ago
+* PHP Backend Developer (w/m/d)
+### PHP Backend Developer (w/m/d)
+Transfermarkt GmbH & Co. KG
+Hamburg, Hamburg, Germany
+1 year ago
+* Senior Python-Entwickler:in
+### Senior Python-Entwickler:in
+Netfonds AG
+Hamburg, Germany
+1 week ago
+* Senior Back-end Engineer (Crypto and Fiat Payments) (iGaming)
+### Senior Back-end Engineer (Crypto and Fiat Payments) (iGaming)
+SweepTech iGaming Solutions
+Hamburg, Hamburg, Germany
+1 week ago
+* Python and Kubernetes Software Engineer - Data, Workflows, AI/ML & Analytics
+### Python and Kubernetes Software Engineer - Data, Workflows, AI/ML & Analytics
+Canonical
+Hamburg, Hamburg, Germany
+1 month ago
+* Senior Backend Developer (m/w/d)
+### Senior Backend Developer (m/w/d)
+Reydix
+Hamburg, Hamburg, Germany
+1 month ago
+* Backend AI Developer (m/w/d) für den Standort Hamburg
+### Backend AI Developer (m/w/d) für den Standort Hamburg
+Oikos Group GmbH
+Hamburg, Hamburg, Germany
+1 week ago
+* Data & Python Engineer (m/f/d) - Supply Data Solutions - onsite in Hamburg
+### Data & Python Engineer (m/f/d) - Supply Data Solutions - onsite in Hamburg
+ABOUT YOU
+Hamburg, Hamburg, Germany
+1 month ago
+* Senior Go Backend Developer (f/m/d)
+### Senior Go Backend Developer (f/m/d)
+justtrack
+Hamburg, Hamburg, Germany
+2 weeks ago
+Similar Searches
+----------------
+* ### Developer jobs
+21,496 open jobs
+* ### PHP Developer jobs
+3,842 open jobs
+* ### Java Software Engineer jobs
+7,284 open jobs
+* ### Android Developer jobs
+3,074 open jobs
+* ### Programming Engineer jobs
+2,620 open jobs
+* ### Analyst jobs
+54,870 open jobs
+* ### System Programmer jobs
+98 open jobs
+* ### Information Engineer jobs
+47 open jobs
+* ### Linux Administrator jobs
+1,565 open jobs
+* ### Game Developer jobs
+15 open jobs
+* ### Software Tester jobs
+1,354 open jobs
+* ### Advanced Business Application Programming Specialist jobs
+11,643 open jobs
+* ### Information Technology Service Engineer jobs
+7,059 open jobs
+* ### Computer Science Engineer jobs
+5,248 open jobs
+* ### Recording Engineer jobs
+46 open jobs
+* ### Purchasing Lead jobs
+121 open jobs
+* ### Chemistry Instructor jobs
+147 open jobs
+* ### Physicist jobs
+534 open jobs
+* ### Computer Science Specialist jobs
+68,181 open jobs
+* ### Development Engineer jobs
+33,377 open jobs
+* ### Scrum Master jobs
+11,771 open jobs
+* ### Business Analyst jobs
+5,224 open jobs
+* ### Physical Education Teacher jobs
+573 open jobs
+* ### Mathematics Teacher jobs
+239 open jobs
+* ### Computational Biologist jobs
+10 open jobs
+Show more
+Show less
+Explore collaborative articles
+------------------------------
+We’re unlocking community knowledge in a new way. Experts add insights directly into each article, started with the help of AI.
+Explore More
+More searches
+More searches
+* + Developer jobs
++ PHP Developer jobs
++ Java Software Engineer jobs
++ Android Developer jobs
++ Programming Engineer jobs
++ Analyst jobs
++ System Programmer jobs
++ Information Engineer jobs
++ Linux Administrator jobs
++ Game Developer jobs
++ NRW.BANK jobs
++ Cognizant jobs
++ Software Tester jobs
++ Advanced Business Application Programming Specialist jobs
++ Information Technology Service Engineer jobs
++ COMPO jobs
++ Computer Science Engineer jobs
++ IBM jobs
++ Recording Engineer jobs
++ Klar jobs
++ TeleClinic jobs
++ Purchasing Lead jobs
++ Chemistry Instructor jobs
++ TIMOCOM jobs
++ Physicist jobs
++ Computer Science Specialist jobs
++ Amazon jobs
++ HUK-COBURG jobs
++ Google jobs
++ IAV jobs
++ CGI jobs
++ Development Engineer jobs
++ Scrum Master jobs
++ Business Analyst jobs
++ Salesforce jobs
++ Physical Education Teacher jobs
++ bonprix jobs
++ Mathematics Teacher jobs
++ Cisco jobs
++ Swift jobs
++ Delivery Hero jobs
++ ECE jobs
++ P3 jobs
++ Atos jobs
++ Computational Biologist jobs
++ LinkedIn jobs
++ Recruiter jobs
++ Video Editor jobs
++ Architect jobs
++ Laboratory Engineer jobs
++ Mathematician jobs
++ Picture Editor jobs
++ Judge jobs
++ Medizinische Hochschule Hannover jobs
++ Bosch jobs
++ Information Technology Consultant jobs
++ Business Intelligence Specialist jobs
++ EagleBurgmann jobs
++ TARGOBANK jobs
++ Professor jobs
+* LinkedIn
+© 2025
+* About
+* Accessibility
+* User Agreement
+* Privacy Policy
+* Cookie Policy
+* Copyright Policy
+* Brand Policy
+* Guest Controls
+* Community Guidelines
+* + العربية (Arabic)
++ বাংলা (Bangla)
++ Čeština (Czech)
++ Dansk (Danish)
++ Deutsch (German)
++ Ελληνικά (Greek)
++ **English (English)**
++ Español (Spanish)
++ فارسی (Persian)
++ Suomi (Finnish)
++ Français (French)
++ हिंदी (Hindi)
++ Magyar (Hungarian)
++ Bahasa Indonesia (Indonesian)
++ Italiano (Italian)
++ עברית (Hebrew)
++ 日本語 (Japanese)
++ 한국어 (Korean)
++ मराठी (Marathi)
++ Bahasa Malaysia (Malay)
++ Nederlands (Dutch)
++ Norsk (Norwegian)
++ ਪੰਜਾਬੀ (Punjabi)
++ Polski (Polish)
++ Português (Portuguese)
++ Română (Romanian)
++ Русский (Russian)
++ Svenska (Swedish)
++ తెలుగు (Telugu)
++ ภาษาไทย (Thai)
++ Tagalog (Tagalog)
++ Türkçe (Turkish)
++ Українська (Ukrainian)
++ Tiếng Việt (Vietnamese)
++ 简体中文 (Chinese (Simplified))
++ 正體中文 (Chinese (Traditional))
+Language
+LinkedIn
+Know when new jobs open up
+Never miss a job alert with the new LinkedIn app for Windows.
+Get the app
+Agree & Join LinkedIn
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+LinkedIn
+LinkedIn is better on the app
+Don’t have the app? Get it in the Microsoft Store.
+Open the app
+Welcome
+-------
+Email or phone
+Password
+Show
+Forgot password?
+Continue
+or
+By clicking Continue to join or sign in, you agree to LinkedIn’s User Agreement, Privacy Policy, and Cookie Policy.
+New to LinkedIn? Join now

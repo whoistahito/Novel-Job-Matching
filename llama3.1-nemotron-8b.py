@@ -51,7 +51,7 @@ OUTPUT FORMAT (JSON only, no other text):
 {{
   "skills": ["Python programming", "AWS cloud services", "Docker containerization"],
   "experience": ["3+ years software development", "2+ years with microservices"],
-  "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification", "Bachelor's degree in Computer Science"],
+  "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
 }}
 
 IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""

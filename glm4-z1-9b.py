@@ -8,7 +8,7 @@ import argparse
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 # Define constants
-MODEL_ID = "THUDM/GLM-4-9B-0414"
+MODEL_ID = "THUDM/GLM-Z1-9B-0414"
 DEFAULT_INPUT_FILE = "input_markdown_linkedin.txt"  # Default input file if not specified in arguments
 
 

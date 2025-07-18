@@ -9,7 +9,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 # Define constants
 MODEL_ID = "Qwen/Qwen3-8B"
-DEFAULT_INPUT_FILE = "input_markdown.txt"  # Default input file if not specified in arguments
+DEFAULT_INPUT_FILE = "input_markdown_linkedin.txt"  # Default input file if not specified in arguments
 
 
 def print_gpu_info(label="Current GPU Status"):

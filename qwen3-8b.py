@@ -34,18 +34,26 @@ def print_gpu_info(label="Current GPU Status"):
 
 def process_chunk(model, tokenizer, chunk):
     """Process a single chunk of Markdown with the LLM."""
-    prompt = f"""Extract job requirements from this Markdown text and return them in JSON format.
-                Focus only on skills, qualifications, experience, and education requirements.
-                If this Markdown text doesn't contain job requirements, return an empty JSON array.
+    prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
-                Markdown text:
-                {chunk}
-                Return ONLY a valid JSON array of requirements with no additional text, it should look like this:
-               {{requirements: [
-                "qualifications": ["Description of qualification 1"],
-                "experineces": ["Description of experinece 1"],
-                "skills":["Description of skill 1"],
-                ]}}"""
+    RULES:
+    - Extract concrete requirements only (skills, experience years, certifications, education)
+    - Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
+    - Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
+    - Include specific technologies, tools, and methodologies mentioned
+    - Only extract what is explicitly required, not preferred
+
+    TEXT TO ANALYZE:
+    {chunk}
+
+    OUTPUT FORMAT (JSON only, no other text):
+    {{
+      "skills": ["Python programming", "AWS cloud services", "Docker","Git", "Kubernetes"],
+      "experience": ["3+ years software development", "2+ years with microservices"],
+      "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
+    }}
+
+    IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
 
     # Format input for Qwen3 model
     messages = [

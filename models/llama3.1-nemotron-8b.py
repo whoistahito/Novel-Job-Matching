@@ -1,15 +1,17 @@
-import os
-import torch
+import argparse
+from datetime import datetime
 import gc
 import json
+import os
 import re
-from datetime import datetime
-import argparse
+
+import torch
+import transformers
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 # Define constants
-MODEL_ID = "THUDM/GLM-Z1-9B-0414"
-DEFAULT_INPUT_FILE = "input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
+DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
 
 
 def print_gpu_info(label="Current GPU Status"):
@@ -32,117 +34,93 @@ def print_gpu_info(label="Current GPU Status"):
     print("=" * (len(label) + 14))
 
 
-def process_chunk(model, tokenizer, chunk):
+def process_chunk(pipeline, chunk, enable_thinking=True):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
-    RULES:
-    - Extract concrete requirements only (skills, experience years, certifications, education)
-    - Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
-    - Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
-    - Include specific technologies, tools, and methodologies mentioned
-    - Only extract what is explicitly required, not preferred
+RULES:
+- Extract concrete requirements only (skills, experience years, certifications, education)
+- Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
+- Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
+- Include specific technologies, tools, and methodologies mentioned
+- Only extract what is explicitly required, not preferred
 
-    TEXT TO ANALYZE:
-    {chunk}
+TEXT TO ANALYZE:
+{chunk}
 
-    OUTPUT FORMAT (JSON only, no other text):
-    {{
-      "skills": ["Python programming", "AWS cloud services", "Docker","Git", "Kubernetes"],
-      "experience": ["3+ years software development", "2+ years with microservices"],
-      "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
-    }}
+OUTPUT FORMAT (JSON only, no other text):
+{{
+  "skills": ["Python programming", "AWS cloud services", "Docker containerization"],
+  "experience": ["3+ years software development", "2+ years with microservices"],
+  "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
+}}
 
-    IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
+IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
 
-    # Format input for GLM-4 model
     messages = [
-        {"role": "system",
-         "content": "You are a specialized job data parser that extracts requirements from Markdown."},
+        {"role": "system", "content": "You are a precise job requirements extraction tool. Output only valid JSON with the exact format requested."},
         {"role": "user", "content": prompt}
     ]
 
-    # Handle GLM-4 tokenizer format specifically
     try:
-        # Format the messages directly for GLM-4
-        chat_text = ""
-        for msg in messages:
-            role = msg["role"]
-            content = msg["content"]
-            if role == "system":
-                chat_text += f"{content}\n\n"
-            elif role == "user":
-                chat_text += f"<|user|>\n{content}<|endoftext|>\n"
-            elif role == "assistant":
-                chat_text += f"<|assistant|>\n{content}<|endoftext|>\n"
-
-        # Add final assistant prompt
-        chat_text += "<|assistant|>\n<think>\n"
-
-        # Tokenize the text
-        inputs = tokenizer(chat_text, return_tensors="pt")
-
-        # Move to the correct device
-        device = next(model.parameters()).device
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
         # Generate response
-        with torch.inference_mode():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=1000,
-                temperature=0.1,
-                do_sample=False
-            )
+        outputs = pipeline(messages, max_new_tokens=2048, do_sample=True, temperature=0.3, top_p=0.9)
+        response = outputs[0]['generated_text']
 
-        # Decode the response
-        full_output = tokenizer.decode(output[0], skip_special_tokens=True)
+        # Extract assistant response
+        if isinstance(response, list):
+            assistant_response = next((msg['content'] for msg in response if msg['role'] == 'assistant'), None)
+            if assistant_response:
+                response = assistant_response
+            else:
+                response = str(response)
 
-        # Extract the model's response
-        response = full_output.split("<|assistant|>\n")[-1].strip()
+        print(f"Raw response: {response[:200]}...")  # Truncated debug print
+
+        # Simple JSON extraction
+        response = response.strip()
+
+        # Remove any markdown formatting
+        if "```json" in response:
+            start = response.find("```json") + 7
+            end = response.find("```", start)
+            if end != -1:
+                response = response[start:end].strip()
+        elif "```" in response:
+            start = response.find("```") + 3
+            end = response.find("```", start)
+            if end != -1:
+                response = response[start:end].strip()
+
+        # Find JSON object
+        json_start = response.find('{')
+        json_end = response.rfind('}') + 1
+
+        if json_start == -1 or json_end == 0:
+            print("No JSON found in response")
+            return []
+
+        json_str = response[json_start:json_end]
+
+        try:
+            data = json.loads(json_str)
+            print(f"Parsed JSON: {json.dumps(data, indent=2)}")
+
+            # Extract all requirements into a flat list
+            all_reqs = []
+            for category in ['skills', 'experience', 'qualifications', 'education']:
+                if category in data and isinstance(data[category], list):
+                    all_reqs.extend(data[category])
+
+            return all_reqs
+
+        except json.JSONDecodeError as e:
+            print(f"JSON parsing failed: {e}")
+            print(f"Attempted to parse: {json_str}")
+            return []
 
     except Exception as e:
         print(f"Error during generation: {e}")
-        # Fallback to simpler approach
-        inputs = tokenizer(prompt, return_tensors="pt").to(next(model.parameters()).device)
-        with torch.inference_mode():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=1000,
-                temperature=0.1
-            )
-        response = tokenizer.decode(output[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
-
-    if "```json" in response:
-        # Extract content between ```json and ``` markers
-        start_marker = "```json"
-        end_marker = "```"
-        start_index = response.find(start_marker) + len(start_marker)
-        end_index = response.find(end_marker, start_index)
-
-        if end_index != -1:
-            json_str = response[start_index:end_index].strip()
-        else:
-            # Handle case where closing marker might be missing
-            json_str = response[start_index:].strip()
-    else:
-        # Fallback to the original logic
-        if response.startswith("json"):
-            json_str = response.strip().removeprefix("json").removesuffix("").strip()
-        else:
-            raise ValueError("Input string does not contain valid JSON markup (no ```json or json prefix found)")
-
-    try:
-        data = json.loads(json_str)
-        print(json.dumps(data, indent=2, ensure_ascii=False))
-        if isinstance(data, dict) and "requirements" in data:
-            return data["requirements"]
-        else:
-            print("Unexpected JSON format, returning empty list.")
-            return []
-    except json.JSONDecodeError as e:
-        print(f"Error parsing JSON: {e}")
-        print(f"Response was: {response}")
         return []
 
 
@@ -206,11 +184,15 @@ def main():
     print(f"Current Date and Time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Parse arguments
-    parser = argparse.ArgumentParser(description='Extract job requirements from Markdown using GLM-4')
+    parser = argparse.ArgumentParser(description='Extract job requirements from Markdown using Llama-3.1-Nemotron-Nano-8B-v1')
     parser.add_argument('--chunk_size', type=int, default=12000, help='Maximum token size per chunk')
     parser.add_argument('--output', type=str, default='job_requirements.json', help='Output JSON file')
     parser.add_argument('--input', type=str, default=DEFAULT_INPUT_FILE,
                         help=f'Input Markdown file (default: {DEFAULT_INPUT_FILE})')
+    parser.add_argument('--enable_thinking', action='store_true', default=True,
+                        help='Enable thinking mode for better reasoning (default: True)')
+    parser.add_argument('--context_length', type=int, default=32768,
+                        help='Maximum context length (default: 32768, max: 131072)')
     args = parser.parse_args()
 
     # Get input Markdown from file
@@ -230,24 +212,32 @@ def main():
     # Set environment variables
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Configure quantization
-    quantization_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True
-    )
-
     # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_ID,
-        device_map="balanced",
-        max_memory={0: "9GB", 1: "9GB"},
-        trust_remote_code=True,
-        quantization_config=quantization_config,
-        torch_dtype=torch.float16
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+    tokenizer.pad_token_id = tokenizer.eos_token_id
+
+    model_kwargs = {
+        "torch_dtype": torch.bfloat16,
+        "device_map": "auto"
+    }
+
+    pipeline_kwargs = {}
+    if args.enable_thinking:
+        pipeline_kwargs.update({
+            "temperature": 0.6,
+            "top_p": 0.95,
+        })
+    else:
+        pipeline_kwargs["do_sample"] = False
+
+    pipeline = transformers.pipeline(
+       "text-generation",
+       model=MODEL_ID,
+       tokenizer=tokenizer,
+       max_new_tokens=args.context_length,
+       **pipeline_kwargs,
+       **model_kwargs
     )
 
     # Check GPU status after model loading
@@ -257,7 +247,7 @@ def main():
     all_requirements = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(model, tokenizer, chunk)
+        chunk_requirements = process_chunk(pipeline, chunk, args.enable_thinking)
         if chunk_requirements:
             all_requirements.extend(chunk_requirements)
 
@@ -294,7 +284,7 @@ def main():
     print(f"Results saved to {args.output}")
 
     # Clean up
-    del model, tokenizer
+    del pipeline, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
     print_gpu_info("GPU Status After Cleanup")

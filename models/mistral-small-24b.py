@@ -1,16 +1,17 @@
-import os
-import torch
+import argparse
+from datetime import datetime
 import gc
 import json
+import os
 import re
-from datetime import datetime
-import argparse
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
 from huggingface_hub import login
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 # Define constants
 MODEL_ID = "mistralai/Mistral-Nemo-Instruct-2407"  # Updated to use Mistral-Small-24B
-DEFAULT_INPUT_FILE = "input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
 
 # Add pad token configuration to avoid warnings
 PAD_TOKEN = "<pad>"  # Define a pad token for Mistral model

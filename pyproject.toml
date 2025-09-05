@@ -10,6 +10,9 @@ dependencies = [
     "uvicorn[standard]>=0.30.6",
     "pytest>=8.2.0",
     "httpx>=0.27.0",
+    "transformers>=4.56.1",
+    "torch>=2.8.0",
+    "accelerate>=0.33.0",
 ]
 
 [tool.pytest.ini_options]

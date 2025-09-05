@@ -51,10 +51,34 @@ def test_inference_unknown_model():
         assert data["error"]["code"] == "model_not_found"
 
 
+def test_inference_glm4_9b_parses_mock_text_success():
+    """GLM4 adapter should parse JSON from mock_text without loading HF models."""
+    with TestClient(app) as c:
+        mock = (
+            "Here is the result:\n"
+            "```json\n{\n"
+            "  \"skills\": [\"Python\", \"AWS\"],\n"
+            "  \"experience\": [\"3+ years Python\"],\n"
+            "  \"qualifications\": [\"Bachelor's in CS\"]\n"
+            "}\n```"
+        )
+        body = {
+            "model": "glm4-9b",
+            "input": {"markdown": "# Title\nSome content", "chunk_size": 128},
+            "params": {"mock_text": mock},
+            "stream": False,
+        }
+        resp = c.post("/inference", json=body)
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        assert data["model"] == "glm4-9b"
+        reqs = data["output"]["requirements"]
+        assert any("Python" in r if isinstance(r, str) else True for r in reqs)
+
+
 def test_inference_not_implemented_stubs_return_501():
     with TestClient(app) as c:
         for model_id in [
-            "glm4-9b",
             "glm4-z1-9b",
             "llama3.1-nemotron-8b",
             "mistral-small-24b",

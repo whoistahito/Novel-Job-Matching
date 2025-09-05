@@ -1,1 +1,9 @@
+# IDE
 .idea/
+
+# Python
+.venv/
+__pycache__/
+
+# Local secrets
+huggingface-token

@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import Dict, List
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -35,7 +36,7 @@ app = FastAPI(title="Unified Inference API", version="0.1.0", lifespan=lifespan)
 
 
 @app.get("/models")
-async def list_models() -> dict[str, list[str]]:
+async def list_models() -> Dict[str, List[str]]:
     return {"models": registry.list()}
 
 

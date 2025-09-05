@@ -1,27 +1,23 @@
 from __future__ import annotations
 
-from typing import Any, Optional
-
-from pydantic import BaseModel, Field
-
-from app.core.contracts import ModelAdapter
+from app.adapters.base_hf_causal import BaseHFCausalAdapter
 
 
-class QwenInput(BaseModel):
-    markdown: str
-    chunk_size: int = 12000
+class QwenAdapter(BaseHFCausalAdapter):
+    """Adapter for the Qwen3-8B model."""
 
+    # Hugging Face repo id
+    model_id = "Qwen/Qwen3-8B"
 
-class QwenOutput(BaseModel):
-    requirements: list[Any] = Field(default_factory=list)
-
-
-class QwenAdapter(ModelAdapter):
-    input_model = QwenInput
-    output_model = QwenOutput
+    # Sampling defaults per plan
+    max_new_tokens: int = 1000
+    temperature: float = 0.6
+    do_sample: bool = True
+    top_p: float | None = 0.95
 
     def name(self) -> str:
         return "qwen3-8b"
 
-    async def predict(self, data: QwenInput, params: Optional[dict[str, Any]] = None) -> QwenOutput:
-        raise NotImplementedError("Qwen3-8B adapter not wired to model yet")
+    def postprocess_text(self, raw: str) -> str:
+        # Strip model-specific scaffolding before JSON extraction
+        return raw.replace("</think>", "").strip()

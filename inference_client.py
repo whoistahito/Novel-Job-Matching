@@ -14,7 +14,7 @@ import sys
 import time
 from typing import Iterable, List, Dict, Any
 
-import httpx
+import requests
 
 # Defaults
 DEFAULT_URL = "http://127.0.0.1:8000/inference"
@@ -58,6 +58,12 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
     p.add_argument("--chunk-size", type=int, default=DEFAULT_CHUNK_SIZE)
     p.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT)
     p.add_argument("--limit", type=int, default=0, help="Limit number of files processed (0 = no limit)")
+    p.add_argument(
+        "--params",
+        type=str,
+        default=None,
+        help="Optional JSON string for the 'params' field (e.g., '{\"temperature\":0.2}' or '{\"mock_text\":\"...\"}')",
+    )
     return p.parse_args(argv)
 
 
@@ -80,16 +86,36 @@ def build_input_payload(model: str, markdown: str, chunk_size: int) -> dict:
     return {"markdown": markdown, "chunk_size": chunk_size}
 
 
-def call_inference(url: str, model: str, markdown: str, chunk_size: int, timeout: float) -> tuple[
-    str, dict | None, str | None]:
-    payload = {
+def parse_params(params_str: str | None) -> dict | None:
+    if not params_str:
+        return None
+    try:
+        return json.loads(params_str)
+    except Exception as e:
+        print(f"Warning: could not parse --params JSON ({e}); ignoring.", file=sys.stderr)
+        return None
+
+
+def call_inference(
+        url: str,
+        model: str,
+        markdown: str,
+        chunk_size: int,
+        timeout: float,
+        params: dict | None,
+) -> tuple[str, dict | None, str | None]:
+    payload: Dict[str, Any] = {
         "model": model,
         "input": build_input_payload(model, markdown, chunk_size),
         "stream": False,
     }
+    if params is not None:
+        payload["params"] = params
+
+    headers = {"Content-Type": "application/json"}
     try:
-        resp = httpx.post(url, json=payload, timeout=timeout)
-    except Exception as e:
+        resp = requests.post(url, headers=headers, data=json.dumps(payload), timeout=timeout)
+    except requests.RequestException as e:
         return ("request_error", None, str(e))
 
     if resp.status_code == 200:
@@ -129,6 +155,7 @@ def extract_requirements(response_data: dict | None) -> list:
 
 def main(argv: List[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
+    params = parse_params(args.params)
 
     files = list(iter_markdown_files(args.input))
     if args.limit > 0:
@@ -157,13 +184,13 @@ def main(argv: List[str] | None = None) -> int:
             for model in args.models:
                 t0 = time.perf_counter()
                 status, data, req_err = call_inference(
-                    args.url, model, markdown, args.chunk_size, args.timeout
+                    args.url, model, markdown, args.chunk_size, args.timeout, params
                 )
                 elapsed_ms = (time.perf_counter() - t0) * 1000.0
 
                 requirements = extract_requirements(data) if status == "ok" else []
 
-                record = {
+                record: Dict[str, Any] = {
                     "model": model,
                     "filename": md_path.name,
                     "input_text": markdown,

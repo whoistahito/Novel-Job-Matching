@@ -17,6 +17,51 @@ class GLM4Z1Adapter(BaseHFCausalAdapter):
     def name(self) -> str:
         return "glm4-z1-9b"
 
+    def _generate_from_messages(self, messages: list[dict[str, str]]) -> str:
+        """Custom message formatting for GLM-4-Z1 model with thinking mode."""
+        import torch
+
+        tok = self._tokenizer
+        mdl = self._model
+
+        # Format messages directly for GLM-4 as done in the model script
+        chat_text = ""
+        for msg in messages:
+            role = msg["role"]
+            content = msg["content"]
+            if role == "system":
+                chat_text += f"{content}\n\n"
+            elif role == "user":
+                chat_text += f"<|user|>\n{content}<|endoftext|>\n"
+            elif role == "assistant":
+                chat_text += f"<|assistant|>\n{content}<|endoftext|>\n"
+
+        # Add final assistant prompt with thinking mode
+        chat_text += "<|assistant|>\n<think>\n"
+
+        # Tokenize the text
+        inputs = tok(chat_text, return_tensors="pt")
+
+        # Move to the correct device
+        device = next(mdl.parameters()).device
+        inputs = {k: v.to(device) for k, v in inputs.items()}
+
+        # Generate response with GLM-4-Z1 specific parameters
+        with torch.inference_mode():
+            output = mdl.generate(
+                **inputs,
+                max_new_tokens=self.max_new_tokens,
+                temperature=self.temperature,
+                do_sample=self.do_sample
+            )
+
+        # Decode the response
+        full_output = tok.decode(output[0], skip_special_tokens=True)
+
+        # Extract the model's response (everything after the last <|assistant|>)
+        response = full_output.split("<|assistant|>\n")[-1].strip()
+        return response
+
     def postprocess_text(self, raw: str) -> str:
         # Strip optional <think>... markers and content, keep what's after
         # Remove any <think>...</think> blocks

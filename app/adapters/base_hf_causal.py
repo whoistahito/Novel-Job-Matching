@@ -97,7 +97,7 @@ class BaseHFCausalAdapter(ModelAdapter):
                     self.model_id,
                     device_map="auto",
                     trust_remote_code=self.trust_remote_code,
-                    quantization_config=quant_cfg,
+                    # quantization_config=quant_cfg,
                     torch_dtype=torch.float16,
                     token=token,
                 )
@@ -132,13 +132,6 @@ class BaseHFCausalAdapter(ModelAdapter):
                 quals = parsed.get("qualifications")
                 if isinstance(quals, list):
                     all_quals.extend(quals)
-                # Aliases
-                education = parsed.get("education")
-                if isinstance(education, list):
-                    all_quals.extend(education)
-                singular_qual = parsed.get("qualification")
-                if isinstance(singular_qual, list):
-                    all_quals.extend(singular_qual)
             elif isinstance(parsed, list):
                 # Fallback: if model emitted a bare list, try to guess as skills
                 all_skills.extend(parsed)

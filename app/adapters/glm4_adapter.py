@@ -29,7 +29,54 @@ class GLM4Adapter(BaseHFCausalAdapter):
         # Public API model id used in /models and requests
         return "glm4-9b"
 
-    async def predict(self, data: RequirementsInput, params: Optional[dict[str, Any]] = None) -> RequirementsOutput:
+    def _generate_from_messages(self, messages: list[dict[str, str]]) -> str:
+        """Custom message formatting for GLM-4 model."""
+        import torch
+
+        tok = self._tokenizer
+        mdl = self._model
+
+        # Format messages directly for GLM-4 as done in the model script
+        chat_text = ""
+        for msg in messages:
+            role = msg["role"]
+            content = msg["content"]
+            if role == "system":
+                chat_text += f"{content}\n\n"
+            elif role == "user":
+                chat_text += f"<|user|>\n{content}<|endoftext|>\n"
+            elif role == "assistant":
+                chat_text += f"<|assistant|>\n{content}<|endoftext|>\n"
+
+        # Add final assistant prompt
+        chat_text += "<|assistant|>\n"
+
+        # Tokenize the text
+        inputs = tok(chat_text, return_tensors="pt")
+
+        # Move to the correct device
+        device = next(mdl.parameters()).device
+        inputs = {k: v.to(device) for k, v in inputs.items()}
+
+        # Generate response with GLM-4 specific parameters
+        with torch.inference_mode():
+            output = mdl.generate(
+                **inputs,
+                max_new_tokens=self.max_new_tokens,
+                temperature=self.temperature,
+                do_sample=self.do_sample,
+            )
+
+        # Decode the response
+        full_output = tok.decode(output[0], skip_special_tokens=True)
+
+        # Extract the model's response
+        response = full_output.split("<|assistant|>\n")[-1].strip()
+        return response
+
+    async def predict(
+            self, data: RequirementsInput, params: Optional[dict[str, Any]] = None
+    ) -> RequirementsOutput:
         # Fast path for tests and offline parsing: allow providing a mock raw text
         if params and isinstance(params, dict) and params.get("mock_text"):
             text = str(params["mock_text"])  # raw model-like output

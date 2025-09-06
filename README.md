@@ -13,7 +13,7 @@ A single FastAPI endpoint that abstracts multiple LLM backends behind a clean ad
 
 Prereqs: Python 3.13, uv.
 
-```powershell
+```bash
 # Install deps
 uv sync
 
@@ -26,7 +26,7 @@ uv run uvicorn app.api:app --reload
 
 Try it:
 
-```powershell
+```bash
 # List models
 curl http://127.0.0.1:8000/models
 
@@ -54,19 +54,10 @@ Prereqs:
 
 Build and run:
 
-```powershell
+```bash
 # Build image
 docker build -t novel-job-matching:latest .
-
-# Run with GPU, pass HF token, and persist HF cache (to avoid re-downloading models)
-docker run --rm -p 8000:8000 --gpus all `
-  -e HF_TOKEN=YOUR_HF_TOKEN `
-  -v %USERPROFILE%\.cache\huggingface:/root/.cache/huggingface `
-  novel-job-matching:latest
 ```
-
-Linux/macOS volume example:
-
 ```bash
 docker run --rm -p 8000:8000 --gpus all \
   -e HF_TOKEN=$HF_TOKEN \
@@ -74,6 +65,15 @@ docker run --rm -p 8000:8000 --gpus all \
   novel-job-matching:latest
 ```
 
+On Windows (PowerShell):
+
+```powershell
+# Run with GPU, pass HF token, and persist HF cache (to avoid re-downloading models)
+docker run --rm -p 8000:8000 --gpus all `
+  -e HF_TOKEN=YOUR_HF_TOKEN `
+  -v %USERPROFILE%\.cache\huggingface:/root/.cache/huggingface `
+  novel-job-matching:latest
+```
 Verify:
 
 ```bash
@@ -154,7 +154,6 @@ The HF-backed adapters (GLM4-9B, GLM4-Z1-9B, Llama3.1-Nemotron-8B, Mistral-Small
 generation using Hugging Face Transformers when available.
 
 - Dependencies (local):
-    - Install transformers and a CUDA-enabled torch per https://pytorch.org/get-started/locally/
     - Quantization (optional): if `bitsandbytes` is installed and a CUDA GPU is available, 4-bit quantization is enabled
       automatically.
 

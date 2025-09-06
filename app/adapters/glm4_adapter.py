@@ -33,19 +33,43 @@ class GLM4Adapter(BaseHFCausalAdapter):
         if params and isinstance(params, dict) and params.get("mock_text"):
             text = str(params["mock_text"])  # raw model-like output
             parsed, _raw = extract_json_payload(text)
-            all_reqs: list[Any] = []
+
+            skills: list[Any] = []
+            experience: list[Any] = []
+            qualifications: list[Any] = []
+            aggregated: list[Any] = []
+
             if isinstance(parsed, dict):
-                if "requirements" in parsed and isinstance(parsed["requirements"], list):
-                    all_reqs.extend(parsed["requirements"])
-                else:
-                    # Flatten common categories
-                    for key in ("skills", "experience", "qualifications", "education"):
-                        vals = parsed.get(key)
-                        if isinstance(vals, list):
-                            all_reqs.extend(vals)
+                s = parsed.get("skills")
+                if isinstance(s, list):
+                    skills.extend(s)
+                e = parsed.get("experience")
+                if isinstance(e, list):
+                    experience.extend(e)
+                q = parsed.get("qualifications")
+                if isinstance(q, list):
+                    qualifications.extend(q)
+                edu = parsed.get("education")
+                if isinstance(edu, list):
+                    qualifications.extend(edu)
+                r = parsed.get("requirements")
+                if isinstance(r, list):
+                    aggregated.extend(r)
             elif isinstance(parsed, list):
-                all_reqs.extend(parsed)
-            return RequirementsOutput(requirements=dedupe_stable(all_reqs))
+                aggregated.extend(parsed)
+
+            # Dedupe and aggregate for back-compat
+            skills = dedupe_stable(skills)
+            experience = dedupe_stable(experience)
+            qualifications = dedupe_stable(qualifications)
+            aggregated = dedupe_stable([*skills, *experience, *qualifications, *aggregated])
+
+            return RequirementsOutput(
+                skills=skills,
+                experience=experience,
+                qualifications=qualifications,
+                requirements=aggregated,
+            )
 
         # Otherwise, run the standard HF pipeline
         return await super().predict(data, params)

@@ -19,5 +19,4 @@ class QwenAdapter(BaseHFCausalAdapter):
         return "qwen3-8b"
 
     def postprocess_text(self, raw: str) -> str:
-        # Strip model-specific scaffolding before JSON extraction
         return raw.replace("</think>", "").strip()

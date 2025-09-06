@@ -36,7 +36,6 @@ class ModelAdapter(ABC):
     def name(self) -> str:  # unique model id
         raise NotImplementedError
 
-    # Concrete adapters must set these class attributes
     input_model: Type[BaseModel]
     output_model: Type[BaseModel]
 

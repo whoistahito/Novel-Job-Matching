@@ -16,6 +16,11 @@ class RequirementsInput(BaseModel):
 
 
 class RequirementsOutput(BaseModel):
+    # Structured fields requested: always include these keys
+    skills: list[Any] = Field(default_factory=list)
+    experience: list[Any] = Field(default_factory=list)
+    qualifications: list[Any] = Field(default_factory=list)
+    # Backward-compatible aggregated list of all requirements
     requirements: list[Any] = Field(default_factory=list)
 
 
@@ -106,7 +111,11 @@ class BaseHFCausalAdapter(ModelAdapter):
             self.setup_tokenizer_model()
 
         chunks = chunk_markdown(data.markdown, data.chunk_size)
-        all_reqs: list[Any] = []
+        # Collect per-category results across chunks
+        all_skills: list[Any] = []
+        all_exp: list[Any] = []
+        all_quals: list[Any] = []
+        agg_reqs: list[Any] = []  # catch-all / backward compatible
 
         for chunk in chunks:
             messages = self.build_messages(chunk)
@@ -114,19 +123,45 @@ class BaseHFCausalAdapter(ModelAdapter):
             text = self.postprocess_text(text)
             parsed, _raw = extract_json_payload(text)
             if isinstance(parsed, dict):
-                if "requirements" in parsed and isinstance(parsed["requirements"], list):
-                    all_reqs.extend(parsed["requirements"])
-                else:
-                    # Flatten common categories
-                    for key in ("skills", "experience", "qualifications", "education"):
-                        vals = parsed.get(key)
-                        if isinstance(vals, list):
-                            all_reqs.extend(vals)
+                # Primary structured fields
+                skills = parsed.get("skills")
+                if isinstance(skills, list):
+                    all_skills.extend(skills)
+                exp = parsed.get("experience")
+                if isinstance(exp, list):
+                    all_exp.extend(exp)
+                quals = parsed.get("qualifications")
+                if isinstance(quals, list):
+                    all_quals.extend(quals)
+                # Common alias
+                education = parsed.get("education")
+                if isinstance(education, list):
+                    all_quals.extend(education)
+                # Accept singular alias as well
+                singular_qual = parsed.get("qualification")
+                if isinstance(singular_qual, list):
+                    all_quals.extend(singular_qual)
+                # Back-compat if model emitted a single list
+                reqs = parsed.get("requirements")
+                if isinstance(reqs, list):
+                    agg_reqs.extend(reqs)
             elif isinstance(parsed, list):
-                all_reqs.extend(parsed)
-            # else: skip chunk if unparsable
+                # Fallback: untyped list -> treat as aggregated requirements
+                agg_reqs.extend(parsed)
 
-        return RequirementsOutput(requirements=dedupe_stable(all_reqs))
+        # Dedupe while preserving order
+        all_skills = dedupe_stable(all_skills)
+        all_exp = dedupe_stable(all_exp)
+        all_quals = dedupe_stable(all_quals)
+        # Aggregate for backward compatibility and convenience
+        agg_reqs = dedupe_stable([*all_skills, *all_exp, *all_quals, *agg_reqs])
+
+        return RequirementsOutput(
+            skills=all_skills,
+            experience=all_exp,
+            qualifications=all_quals,
+            requirements=agg_reqs,
+        )
 
     # ---------------------- Helpers ----------------------
     def build_messages(self, chunk: str) -> list[dict[str, str]]:

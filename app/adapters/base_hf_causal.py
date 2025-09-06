@@ -89,11 +89,10 @@ class BaseHFCausalAdapter(ModelAdapter):
                 )
                 self._model = AutoModelForCausalLM.from_pretrained(
                     self.model_id,
-                    device_map="cuda",
+                    device_map="auto",
                     trust_remote_code=self.trust_remote_code,
                     quantization_config=quant_cfg,
                     torch_dtype=torch.float16,
-                    low_cpu_mem_usage=True,
                     token=token,
                 )
             except Exception as e:

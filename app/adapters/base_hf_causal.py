@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from pydantic import BaseModel, Field
+import torch
 
 from app.core.contracts import ModelAdapter
 from app.utils.text_utils import chunk_markdown, extract_json_payload, dedupe_stable
@@ -65,7 +66,6 @@ class BaseHFCausalAdapter(ModelAdapter):
 
     # ---------------------- Core pipeline ----------------------
     async def predict(
-            import torch
             self, data: RequirementsInput, params: Optional[dict[str, Any]] = None
     ) -> RequirementsOutput:
         # Lazy import to avoid heavy deps unless needed

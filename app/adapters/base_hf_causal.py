@@ -65,6 +65,7 @@ class BaseHFCausalAdapter(ModelAdapter):
 
     # ---------------------- Core pipeline ----------------------
     async def predict(
+            import torch
             self, data: RequirementsInput, params: Optional[dict[str, Any]] = None
     ) -> RequirementsOutput:
         # Lazy import to avoid heavy deps unless needed

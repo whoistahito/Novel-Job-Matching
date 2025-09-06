@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
     # Shutdown hook: nothing yet
 
 
-app = FastAPI(title="Unified Inference API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Job Requirement Extraction using LLM API", version="1.0.0", lifespan=lifespan)
 
 
 @app.get("/models")

@@ -13,6 +13,7 @@ dependencies = [
     "transformers>=4.56.1",
     "torch>=2.8.0",
     "accelerate>=0.33.0",
+    "markdownify>=0.13.1",
 ]
 
 [tool.pytest.ini_options]

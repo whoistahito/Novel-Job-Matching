@@ -96,6 +96,50 @@ def parse_params(params_str: str | None) -> dict | None:
         return None
 
 
+def extract_requirements(response_data: dict | None) -> Dict[str, list]:
+    """Return requirements as an object with skills, experience, qualifications arrays.
+
+    Backward compatibility:
+    - If output.requirements is a list, treat it as skills.
+    - If output is a list, treat it as skills.
+    - If top-level requirements is present (legacy), map similarly.
+    """
+
+    def empty() -> Dict[str, list]:
+        return {"skills": [], "experience": [], "qualifications": []}
+
+    if not isinstance(response_data, dict):
+        return empty()
+
+    output = response_data.get("output")
+
+    # New shape: output = {"requirements": {skills, experience, qualifications}}
+    if isinstance(output, dict):
+        req = output.get("requirements")
+        if isinstance(req, dict):
+            skills = req.get("skills") if isinstance(req.get("skills"), list) else []
+            exp = req.get("experience") if isinstance(req.get("experience"), list) else []
+            quals = req.get("qualifications") if isinstance(req.get("qualifications"), list) else []
+            return {"skills": skills, "experience": exp, "qualifications": quals}
+        if isinstance(req, list):
+            return {"skills": req, "experience": [], "qualifications": []}
+        # Legacy: sometimes models may emit top-level keys inside output
+        skills = output.get("skills") if isinstance(output.get("skills"), list) else []
+        exp = output.get("experience") if isinstance(output.get("experience"), list) else []
+        quals = output.get("qualifications") if isinstance(output.get("qualifications"), list) else []
+        if skills or exp or quals:
+            return {"skills": skills, "experience": exp, "qualifications": quals}
+
+    # Legacy shapes
+    if isinstance(output, list):
+        return {"skills": output, "experience": [], "qualifications": []}
+
+    if isinstance(response_data.get("requirements"), list):
+        return {"skills": response_data["requirements"], "experience": [], "qualifications": []}
+
+    return empty()
+
+
 def call_inference(
         url: str,
         model: str,
@@ -139,20 +183,6 @@ def call_inference(
     return (f"http_{resp.status_code}", err, None)
 
 
-def extract_requirements(response_data: dict | None) -> list:
-    if not isinstance(response_data, dict):
-        return []
-    output = response_data.get("output")
-    if isinstance(output, dict) and isinstance(output.get("requirements"), list):
-        return output["requirements"]
-    # Fallback: try direct array or any common keys
-    if isinstance(output, list):
-        return output
-    if isinstance(response_data.get("requirements"), list):
-        return response_data["requirements"]
-    return []
-
-
 def main(argv: List[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     params = parse_params(args.params)
@@ -188,7 +218,8 @@ def main(argv: List[str] | None = None) -> int:
                 )
                 elapsed_ms = (time.perf_counter() - t0) * 1000.0
 
-                requirements = extract_requirements(data) if status == "ok" else []
+                requirements = extract_requirements(data) if status == "ok" else {"skills": [], "experience": [],
+                                                                                  "qualifications": []}
 
                 record: Dict[str, Any] = {
                     "model": model,

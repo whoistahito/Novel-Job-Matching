@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from typing import Any, Optional
 
-from app.adapters.base_hf_causal import BaseHFCausalAdapter, RequirementsInput, RequirementsOutput
+from app.adapters.base_hf_causal import BaseHFCausalAdapter, RequirementsInput, RequirementsOutput, RequirementsData
 from app.utils.text_utils import extract_json_payload, dedupe_stable
 
 
@@ -35,7 +35,6 @@ class GLM4Z1Adapter(BaseHFCausalAdapter):
             skills: list[Any] = []
             experience: list[Any] = []
             qualifications: list[Any] = []
-            aggregated: list[Any] = []
 
             if isinstance(parsed, dict):
                 s = parsed.get("skills")
@@ -54,23 +53,21 @@ class GLM4Z1Adapter(BaseHFCausalAdapter):
                 q1 = parsed.get("qualification")
                 if isinstance(q1, list):
                     qualifications.extend(q1)
-                r = parsed.get("requirements")
-                if isinstance(r, list):
-                    aggregated.extend(r)
             elif isinstance(parsed, list):
-                aggregated.extend(parsed)
+                # Legacy
+                skills.extend(parsed)
 
-            # Dedupe and aggregate
+            # Dedupe
             skills = dedupe_stable(skills)
             experience = dedupe_stable(experience)
             qualifications = dedupe_stable(qualifications)
-            aggregated = dedupe_stable([*skills, *experience, *qualifications, *aggregated])
 
             return RequirementsOutput(
-                skills=skills,
-                experience=experience,
-                qualifications=qualifications,
-                requirements=aggregated,
+                requirements=RequirementsData(
+                    skills=skills,
+                    experience=experience,
+                    qualifications=qualifications,
+                )
             )
 
         # Otherwise, run the standard HF pipeline

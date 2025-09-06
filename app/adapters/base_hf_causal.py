@@ -15,13 +15,14 @@ class RequirementsInput(BaseModel):
     chunk_size: int = 12000
 
 
-class RequirementsOutput(BaseModel):
-    # Structured fields requested: always include these keys
+class RequirementsData(BaseModel):
     skills: list[Any] = Field(default_factory=list)
     experience: list[Any] = Field(default_factory=list)
     qualifications: list[Any] = Field(default_factory=list)
-    # Backward-compatible aggregated list of all requirements
-    requirements: list[Any] = Field(default_factory=list)
+
+
+class RequirementsOutput(BaseModel):
+    requirements: RequirementsData
 
 
 class BaseHFCausalAdapter(ModelAdapter):
@@ -101,7 +102,6 @@ class BaseHFCausalAdapter(ModelAdapter):
                     token=token,
                 )
             except Exception as e:
-                # Provide a helpful message rather than 500
                 raise NotImplementedError(
                     "Model loading failed on GPU. Ensure 'accelerate' is installed, a compatible NVIDIA GPU with recent "
                     "CUDA drivers is available, and (optionally) 'bitsandbytes' for 4-bit quantization. "
@@ -115,7 +115,6 @@ class BaseHFCausalAdapter(ModelAdapter):
         all_skills: list[Any] = []
         all_exp: list[Any] = []
         all_quals: list[Any] = []
-        agg_reqs: list[Any] = []  # catch-all / backward compatible
 
         for chunk in chunks:
             messages = self.build_messages(chunk)
@@ -133,34 +132,28 @@ class BaseHFCausalAdapter(ModelAdapter):
                 quals = parsed.get("qualifications")
                 if isinstance(quals, list):
                     all_quals.extend(quals)
-                # Common alias
+                # Aliases
                 education = parsed.get("education")
                 if isinstance(education, list):
                     all_quals.extend(education)
-                # Accept singular alias as well
                 singular_qual = parsed.get("qualification")
                 if isinstance(singular_qual, list):
                     all_quals.extend(singular_qual)
-                # Back-compat if model emitted a single list
-                reqs = parsed.get("requirements")
-                if isinstance(reqs, list):
-                    agg_reqs.extend(reqs)
             elif isinstance(parsed, list):
-                # Fallback: untyped list -> treat as aggregated requirements
-                agg_reqs.extend(parsed)
+                # Fallback: if model emitted a bare list, try to guess as skills
+                all_skills.extend(parsed)
 
         # Dedupe while preserving order
         all_skills = dedupe_stable(all_skills)
         all_exp = dedupe_stable(all_exp)
         all_quals = dedupe_stable(all_quals)
-        # Aggregate for backward compatibility and convenience
-        agg_reqs = dedupe_stable([*all_skills, *all_exp, *all_quals, *agg_reqs])
 
         return RequirementsOutput(
-            skills=all_skills,
-            experience=all_exp,
-            qualifications=all_quals,
-            requirements=agg_reqs,
+            requirements=RequirementsData(
+                skills=all_skills,
+                experience=all_exp,
+                qualifications=all_quals,
+            )
         )
 
     # ---------------------- Helpers ----------------------

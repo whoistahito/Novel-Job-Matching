@@ -73,7 +73,9 @@ def test_inference_glm4_9b_parses_mock_text_success():
         data = resp.json()
         assert data["model"] == "glm4-9b"
         reqs = data["output"]["requirements"]
-        assert any("Python" in r if isinstance(r, str) else True for r in reqs)
+        assert isinstance(reqs, dict)
+        assert set(reqs.keys()) == {"skills", "experience", "qualifications"}
+        assert any("Python" in r for r in reqs.get("skills", []))
 
 
 def test_inference_not_implemented_stubs_return_501():

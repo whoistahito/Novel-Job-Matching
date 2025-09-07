@@ -45,6 +45,8 @@ def process_chunk(model, tokenizer, chunk):
         {"role": "user", "content": prompt}
     ]
 
+    response = ""  # Initialize response variable to prevent undefined variable error
+
     try:
         # Apply chat template for Qwen3
         text = tokenizer.apply_chat_template(
@@ -93,6 +95,7 @@ def process_chunk(model, tokenizer, chunk):
 
     except Exception as e:
         print(f"Error during generation: {e}")
+        return []  # Return empty list on error instead of continuing
 
     # Find the start of the JSON object.
     json_start_index = response.find('{')

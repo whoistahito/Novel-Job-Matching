@@ -185,21 +185,24 @@ def main():
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
         chunk_requirements = process_chunk(model, tokenizer, chunk)
         if chunk_requirements:
-            all_requirements.extend(chunk_requirements)
+            # Extract individual items from the dictionary structure
+            if isinstance(chunk_requirements, dict):
+                # Flatten all the lists in the dictionary
+                for category, items in chunk_requirements.items():
+                    if isinstance(items, list):
+                        all_requirements.extend(items)
+                    elif isinstance(items, str):
+                        all_requirements.append(items)
+            else:
+                all_requirements.extend(chunk_requirements)
 
     # Deduplicate requirements
     unique_requirements = []
     seen = set()
 
     for req in all_requirements:
-        # Handle different requirement formats
-        if isinstance(req, dict):
-            # Convert dict to frozen set of items for hashing
-            req_tuple = frozenset((k, str(v)) for k, v in req.items())
-            if req_tuple not in seen:
-                seen.add(req_tuple)
-                unique_requirements.append(req)
-        elif isinstance(req, str) and req not in seen:
+        # Handle string requirements only (since we flattened the structure)
+        if isinstance(req, str) and req not in seen:
             seen.add(req)
             unique_requirements.append(req)
 

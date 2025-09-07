@@ -16,7 +16,7 @@ CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(pipeline, chunk, enable_thinking=True):
+def process_chunk(pipeline, chunk):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
@@ -46,17 +46,19 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
     ]
 
     try:
-        # Generate response
-        outputs = pipeline(messages, max_new_tokens=2048, do_sample=True, temperature=0.3, top_p=0.9)
-        response = outputs[0]['generated_text']
+        # Format chat prompt
+        try:
+            input_text = pipeline.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+        except Exception:
+            input_text = "\n\n".join([m["content"] for m in messages])
 
-        # Extract assistant response
-        if isinstance(response, list):
-            assistant_response = next((msg['content'] for msg in response if msg['role'] == 'assistant'), None)
-            if assistant_response:
-                response = assistant_response
-            else:
-                response = str(response)
+        # Generate response
+        outputs = pipeline(input_text, max_new_tokens=2048, do_sample=True, temperature=0.3, top_p=0.9)
+        response = outputs[0]['generated_text']
 
         print(f"Raw response: {response[:200]}...")  # Truncated debug print
 
@@ -76,7 +78,7 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
 
         except json.JSONDecodeError as e:
             print(f"JSON parsing failed: {e}")
-            print(f"Attempted to parse: {json_str}")
+            print(f"Attempted to parse: {response}")
             return []
 
     except Exception as e:
@@ -167,11 +169,17 @@ def main():
         "device_map": "auto"
     }
 
+    pipeline_kwargs = {
+        "temperature": 0.6,
+        "top_p": 0.95,
+    }
+
     pipeline = transformers.pipeline(
         "text-generation",
         model=MODEL_ID,
         tokenizer=tokenizer,
         max_new_tokens=20000,
+        **pipeline_kwargs,
         **model_kwargs
     )
 
@@ -179,7 +187,7 @@ def main():
     all_requirements = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(pipeline, chunk, args.enable_thinking)
+        chunk_requirements = process_chunk(pipeline, chunk)
         if chunk_requirements:
             all_requirements.extend(chunk_requirements)
 
@@ -211,9 +219,9 @@ def main():
     print(result_json)
 
     # Save to file
-    with open(args.output, "w", encoding="utf-8") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
-    print(f"Results saved to {args.output}")
+    print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
     del pipeline, tokenizer

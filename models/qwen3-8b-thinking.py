@@ -8,7 +8,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "Qwen/Qwen3-8B"
-DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+INPUT_FILE = "../input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
@@ -23,19 +23,21 @@ def process_chunk(model, tokenizer, chunk):
     - Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
     - Include specific technologies, tools, and methodologies mentioned
     - Only extract what is explicitly required, not preferred
+    - Shorten your answer by thinking of the solution and output that solution, without doubting your calculation and repeating it. 
 
     TEXT TO ANALYZE:
     {chunk}
+    IMPORTANT: Return ONLY ONE JSON as output like object above, no explanations or additional text, JUST the result JSON.
 
     OUTPUT FORMAT (JSON only, no other text):
     {{
-      "skills": ["Python programming", "AWS cloud services", "Docker","Git", "Kubernetes"],
-      "experience": ["3+ years software development", "2+ years with microservices"],
-      "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
+      "requirements": {{
+        "skills": ["Python programming", "AWS cloud services", "Docker", "Git", "Kubernetes"],
+        "experience": ["3+ years software development", "2+ years with microservices"],
+        "qualifications": ["Bachelor's degree in Engineering", "AWS Solutions Architect certification"]
+      }}
     }}
-
-    IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
-
+"""
     # Format input for Qwen3 model
     messages = [
         {"role": "system",
@@ -43,40 +45,54 @@ def process_chunk(model, tokenizer, chunk):
         {"role": "user", "content": prompt}
     ]
 
-    # Apply chat template for Qwen3
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-        enable_thinking=False
-    )
-
-    # Tokenize the text
-    model_inputs = tokenizer([text], return_tensors="pt")
-
-    # Create explicit attention mask (1s for all tokens)
-    input_ids_length = model_inputs["input_ids"].shape[1]
-    attention_mask = torch.ones((1, input_ids_length), dtype=torch.long)
-    model_inputs["attention_mask"] = attention_mask
-
-    # Move to the correct device
-    device = next(model.parameters()).device
-    model_inputs = {k: v.to(device) for k, v in model_inputs.items()}
-
-    with torch.inference_mode():
-        generated_ids = model.generate(
-            model_inputs["input_ids"],
-            attention_mask=model_inputs["attention_mask"],
-            max_new_tokens=2500,
-            temperature=0.6,
-            top_p=0.95,
-            top_k=20,
-            do_sample=False
+    try:
+        # Apply chat template for Qwen3
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=True  # Enable thinking mode for better reasoning
         )
 
-    # Get only the new tokens
-    output_ids = generated_ids[0][model_inputs["input_ids"].shape[1]:].tolist()
-    response = tokenizer.decode(output_ids, skip_special_tokens=True).strip("\n")
+        # Tokenize the text
+        model_inputs = tokenizer([text], return_tensors="pt")
+
+        # Create explicit attention mask (1s for all tokens)
+        input_ids_length = model_inputs["input_ids"].shape[1]
+        attention_mask = torch.ones((1, input_ids_length), dtype=torch.long)
+        model_inputs["attention_mask"] = attention_mask
+
+        # Move to the correct device
+        device = next(model.parameters()).device
+        model_inputs = {k: v.to(device) for k, v in model_inputs.items()}
+
+        # Generate response with recommended parameters for thinking mode
+        with torch.inference_mode():
+            generated_ids = model.generate(
+                model_inputs["input_ids"],
+                attention_mask=model_inputs["attention_mask"],
+                max_new_tokens=10000,
+                temperature=0.6,
+                top_p=0.95,
+                top_k=20,
+                do_sample=True
+            )
+
+        # Get only the new tokens
+        output_ids = generated_ids[0][model_inputs["input_ids"].shape[1]:].tolist()
+
+        # Look for </think> token (ID 151668 according to docs)
+        think_end_index = len(output_ids)
+        for i in range(len(output_ids) - 1, -1, -1):
+            if output_ids[i] == 151668:  # </think> token
+                think_end_index = i
+                break
+
+        response = tokenizer.decode(output_ids[think_end_index:], skip_special_tokens=True).strip("\n")
+
+
+    except Exception as e:
+        print(f"Error during generation: {e}")
 
     # Find the start of the JSON object.
     json_start_index = response.find('{')
@@ -87,12 +103,17 @@ def process_chunk(model, tokenizer, chunk):
     # Extract from the start of the JSON object to the end of the string
     json_str = response[json_start_index:]
 
+    # Clean up potential markdown code block fences that might still exist
+    if json_str.strip().startswith("```json"):
+        json_str = json_str.strip()[7:]
+    if json_str.strip().endswith("```"):
+        json_str = json_str.strip()[:-3]
+
     try:
         data = json.loads(json_str)
         print(json.dumps(data, indent=2, ensure_ascii=False))
-        # Handle flat structure format - return the data directly since it contains skills, experience, qualifications
-        if isinstance(data, dict) and any(key in data for key in ["skills", "experience", "qualifications"]):
-            return data
+        if isinstance(data, dict) and "requirements" in data:
+            return data["requirements"]
         else:
             print("Unexpected JSON format, returning empty list.")
             return []
@@ -115,7 +136,7 @@ def chunk_markdown(markdown_text, chunk_size=3000):
     """
     print("Breaking down the Markdown into manageable chunks...")
 
-    # Rough estimate: 1 token ≈ 4 characters
+    # Rough estimate: 1 token ≈ 4 characters for English text
     chars_per_chunk = chunk_size * 4
 
     # Try to split on major Markdown elements (headers)
@@ -149,14 +170,18 @@ def get_markdown_content(input_file):
     try:
         with open(input_file, 'r', encoding='utf-8') as f:
             return f.read()
+    except FileNotFoundError:
+        print(f"Error: Input file '{input_file}' not found.")
+        exit(1)
     except Exception as e:
         print(f"Error reading input file: {e}")
         exit(1)
 
 
 def main():
+    # Current date and user info
+
     # Get input Markdown from file
-    markdown_content = get_markdown_content(DEFAULT_INPUT_FILE)
 
     # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
@@ -165,11 +190,14 @@ def main():
     gc.collect()
     torch.cuda.empty_cache()
 
+    # Set environment variables
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
+    # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
 
+    # Configure model loading parameters
     model_kwargs = {
         "device_map": "auto",  # Changed from balanced to auto for better allocation
         "trust_remote_code": True,
@@ -202,18 +230,11 @@ def main():
         elif isinstance(req, str) and req not in seen:
             seen.add(req)
             unique_requirements.append(req)
-
-    # Output final result
-    print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
-
-    # Create a properly structured JSON object
     result_obj = {
         "requirements": unique_requirements,
     }
 
     result_json = json.dumps(result_obj, indent=2)
-    print(result_json)
-
     # Save to file
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)

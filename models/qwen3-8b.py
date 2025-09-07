@@ -8,7 +8,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "Qwen/Qwen3-8B"
-DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
@@ -156,7 +156,7 @@ def get_markdown_content(input_file):
 
 def main():
     # Get input Markdown from file
-    markdown_content = get_markdown_content(DEFAULT_INPUT_FILE)
+    markdown_content = get_markdown_content(INPUT_FILE)
 
     # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)

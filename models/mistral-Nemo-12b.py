@@ -1,5 +1,3 @@
-import argparse
-from datetime import datetime
 import gc
 import json
 import os
@@ -7,11 +5,13 @@ import re
 
 from huggingface_hub import login
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "mistralai/Mistral-Nemo-Instruct-2407"  # Updated to use Mistral-Small-24B
-DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+CHUNK_SIZE = 12000
+OUTPUT_FILE = 'job_requirements.json'
 
 # Add pad token configuration to avoid warnings
 PAD_TOKEN = "<pad>"  # Define a pad token for Mistral model
@@ -41,26 +41,6 @@ def authenticate_huggingface():
         return False
 
 
-def print_gpu_info(label="Current GPU Status"):
-    """Print information about available GPUs and their memory usage."""
-    print(f"\n===== {label} =====")
-    print(f"CUDA available: {torch.cuda.is_available()}")
-    print(f"Number of GPUs: {torch.cuda.device_count()}")
-
-    for i in range(torch.cuda.device_count()):
-        total_memory = torch.cuda.get_device_properties(i).total_memory / 1024 ** 3
-        reserved = torch.cuda.memory_reserved(i) / 1024 ** 3
-        allocated = torch.cuda.memory_allocated(i) / 1024 ** 3
-        free = total_memory - reserved
-
-        print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
-        print(f"  Total memory: {total_memory:.2f} GB")
-        print(f"  Reserved memory: {reserved:.2f} GB")
-        print(f"  Allocated memory: {allocated:.2f} GB")
-        print(f"  Free memory: {free:.2f} GB")
-    print("=" * (len(label) + 14))
-
-
 def process_chunk(model, tokenizer, chunk):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
@@ -86,10 +66,12 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
 
     # Format input for Mistral model
     messages = [
-        {"role": "system", "content": "You are a specialized job data parser that extracts requirements from Markdown."},
+        {"role": "system",
+         "content": "You are a specialized job data parser that extracts requirements from Markdown."},
         {"role": "user", "content": prompt}
     ]
 
+    response = ""
     try:
         # Apply Mistral chat template
         model_inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
@@ -103,7 +85,7 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
             generated_ids = model.generate(
                 model_inputs,
                 max_new_tokens=2048,
-                temperature=0.6,
+                temperature=0.3,
                 top_p=0.95,
                 top_k=20,
                 do_sample=True
@@ -112,71 +94,14 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
         # Get only the new tokens
         output_ids = generated_ids[0][model_inputs.shape[1]:].tolist()
         response = tokenizer.decode(output_ids, skip_special_tokens=True).strip("\n")
-        print(f"Response (first 200 chars): {response[:200]}...")
 
     except Exception as e:
-        print(f"Error during generation: {e}")
-        # Fallback to simpler approach
-        try:
-            # Create simpler input format
-            prompt_text = f"""<s>[INST] {prompt} [/INST]"""
-            inputs = tokenizer(prompt_text, return_tensors="pt").to(device)
-
-            with torch.inference_mode():
-                output = model.generate(
-                    inputs.input_ids,
-                    max_new_tokens=2048,
-                    temperature=0.6,
-                    top_p=0.95,
-                    top_k=20,
-                    do_sample=True
-                )
-
-            # Get only the generated tokens, excluding the input
-            input_length = inputs.input_ids.shape[1]
-            output_ids = output[0][input_length:].tolist()
-            response = tokenizer.decode(output_ids, skip_special_tokens=True).strip("\n")
-        except Exception as inner_e:
-            print(f"Fallback approach also failed: {inner_e}")
-            return []
+        print(f"Error during model inference: {e}")
+        return []
 
     # Clean and extract JSON from the response
     try:
-        # Find the first opening brace
-        json_start = response.find('{')
-        if json_start == -1:
-            print("No JSON object found in the response")
-            return []
-
-        # Extract potential JSON content
-        json_text = response[json_start:]
-
-        # Use a more robust approach to find the proper JSON object
-        # Count braces to find the matching closing brace
-        brace_count = 0
-        end_pos = -1
-
-        for i, char in enumerate(json_text):
-            if char == '{':
-                brace_count += 1
-            elif char == '}':
-                brace_count -= 1
-                if brace_count == 0:
-                    end_pos = i
-                    break
-
-        if end_pos != -1:
-            json_text = json_text[:end_pos + 1]
-
-        # Remove code block markers if present
-        json_text = json_text.strip()
-        if json_text.startswith("```json"):
-            json_text = json_text[7:]
-        if json_text.endswith("```"):
-            json_text = json_text[:-3]
-
-        # Parse the JSON
-        parsed_json = json.loads(json_text.strip())
+        parsed_json = json.loads(response.strip())
         print("Successfully parsed JSON:")
         print(json.dumps(parsed_json, indent=2))
 
@@ -185,7 +110,7 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
 
     except json.JSONDecodeError as e:
         print(f"JSON decode error: {e}")
-        print(f"Problematic JSON text: {json_text if 'json_text' in locals() else 'Not available'}")
+        print(f"Problematic JSON text: {response}")
         return []
     except Exception as e:
         print(f"Error processing response: {e}")
@@ -248,40 +173,17 @@ def get_markdown_content(input_file):
 
 
 def main():
-    # Current date and user info
-    print(f"Current Date and Time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
-
-    # Parse arguments
-    parser = argparse.ArgumentParser(description='Extract job requirements from Markdown using Qwen3-8B-FP8')
-    parser.add_argument('--chunk_size', type=int, default=12000, help='Maximum token size per chunk')
-    parser.add_argument('--output', type=str, default='job_requirements.json', help='Output JSON file')
-    parser.add_argument('--input', type=str, default=DEFAULT_INPUT_FILE,
-                        help=f'Input Markdown file (default: {DEFAULT_INPUT_FILE})')
-    parser.add_argument('--enable_thinking', action='store_true', default=True,
-                        help='Enable thinking mode for better reasoning (default: True)')
-    parser.add_argument('--context_length', type=int, default=32768,
-                        help='Maximum context length (default: 32768, max: 131072 with YaRN)')
-    parser.add_argument('--token', type=str, help='Hugging Face token (optional, will prompt if not provided)')
-    args = parser.parse_args()
-
-    # Set token in environment if provided via arguments
-    if args.token:
-        os.environ["HF_TOKEN"] = args.token
-
     # Authenticate with Hugging Face
     if not authenticate_huggingface():
         print("Exiting due to authentication failure.")
         exit(1)
 
     # Get input Markdown from file
-    print(f"Reading input from: {args.input}")
-    markdown_content = get_markdown_content(args.input)
+    print(f"Reading input from: {INPUT_FILE}")
+    markdown_content = get_markdown_content(INPUT_FILE)
 
     # Chunk the markdown content
-    chunks = chunk_markdown(markdown_content, chunk_size=args.chunk_size)
-
-    # Check available GPUs
-    print_gpu_info("Available GPUs")
+    chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
     # Clean up memory before loading model
     gc.collect()
@@ -290,57 +192,30 @@ def main():
     # Set environment variables
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Determine if we need to use YaRN scaling for long contexts
-    rope_scaling = None
-    if args.context_length > 32768:
-        if args.context_length > 131072:
-            print("Warning: Requested context length exceeds maximum supported (131072). Capping at 131072.")
-            args.context_length = 131072
-
-        # Calculate appropriate YaRN factor (based on context length)
-        factor = args.context_length / 32768
-        rope_scaling = {
-            "rope_type": "yarn",
-            "factor": factor,
-            "original_max_position_embeddings": 32768
-        }
-        print(f"Enabling YaRN scaling with factor {factor} for context length {args.context_length}")
-
     # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
 
     # Fix pad token issues - make pad token different from EOS token
+    pad_token_added = False
     if tokenizer.pad_token is None or tokenizer.pad_token == tokenizer.eos_token:
         tokenizer.add_special_tokens({"pad_token": PAD_TOKEN})
         print(f"Added custom pad token: {PAD_TOKEN}")
+        pad_token_added = True
 
     # Configure model loading parameters
     model_kwargs = {
-        "device_map": "balanced",  # Changed to "balanced" to distribute across GPUs
-        "max_memory": {0: "10GiB", 1: "10GiB"},  # Explicitly allocate memory on both GPUs
-        "trust_remote_code": True,
-        "torch_dtype": torch.bfloat16,  # Use bfloat16 for better memory efficiency
+        "device_map": "balanced",
+        "max_memory": {0: "10GiB", 1: "10GiB"},
+        "dtype": torch.bfloat16,
     }
-
-    # Add rope_scaling if needed
-    if rope_scaling:
-        model_kwargs["rope_scaling"] = rope_scaling
-
-    # Add quantization for better memory efficiency
-    quantization_config = BitsAndBytesConfig(
-        load_in_8bit=True,  # Enable 8-bit quantization
-        llm_int8_threshold=6.0,
-        llm_int8_skip_modules=None,
-        llm_int8_enable_fp32_cpu_offload=True,
-    )
-    model_kwargs["quantization_config"] = quantization_config
 
     # Load the model
     model = AutoModelForCausalLM.from_pretrained(MODEL_ID, **model_kwargs)
 
-    # Check GPU status after model loading
-    print_gpu_info("GPU Status After Model Loading")
+    # Resize model embeddings if pad token was added
+    if pad_token_added:
+        model.resize_token_embeddings(len(tokenizer))
 
     # Process each chunk
     all_requirements = []
@@ -378,15 +253,14 @@ def main():
     print(result_json)
 
     # Save to file
-    with open(args.output, "w", encoding="utf-8") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
-    print(f"Results saved to {args.output}")
+    print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
     del model, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
-    print_gpu_info("GPU Status After Cleanup")
 
 
 if __name__ == "__main__":

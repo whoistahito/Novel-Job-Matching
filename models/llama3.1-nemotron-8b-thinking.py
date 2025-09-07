@@ -1,4 +1,3 @@
-from datetime import datetime
 import gc
 import json
 import os
@@ -142,8 +141,6 @@ def get_markdown_content(input_file):
 
 
 def main():
-    # Current date and user info
-    print(f"Current Date and Time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Get input Markdown from file
     print(f"Reading input from: {INPUT_FILE}")

@@ -16,7 +16,7 @@ CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(pipeline, chunk, enable_thinking=True):
+def process_chunk(pipeline, chunk):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
@@ -179,7 +179,7 @@ def main():
     all_requirements = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(pipeline, chunk, args.enable_thinking)
+        chunk_requirements = process_chunk(pipeline, chunk)
         if chunk_requirements:
             all_requirements.extend(chunk_requirements)
 
@@ -211,9 +211,9 @@ def main():
     print(result_json)
 
     # Save to file
-    with open(args.output, "w", encoding="utf-8") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
-    print(f"Results saved to {args.output}")
+    print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
     del pipeline, tokenizer

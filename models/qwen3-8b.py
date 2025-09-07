@@ -180,38 +180,38 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(MODEL_ID, **model_kwargs)
 
     # Process each chunk
-    all_requirements = []
+    all_requirements = {"skills": [], "experience": [], "qualifications": []}
+
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
         chunk_requirements = process_chunk(model, tokenizer, chunk)
         if chunk_requirements:
-            # Extract individual items from the dictionary structure
+            # Preserve the structured format instead of flattening
             if isinstance(chunk_requirements, dict):
-                # Flatten all the lists in the dictionary
-                for category, items in chunk_requirements.items():
-                    if isinstance(items, list):
-                        all_requirements.extend(items)
-                    elif isinstance(items, str):
-                        all_requirements.append(items)
-            else:
-                all_requirements.extend(chunk_requirements)
+                # Merge each category while maintaining structure
+                for category in ["skills", "experience", "qualifications"]:
+                    if category in chunk_requirements and isinstance(chunk_requirements[category], list):
+                        all_requirements[category].extend(chunk_requirements[category])
 
-    # Deduplicate requirements
-    unique_requirements = []
-    seen = set()
+    # Deduplicate requirements within each category
+    for category in all_requirements:
+        seen = set()
+        unique_items = []
+        for item in all_requirements[category]:
+            if isinstance(item, str) and item not in seen:
+                seen.add(item)
+                unique_items.append(item)
+        all_requirements[category] = unique_items
 
-    for req in all_requirements:
-        # Handle string requirements only (since we flattened the structure)
-        if isinstance(req, str) and req not in seen:
-            seen.add(req)
-            unique_requirements.append(req)
+    # Count total requirements
+    total_count = sum(len(items) for items in all_requirements.values())
+    print(f"\n===== Extracted {total_count} Job Requirements =====")
 
-    # Output final result
-    print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
-
-    # Create a properly structured JSON object
+    # Create the final structured JSON object
     result_obj = {
-        "requirements": unique_requirements,
+        "skills": all_requirements["skills"],
+        "experience": all_requirements["experience"],
+        "qualifications": all_requirements["qualifications"]
     }
 
     result_json = json.dumps(result_obj, indent=2)

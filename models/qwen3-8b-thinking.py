@@ -182,9 +182,9 @@ def get_markdown_content(input_file):
 
 
 def main():
-    # Current date and user info
-
     # Get input Markdown from file
+    print(f"Reading input from: {INPUT_FILE}")
+    markdown_content = get_markdown_content(INPUT_FILE)
 
     # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)

@@ -1,36 +1,17 @@
-import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 import gc
 import json
 import os
 import re
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "THUDM/GLM-Z1-9B-0414"
-DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
-
-
-def print_gpu_info(label="Current GPU Status"):
-    """Print information about available GPUs and their memory usage."""
-    print(f"\n===== {label} =====")
-    print(f"CUDA available: {torch.cuda.is_available()}")
-    print(f"Number of GPUs: {torch.cuda.device_count()}")
-
-    for i in range(torch.cuda.device_count()):
-        total_memory = torch.cuda.get_device_properties(i).total_memory / 1024 ** 3
-        reserved = torch.cuda.memory_reserved(i) / 1024 ** 3
-        allocated = torch.cuda.memory_allocated(i) / 1024 ** 3
-        free = total_memory - reserved
-
-        print(f"GPU {i}: {torch.cuda.get_device_name(i)}")
-        print(f"  Total memory: {total_memory:.2f} GB")
-        print(f"  Reserved memory: {reserved:.2f} GB")
-        print(f"  Allocated memory: {allocated:.2f} GB")
-        print(f"  Free memory: {free:.2f} GB")
-    print("=" * (len(label) + 14))
+INPUT_FILE = "../input_markdown_linkedin.txt"
+CHUNK_SIZE = 12000
+OUTPUT_FILE = 'job_requirements.json'
 
 
 def process_chunk(model, tokenizer, chunk):
@@ -63,6 +44,7 @@ def process_chunk(model, tokenizer, chunk):
         {"role": "user", "content": prompt}
     ]
 
+    response = ""
     # Handle GLM-4 tokenizer format specifically
     try:
         # Format the messages directly for GLM-4
@@ -91,53 +73,31 @@ def process_chunk(model, tokenizer, chunk):
         with torch.inference_mode():
             output = model.generate(
                 **inputs,
-                max_new_tokens=1000,
-                temperature=0.1,
+                max_new_tokens=20000,
+                temperature=0.6,
                 do_sample=False
             )
 
-        # Decode the response
-        full_output = tokenizer.decode(output[0], skip_special_tokens=True)
+        # find the where think token is which is [522, 26779, 29]
 
-        # Extract the model's response
-        response = full_output.split("<|assistant|>\n")[-1].strip()
+        # Decode the response
+        response = tokenizer.decode(output[0], skip_special_tokens=True)
+        print(response)
+        if "</think>" in response:
+            think_end_index = response.find("</think>")
+            response = response[think_end_index + len("</think>"):].strip()
 
     except Exception as e:
-        print(f"Error during generation: {e}")
-        # Fallback to simpler approach
-        inputs = tokenizer(prompt, return_tensors="pt").to(next(model.parameters()).device)
-        with torch.inference_mode():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=1000,
-                temperature=0.1
-            )
-        response = tokenizer.decode(output[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+        print(f"Error during model inference: {e}")
+        return []
 
-    if "```json" in response:
-        # Extract content between ```json and ``` markers
-        start_marker = "```json"
-        end_marker = "```"
-        start_index = response.find(start_marker) + len(start_marker)
-        end_index = response.find(end_marker, start_index)
-
-        if end_index != -1:
-            json_str = response[start_index:end_index].strip()
-        else:
-            # Handle case where closing marker might be missing
-            json_str = response[start_index:].strip()
-    else:
-        # Fallback to the original logic
-        if response.startswith("json"):
-            json_str = response.strip().removeprefix("json").removesuffix("").strip()
-        else:
-            raise ValueError("Input string does not contain valid JSON markup (no ```json or json prefix found)")
-
+    print(response)
     try:
-        data = json.loads(json_str)
+        data = json.loads(response)
         print(json.dumps(data, indent=2, ensure_ascii=False))
-        if isinstance(data, dict) and "requirements" in data:
-            return data["requirements"]
+        # Handle flat structure format - return the data directly since it contains skills, experience, qualifications
+        if isinstance(data, dict) and any(key in data for key in ["skills", "experience", "qualifications"]):
+            return data
         else:
             print("Unexpected JSON format, returning empty list.")
             return []
@@ -204,25 +164,14 @@ def get_markdown_content(input_file):
 
 def main():
     # Current date and user info
-    print(f"Current Date and Time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
-
-    # Parse arguments
-    parser = argparse.ArgumentParser(description='Extract job requirements from Markdown using GLM-4')
-    parser.add_argument('--chunk_size', type=int, default=12000, help='Maximum token size per chunk')
-    parser.add_argument('--output', type=str, default='job_requirements.json', help='Output JSON file')
-    parser.add_argument('--input', type=str, default=DEFAULT_INPUT_FILE,
-                        help=f'Input Markdown file (default: {DEFAULT_INPUT_FILE})')
-    args = parser.parse_args()
+    print(f"Current Date and Time (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
 
     # Get input Markdown from file
-    print(f"Reading input from: {args.input}")
-    markdown_content = get_markdown_content(args.input)
+    print(f"Reading input from: {INPUT_FILE}")
+    markdown_content = get_markdown_content(INPUT_FILE)
 
     # Chunk the markdown content
-    chunks = chunk_markdown(markdown_content, chunk_size=args.chunk_size)
-
-    # Check available GPUs
-    print_gpu_info("Available GPUs")
+    chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
     # Clean up memory before loading model
     gc.collect()
@@ -231,74 +180,63 @@ def main():
     # Set environment variables
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Configure quantization
-    quantization_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True
-    )
-
     # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
-        device_map="balanced",
-        max_memory={0: "9GB", 1: "9GB"},
+        device_map="auto",
         trust_remote_code=True,
-        quantization_config=quantization_config,
-        torch_dtype=torch.float16
+        dtype=torch.float16
     )
 
-    # Check GPU status after model loading
-    print_gpu_info("GPU Status After Model Loading")
-
     # Process each chunk
-    all_requirements = []
+    all_requirements = {"skills": [], "experience": [], "qualifications": []}
+
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
         chunk_requirements = process_chunk(model, tokenizer, chunk)
         if chunk_requirements:
-            all_requirements.extend(chunk_requirements)
+            # Preserve the structured format instead of flattening
+            if isinstance(chunk_requirements, dict):
+                # Merge each category while maintaining structure
+                for category in ["skills", "experience", "qualifications"]:
+                    if category in chunk_requirements and isinstance(chunk_requirements[category], list):
+                        all_requirements[category].extend(chunk_requirements[category])
 
-    # Deduplicate requirements
-    unique_requirements = []
-    seen = set()
+    # Deduplicate requirements within each category
+    for category in all_requirements:
+        seen = set()
+        unique_items = []
+        for item in all_requirements[category]:
+            if isinstance(item, str) and item not in seen:
+                seen.add(item)
+                unique_items.append(item)
+        all_requirements[category] = unique_items
 
-    for req in all_requirements:
-        # Handle different requirement formats
-        if isinstance(req, dict):
-            # Convert dict to frozen set of items for hashing
-            req_tuple = frozenset((k, str(v)) for k, v in req.items())
-            if req_tuple not in seen:
-                seen.add(req_tuple)
-                unique_requirements.append(req)
-        elif isinstance(req, str) and req not in seen:
-            seen.add(req)
-            unique_requirements.append(req)
+    # Count total requirements
+    total_count = sum(len(items) for items in all_requirements.values())
+    print(f"\n===== Extracted {total_count} Job Requirements =====")
 
-    # Output final result
-    print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
-
-    # Create a properly structured JSON object
+    # Create the final structured JSON object
     result_obj = {
-        "requirements": unique_requirements,
+        "skills": all_requirements["skills"],
+        "experience": all_requirements["experience"],
+        "qualifications": all_requirements["qualifications"]
     }
 
     result_json = json.dumps(result_obj, indent=2)
     print(result_json)
 
     # Save to file
-    with open(args.output, "w", encoding="utf-8") as f:
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
-    print(f"Results saved to {args.output}")
+    print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
     del model, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
-    print_gpu_info("GPU Status After Cleanup")
 
 
 if __name__ == "__main__":

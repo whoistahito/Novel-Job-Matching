@@ -4,8 +4,7 @@ import os
 import re
 
 import torch
-import transformers
-from transformers import AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
@@ -15,7 +14,7 @@ CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(pipeline, chunk):
+def process_chunk(model, tokenizer, chunk):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
@@ -40,24 +39,38 @@ IMPORTANT: Return ONLY the JSON object above, no explanations or additional text
 
     messages = [
         {"role": "system",
-         "content": "You are a precise job requirements extraction tool. Output only valid JSON with the exact format requested."},
+         "content": "detailed thinking off"},
         {"role": "user", "content": prompt}
     ]
 
     try:
-        # Format chat prompt
-        try:
-            input_text = pipeline.tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True,
-            )
-        except Exception:
-            input_text = "\n\n".join([m["content"] for m in messages])
+        # Apply Mistral chat template
+        model_inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
+
+        # Move to the correct device
+        device = next(model.parameters()).device
+        model_inputs = model_inputs.to(device)
 
         # Generate response
-        outputs = pipeline(input_text, max_new_tokens=2048, do_sample=True, temperature=0.3, top_p=0.9)
-        response = outputs[0]['generated_text']
+        with torch.inference_mode():
+            generated_ids = model.generate(
+                model_inputs,
+                max_new_tokens=2048,
+                temperature=0.6,
+                top_p=0.95,
+                do_sample=True
+            )
+
+        output_ids = generated_ids[0][model_inputs.shape[1]:].tolist()
+        response = tokenizer.decode(output_ids, skip_special_tokens=True).strip("\n")
+
+        # Extract assistant response
+        if isinstance(response, list):
+            assistant_response = next((msg['content'] for msg in response if msg['role'] == 'assistant'), None)
+            if assistant_response:
+                response = assistant_response
+            else:
+                response = str(response)
 
         print(f"Raw response: {response[:200]}...")  # Truncated debug print
 
@@ -162,29 +175,21 @@ def main():
     tokenizer.pad_token_id = tokenizer.eos_token_id
 
     model_kwargs = {
-        "torch_dtype": torch.bfloat16,
-        "device_map": "auto"
+        "device_map": "auto",
+        "dtype": torch.bfloat16,
     }
 
-    pipeline_kwargs = {
-        "temperature": 0.6,
-        "top_p": 0.95,
-    }
-
-    pipeline = transformers.pipeline(
-        "text-generation",
-        model=MODEL_ID,
-        tokenizer=tokenizer,
-        max_new_tokens=20000,
-        **pipeline_kwargs,
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_ID,
         **model_kwargs
     )
+
 
     # Process each chunk
     all_requirements = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(pipeline, chunk)
+        chunk_requirements = process_chunk(model, tokenizer, chunk)
         if chunk_requirements:
             all_requirements.extend(chunk_requirements)
 
@@ -221,7 +226,7 @@ def main():
     print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
-    del pipeline, tokenizer
+    del model, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
 

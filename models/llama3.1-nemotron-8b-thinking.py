@@ -4,227 +4,168 @@ import os
 import re
 
 import torch
-import transformers
-from transformers import AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Define constants
 MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
-DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
-INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+DEFAULT_INPUT_FILE = "../input_markdown_linkedin.txt"
+INPUT_FILE = "../input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(pipeline, chunk):
-    """Process a single chunk of Markdown with the LLM."""
-    prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
+def process_chunk(model, tokenizer, chunk):
+    """Process a single chunk of Markdown with the LLM using Reasoning ON mode."""
+    prompt = f"""You are an expert job requirements extractor. First, think step-by-step about the requirements listed in the text. Then, based on your thoughts, extract ONLY the specific, actionable job requirements into a JSON object.
 
 RULES:
-- Extract concrete requirements only (skills, experience years, certifications, education)
-- Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
-- Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
-- Include specific technologies, tools, and methodologies mentioned
-- Only extract what is explicitly required, not preferred
+- Extract concrete requirements only: skills, experience years, certifications, education.
+- Skip company descriptions, benefits, culture, responsibilities, and "nice-to-have" items.
+- Be precise with experience (e.g., "3+ years Python" not just "Python experience").
+- Only extract what is explicitly stated as a requirement.
 
 TEXT TO ANALYZE:
 {chunk}
 
-OUTPUT FORMAT (JSON only, no other text):
+Your response MUST be a single JSON object. It must start with `{{` and end with `}}`. Do NOT include any other text, explanations, or code formatting outside of the JSON.
+
+OUTPUT FORMAT:
 {{
-  "skills": ["Python programming", "AWS cloud services", "Docker containerization"],
-  "experience": ["3+ years software development", "2+ years with microservices"],
-  "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
+  "skills": ["skill A", "skill B"],
+  "experience": ["experience requirement A", "experience requirement B"],
+  "qualifications": ["qualification A", "qualification B"]
 }}
-
-IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
-
+"""
     messages = [
-        {"role": "system",
-         "content": "You are a precise job requirements extraction tool. Output only valid JSON with the exact format requested."},
+        {"role": "system", "content": "detailed thinking on"},
         {"role": "user", "content": prompt}
     ]
 
     try:
-        # Format chat prompt
-        try:
-            input_text = pipeline.tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True,
+        model_inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
+        device = next(model.parameters()).device
+        model_inputs = model_inputs.to(device)
+
+        with torch.inference_mode():
+            generated_ids = model.generate(
+                model_inputs,
+                max_new_tokens=10000,  # Increased token limit to allow for thinking
+                temperature=0.6,
+                top_p=0.95,
+                do_sample=True
             )
-        except Exception:
-            input_text = "\n\n".join([m["content"] for m in messages])
 
-        # Generate response
-        outputs = pipeline(input_text, max_new_tokens=2048, do_sample=True, temperature=0.3, top_p=0.9)
-        response = outputs[0]['generated_text']
+        # The rest of the decoding process remains the same
+        output_ids = generated_ids[0][model_inputs.shape[1]:]
+        response = tokenizer.decode(output_ids, skip_special_tokens=True).strip()
 
-        print(f"Raw response: {response[:200]}...")  # Truncated debug print
+        print(f"Raw response from model: {response[:300]}...")
 
-        response = response.strip()
+        # The model will output its reasoning first, which we need to strip away.
+        think_end_tag = "</think>"
+        if think_end_tag in response:
+            # Find the end of the thought process and get the text after it
+            json_part = response.split(think_end_tag, 1)[1].strip()
+        else:
+            json_part = response
 
-        try:
-            data = json.loads(response)
-            print(f"Parsed JSON: {json.dumps(data, indent=2)}")
+        data = json.loads(json_part)
 
-            # Extract all requirements into a flat list
-            all_reqs = []
-            for category in ['skills', 'experience', 'qualifications']:
-                if category in data and isinstance(data[category], list):
-                    all_reqs.extend(data[category])
+        if not data:
+            print("Could not extract valid JSON from the final response part.")
+            return None
 
-            return all_reqs
+        print(f"Parsed JSON: {json.dumps(data, indent=2)}")
 
-        except json.JSONDecodeError as e:
-            print(f"JSON parsing failed: {e}")
-            print(f"Attempted to parse: {response}")
-            return []
+        # Return a structured dictionary
+        return {
+            "skills": data.get("skills", []) if isinstance(data.get("skills"), list) else [],
+            "experience": data.get("experience", []) if isinstance(data.get("experience"), list) else [],
+            "qualifications": data.get("qualifications", []) if isinstance(data.get("qualifications"), list) else [],
+        }
 
     except Exception as e:
-        print(f"Error during generation: {e}")
-        return []
-
+        print(f"An error occurred during generation: {e}")
+        return None
 
 def chunk_markdown(markdown_text, chunk_size=3000):
-    """
-    Split markdown text into chunks for processing.
-
-    Args:
-        markdown_text: Markdown formatted text
-        chunk_size: Maximum token size for each chunk (approximate)
-
-    Returns:
-        List of markdown chunks ready for processing
-    """
     print("Breaking down the Markdown into manageable chunks...")
-
-    # Rough estimate: 1 token ≈ 4 characters for English text
     chars_per_chunk = chunk_size * 4
-
-    # Try to split on major Markdown elements (headers)
     chunks = re.split(r'(#{1,6}\s+.*?\n)', markdown_text)
-
-    # Recombine to stay under token limit
-    result_chunks = []
-    current_chunk = ""
-
+    result_chunks, current_chunk = [], ""
     for chunk in chunks:
         if len(current_chunk) + len(chunk) < chars_per_chunk:
             current_chunk += chunk
         else:
-            if current_chunk:
-                result_chunks.append(current_chunk)
+            if current_chunk: result_chunks.append(current_chunk)
             current_chunk = chunk
-
-    if current_chunk:
-        result_chunks.append(current_chunk)
-
-    # If we have no chunks or all chunks are too large, do character-based chunking
-    if not result_chunks or min(len(c) for c in result_chunks) > chars_per_chunk:
+    if current_chunk: result_chunks.append(current_chunk)
+    if not result_chunks or any(len(c) > chars_per_chunk for c in result_chunks):
         result_chunks = [markdown_text[i:i + chars_per_chunk] for i in range(0, len(markdown_text), chars_per_chunk)]
-
     print(f"Created {len(result_chunks)} chunks for processing")
     return result_chunks
 
-
 def get_markdown_content(input_file):
-    """Get Markdown content from file."""
     try:
         with open(input_file, 'r', encoding='utf-8') as f:
             return f.read()
     except FileNotFoundError:
         print(f"Error: Input file '{input_file}' not found.")
         exit(1)
-    except Exception as e:
-        print(f"Error reading input file: {e}")
-        exit(1)
-
 
 def main():
-
-    # Get input Markdown from file
     print(f"Reading input from: {INPUT_FILE}")
     markdown_content = get_markdown_content(INPUT_FILE)
-
-    # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
-    # Clean up memory before loading model
     gc.collect()
     torch.cuda.empty_cache()
 
-    # Set environment variables
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
-    tokenizer.pad_token_id = tokenizer.eos_token_id
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    model_kwargs = {
-        "torch_dtype": torch.bfloat16,
-        "device_map": "auto"
-    }
-
-    pipeline_kwargs = {
-        "temperature": 0.6,
-        "top_p": 0.95,
-    }
-
-    pipeline = transformers.pipeline(
-        "text-generation",
-        model=MODEL_ID,
-        tokenizer=tokenizer,
-        max_new_tokens=20000,
-        **pipeline_kwargs,
-        **model_kwargs
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_ID,
+        device_map="auto",
+        dtype=torch.bfloat16,
     )
 
-    # Process each chunk
-    all_requirements = []
+    all_requirements = {"skills": [], "experience": [], "qualifications": []}
     for i, chunk in enumerate(chunks):
-        print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(pipeline, chunk)
+        print(f"\n--- Processing chunk {i + 1}/{len(chunks)} ---")
+        chunk_requirements = process_chunk(model, tokenizer, chunk)
         if chunk_requirements:
-            all_requirements.extend(chunk_requirements)
+            all_requirements["skills"].extend(chunk_requirements.get("skills", []))
+            all_requirements["experience"].extend(chunk_requirements.get("experience", []))
+            all_requirements["qualifications"].extend(chunk_requirements.get("qualifications", []))
 
-    # Deduplicate requirements
-    unique_requirements = []
-    seen = set()
+    # Deduplicate requirements within each category
+    for category in all_requirements:
+        seen = set()
+        unique_items = []
+        for item in all_requirements[category]:
+            if isinstance(item, str) and item not in seen:
+                seen.add(item)
+                unique_items.append(item)
+        all_requirements[category] = unique_items
 
-    for req in all_requirements:
-        # Handle different requirement formats
-        if isinstance(req, dict):
-            # Convert dict to frozen set of items for hashing
-            req_tuple = frozenset((k, str(v)) for k, v in req.items())
-            if req_tuple not in seen:
-                seen.add(req_tuple)
-                unique_requirements.append(req)
-        elif isinstance(req, str) and req not in seen:
-            seen.add(req)
-            unique_requirements.append(req)
+    total_count = sum(len(items) for items in all_requirements.values())
+    print(f"\n===== Extracted {total_count} Unique Job Requirements =====")
 
-    # Output final result
-    print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
-
-    # Create a properly structured JSON object
-    result_obj = {
-        "requirements": unique_requirements,
-    }
-
-    result_json = json.dumps(result_obj, indent=2)
+    result_json = json.dumps(all_requirements, indent=2)
     print(result_json)
 
-    # Save to file
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
     print(f"Results saved to {OUTPUT_FILE}")
 
-    # Clean up
-    del pipeline, tokenizer
+    del model, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
-
 
 if __name__ == "__main__":
     main()

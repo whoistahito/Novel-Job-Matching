@@ -4,8 +4,11 @@ import json
 import os
 import re
 
+import outlines
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from schema import Requirements
 
 MODEL_ID = "THUDM/GLM-4-9B-0414"
 INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
@@ -60,8 +63,8 @@ def process_chunk(model, tokenizer, chunk):
         generate_kwargs = {
             "input_ids": inputs["input_ids"],
             "attention_mask": inputs["attention_mask"],
-            "max_new_tokens": 8000,
-            "do_sample": False,
+            "max_new_tokens": 10000,
+            "output_type": Requirements
         }
         # Generate response
         with torch.inference_mode():
@@ -143,21 +146,23 @@ def main():
     # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
-    # Clean up memory before loading model
+    # Clean up memory before loading hf_model
     gc.collect()
     torch.cuda.empty_cache()
 
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Load tokenizer and model
-    print(f"Loading tokenizer and model from {MODEL_ID}...")
+    # Load tokenizer and hf_model
+    print(f"Loading tokenizer and hf_model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
+    hf_model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         device_map="auto",
         trust_remote_code=True,
         dtype=torch.float16
     )
+
+    model = outlines.from_hf_model(hf_model, tokenizer)
 
     # Process each chunk
     all_requirements = []
@@ -191,7 +196,7 @@ def main():
     print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
-    del model, tokenizer
+    del hf_model, tokenizer
     gc.collect()
     torch.cuda.empty_cache()
 

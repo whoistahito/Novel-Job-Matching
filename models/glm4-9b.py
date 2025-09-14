@@ -68,31 +68,16 @@ def process_chunk(model, tokenizer, chunk):
             output = model.generate(**generate_kwargs)
 
         # Decode the response
-        full_output = tokenizer.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
+        full_output = tokenizer.decode(output[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
 
         # Extract the model's response
         response = full_output.split("<|assistant|>\n")[-1].strip()
-
+        return json.loads(response)
     except Exception as e:
         print(f"Error during generation: {e}")
+        print("Full output was:", response)
         # Fallback to simpler approach
-        inputs = tokenizer(prompt, return_tensors="pt").to(next(model.parameters()).device)
-        with torch.inference_mode():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=10000,
-                temperature=0.1
-            )
-        response = tokenizer.decode(output[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
-
-    try:
-        data = json.loads(response)
-        return data
-    except json.JSONDecodeError as e:
-        print(f"Error parsing JSON: {e}")
-        print(f"Response was: {response}")
-        return []
-
+        return {"skills": [], "experience": [], "qualifications": []}
 
 def chunk_markdown(markdown_text, chunk_size=3000):
     """

@@ -16,7 +16,7 @@ CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(model, tokenizer, chunk):
+def process_chunk(model, chunk):
     """Process a single chunk of Markdown with the LLM."""
     prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
 
@@ -39,47 +39,13 @@ def process_chunk(model, tokenizer, chunk):
 
     IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
 
-    # Format input for GLM-4 model
-    message = [
-        {"role": "system",
-         "content": "You are a helpful assistant. Your Task is to extract job requirements from provided text."},
-        {"role": "user", "content": prompt}
-    ]
-
     # Handle GLM-4 tokenizer format specifically
     try:
-
-        inputs = tokenizer.apply_chat_template(
-            message,
-            return_tensors="pt",
-            add_generation_prompt=True,
-            return_dict=True,
-        ).to(model.device)
-
-        # Move to the correct device
-        device = next(model.parameters()).device
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        generate_kwargs = {
-            "input_ids": inputs["input_ids"],
-            "attention_mask": inputs["attention_mask"],
-            "max_new_tokens": 10000,
-            "output_type": Requirements
-        }
-        # Generate response
-        with torch.inference_mode():
-            output = model.generate(**generate_kwargs)
-
-        # Decode the response
-        full_output = tokenizer.decode(output[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
-
-        # Extract the model's response
-        response = full_output.split("<|assistant|>\n")[-1].strip()
-        return json.loads(response)
+        # Directly call the outlines model
+        response = model(prompt, output_type=Requirements, max_new_tokens=1000)
+        return response.model_dump() if hasattr(response, "model_dump") else response
     except Exception as e:
         print(f"Error during generation: {e}")
-        print("Full output was:", response)
-        # Fallback to simpler approach
         return {"skills": [], "experience": [], "qualifications": []}
 
 def chunk_markdown(markdown_text, chunk_size=3000):
@@ -153,7 +119,6 @@ def main():
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
     # Load tokenizer and hf_model
-    print(f"Loading tokenizer and hf_model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
     hf_model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
@@ -161,14 +126,13 @@ def main():
         trust_remote_code=True,
         dtype=torch.float16
     )
-
-    model = outlines.from_hf_model(hf_model, tokenizer)
+    model = outlines.from_transformers(hf_model, tokenizer)
 
     # Process each chunk
     all_requirements = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(model, tokenizer, chunk)
+        chunk_requirements = process_chunk(model, chunk)
         if chunk_requirements:
             all_requirements.extend(chunk_requirements)
 

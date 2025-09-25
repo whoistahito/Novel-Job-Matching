@@ -5,6 +5,7 @@ import os
 import re
 
 import outlines
+from outlines import Template
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -18,22 +19,8 @@ OUTPUT_FILE = 'job_requirements.json'
 
 def process_chunk(model, chunk) -> Requirements:
     """Process a single chunk of Markdown with the LLM."""
-    prompt = f"""You are an expert job requirements extractor. Analyze the following job description and extract ONLY the mandatory requirements. 
-
-    Instructions:
-    1. Focus ONLY on clearly stated MUST-HAVE requirements (required, essential, necessary)
-    2. IGNORE all "nice-to-have", "preferred", or "bonus" skills/qualifications
-    3. Be specific and concise - extract exact requirements, not general topics
-    4. Categorize each requirement as either:
-       - "skills": Technical abilities or tools proficiency (e.g., "Python programming", "project management")
-       - "experiences": Work history requirements (e.g., "5+ years in software development", "experience with agile methodologies") 
-       - "qualifications": Formal education or certifications (e.g., "Bachelor's in CS", "PMP certification")
-
-    FORMAT: Return ONLY JSON with three lists (skills, experiences, qualifications).
-
-    JOB DESCRIPTION:
-    {chunk}
-    """
+    template = Template.from_file("prompt_template.txt")
+    prompt: str = template(chunk=chunk)
     try:
         response = model(prompt, output_type=Requirements, max_new_tokens=200)
         print(response)

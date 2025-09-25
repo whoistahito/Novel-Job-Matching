@@ -11,44 +11,39 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from schema import Requirements
 
 MODEL_ID = "THUDM/GLM-4-9B-0414"
-INPUT_FILE = "../input_markdown_linkedin.txt"  # Default input file if not specified in arguments
+INPUT_FILE = "../input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(model, chunk):
+def process_chunk(model, chunk) -> Requirements:
     """Process a single chunk of Markdown with the LLM."""
-    prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
+    prompt = f"""You are an expert job requirements extractor. Analyze the following job description and extract ONLY the mandatory requirements. 
 
-    RULES:
-    - Extract concrete requirements only (skills, experience years, certifications, education)
-    - Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
-    - Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
-    - Include specific technologies, tools, and methodologies mentioned
-    - Only extract what is explicitly required, not preferred
+    Instructions:
+    1. Focus ONLY on clearly stated MUST-HAVE requirements (required, essential, necessary)
+    2. IGNORE all "nice-to-have", "preferred", or "bonus" skills/qualifications
+    3. Be specific and concise - extract exact requirements, not general topics
+    4. Categorize each requirement as either:
+       - "skills": Technical abilities or tools proficiency (e.g., "Python programming", "project management")
+       - "experiences": Work history requirements (e.g., "5+ years in software development", "experience with agile methodologies") 
+       - "qualifications": Formal education or certifications (e.g., "Bachelor's in CS", "PMP certification")
 
-    TEXT TO ANALYZE:
+    FORMAT: Return ONLY JSON with three lists (skills, experiences, qualifications).
+
+    JOB DESCRIPTION:
     {chunk}
-
-    OUTPUT FORMAT (JSON only, no other text):
-    {{
-      "skills": ["Python programming", "AWS cloud services", "Docker","Git", "Kubernetes"],
-      "experience": ["3+ years software development", "2+ years with microservices"],
-      "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
-    }}
-
-    IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
-
-    # Handle GLM-4 tokenizer format specifically
+    """
     try:
-        # Directly call the outlines model
-        response = model(prompt, output_type=Requirements, max_new_tokens=1000)
-        return response.model_dump() if hasattr(response, "model_dump") else response
+        response = model(prompt, output_type=Requirements, max_new_tokens=200)
+        print(response)
+        return Requirements.model_validate_json(response)
     except Exception as e:
         print(f"Error during generation: {e}")
-        return {"skills": [], "experience": [], "qualifications": []}
+        return Requirements()
 
-def chunk_markdown(markdown_text, chunk_size=3000):
+
+def chunk_markdown(markdown_text, chunk_size=3000) -> list[str]:
     """
     Split markdown text into chunks for processing.
 
@@ -66,7 +61,6 @@ def chunk_markdown(markdown_text, chunk_size=3000):
     # Try to split on major Markdown elements (headers)
     chunks = re.split(r'(#{1,6}\s+.*?\n)', markdown_text)
 
-    # Recombine to stay under token limit
     result_chunks = []
     current_chunk = ""
 
@@ -89,7 +83,7 @@ def chunk_markdown(markdown_text, chunk_size=3000):
     return result_chunks
 
 
-def get_markdown_content(input_file):
+def get_markdown_content(input_file) -> str:
     """Get Markdown content from file."""
     try:
         with open(input_file, 'r', encoding='utf-8') as f:
@@ -103,8 +97,6 @@ def get_markdown_content(input_file):
 
 
 def main():
-    # Current date and user info
-
     # Get input Markdown from file
     print(f"Reading input from: {INPUT_FILE}")
     markdown_content = get_markdown_content(INPUT_FILE)
@@ -119,31 +111,34 @@ def main():
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
     # Load tokenizer and hf_model
+    model_kwargs = {
+        "device_map": "balanced",
+        "max_memory": {0: "10GiB", 1: "10GiB"},
+        "dtype": torch.bfloat16,
+    }
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
     hf_model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
-        device_map="auto",
-        trust_remote_code=True,
-        dtype=torch.float16
+        **model_kwargs
     )
     model = outlines.from_transformers(hf_model, tokenizer)
 
-    # Process each chunk
-    all_requirements = []
+    all_requirements: List[Requirements] = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
         chunk_requirements = process_chunk(model, chunk)
-        if chunk_requirements:
-            all_requirements.extend(chunk_requirements)
+        all_requirements.append(chunk_requirements)
 
-    merged_requirements = defaultdict(set)
-
-    # Merge all requirements (only dictionaries)
+    merged_requirements: Dict[str, Set[str]] = defaultdict(set)
     for req in all_requirements:
-        for key, values in req.items():
-            merged_requirements[key].update(values)  # Add elements to the set (no duplicates)
+        merged_requirements["skills"].update(req.skills)
+        merged_requirements["experiences"].update(req.experiences)
+        merged_requirements["qualifications"].update(req.qualifications)
 
-    unique_requirements = {key: list(values) for key, values in merged_requirements.items()}
+    # Convert sets back to lists for JSON serialization
+    unique_requirements: Dict[str, List[str]] = {
+        key: sorted(list(values)) for key, values in merged_requirements.items()
+    }
 
     print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
 

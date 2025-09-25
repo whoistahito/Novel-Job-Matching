@@ -1,11 +1,17 @@
+from collections import defaultdict
 from datetime import datetime, timezone
 import gc
 import json
 import os
 import re
+from typing import List, Dict, Set
 
+import outlines
+from outlines import Template
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from schema import Requirements
 
 # Define constants
 MODEL_ID = "THUDM/GLM-Z1-9B-0414"
@@ -14,100 +20,28 @@ CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
-def process_chunk(model, tokenizer, chunk):
-    """Process a single chunk of Markdown with the LLM."""
-    prompt = f"""You are an expert job requirements extractor. Analyze the following text and extract ONLY specific, actionable job requirements.
-
-    RULES:
-    - Extract concrete requirements only (skills, experience years, certifications, education)
-    - Skip: company overview, benefits, culture, responsibilities, "nice-to-have" items
-    - Be precise with experience requirements (e.g., "3+ years Python" not just "Python experience")
-    - Include specific technologies, tools, and methodologies mentioned
-    - Only extract what is explicitly required, not preferred
-
-    TEXT TO ANALYZE:
-    {chunk}
-
-    OUTPUT FORMAT (JSON only, no other text):
-    {{
-      "skills": ["Python programming", "AWS cloud services", "Docker","Git", "Kubernetes"],
-      "experience": ["3+ years software development", "2+ years with microservices"],
-      "qualifications": ["Bachelor's degree in Engineering","AWS Solutions Architect certification"],
-    }}
-
-    IMPORTANT: Return ONLY the JSON object above, no explanations or additional text."""
-
-    # Format input for GLM-4 model
-    messages = [
-        {"role": "system",
-         "content": "You are a specialized job data parser that extracts requirements from Markdown."},
-        {"role": "user", "content": prompt}
-    ]
-
-    response = ""
-    # Handle GLM-4 tokenizer format specifically
+def process_chunk(model, chunk) -> Requirements:
+    """Process a single chunk using structured generation into Requirements schema."""
+    template = Template.from_file("prompt_template.txt")
+    prompt: str = template(chunk=chunk)
     try:
-        # Format the messages directly for GLM-4
-        chat_text = ""
-        for msg in messages:
-            role = msg["role"]
-            content = msg["content"]
-            if role == "system":
-                chat_text += f"{content}\n\n"
-            elif role == "user":
-                chat_text += f"<|user|>\n{content}<|endoftext|>\n"
-            elif role == "assistant":
-                chat_text += f"<|assistant|>\n{content}<|endoftext|>\n"
-
-        # Add final assistant prompt
-        chat_text += "<|assistant|>\n<think>\n"
-
-        # Tokenize the text
-        inputs = tokenizer(chat_text, return_tensors="pt")
-
-        # Move to the correct device
-        device = next(model.parameters()).device
-        inputs = {k: v.to(device) for k, v in inputs.items()}
-
-        # Generate response
-        with torch.inference_mode():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=20000,
-                temperature=0.6,
-                do_sample=False
-            )
-
-        # find the where think token is which is [522, 26779, 29]
-
-        # Decode the response
-        response = tokenizer.decode(output[0], skip_special_tokens=True)
-        print(response)
-        if "</think>" in response:
-            think_end_index = response.find("</think>")
-            response = response[think_end_index + len("</think>"):].strip()
-
+        response = model(prompt, output_type=Requirements, max_new_tokens=200)
+        # In glm4-9b.py they attempt to re-validate JSON; we mirror that pattern for consistency
+        try:
+            return Requirements.model_validate_json(response)
+        except Exception:
+            # If response already is a Requirements instance or dict
+            if isinstance(response, Requirements):
+                return response
+            if isinstance(response, dict):
+                return Requirements(**response)
+            return Requirements()
     except Exception as e:
-        print(f"Error during model inference: {e}")
-        return []
-
-    print(response)
-    try:
-        data = json.loads(response)
-        print(json.dumps(data, indent=2, ensure_ascii=False))
-        # Handle flat structure format - return the data directly since it contains skills, experience, qualifications
-        if isinstance(data, dict) and any(key in data for key in ["skills", "experience", "qualifications"]):
-            return data
-        else:
-            print("Unexpected JSON format, returning empty list.")
-            return []
-    except json.JSONDecodeError as e:
-        print(f"Error parsing JSON: {e}")
-        print(f"Response was: {response}")
-        return []
+        print(f"Error during generation: {e}")
+        return Requirements()
 
 
-def chunk_markdown(markdown_text, chunk_size=3000):
+def chunk_markdown(markdown_text, chunk_size=3000) -> List[str]:
     """
     Split markdown text into chunks for processing.
 
@@ -127,7 +61,7 @@ def chunk_markdown(markdown_text, chunk_size=3000):
     chunks = re.split(r'(#{1,6}\s+.*?\n)', markdown_text)
 
     # Recombine to stay under token limit
-    result_chunks = []
+    result_chunks: List[str] = []
     current_chunk = ""
 
     for chunk in chunks:
@@ -149,7 +83,7 @@ def chunk_markdown(markdown_text, chunk_size=3000):
     return result_chunks
 
 
-def get_markdown_content(input_file):
+def get_markdown_content(input_file) -> str:
     """Get Markdown content from file."""
     try:
         with open(input_file, 'r', encoding='utf-8') as f:
@@ -175,56 +109,39 @@ def main():
 
     # Clean up memory before loading model
     gc.collect()
-    torch.cuda.empty_cache()
-
-    # Set environment variables
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
     # Load tokenizer and model
     print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
+    hf_model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         device_map="auto",
         trust_remote_code=True,
-        dtype=torch.float16
+        dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
     )
+    model = outlines.from_transformers(hf_model, tokenizer)
 
     # Process each chunk
-    all_requirements = {"skills": [], "experience": [], "qualifications": []}
-
+    all_requirements: List[Requirements] = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(model, tokenizer, chunk)
-        if chunk_requirements:
-            # Preserve the structured format instead of flattening
-            if isinstance(chunk_requirements, dict):
-                # Merge each category while maintaining structure
-                for category in ["skills", "experience", "qualifications"]:
-                    if category in chunk_requirements and isinstance(chunk_requirements[category], list):
-                        all_requirements[category].extend(chunk_requirements[category])
+        req_obj = process_chunk(model, chunk)
+        all_requirements.append(req_obj)
 
-    # Deduplicate requirements within each category
-    for category in all_requirements:
-        seen = set()
-        unique_items = []
-        for item in all_requirements[category]:
-            if isinstance(item, str) and item not in seen:
-                seen.add(item)
-                unique_items.append(item)
-        all_requirements[category] = unique_items
+    merged: Dict[str, Set[str]] = defaultdict(set)
+    for req in all_requirements:
+        merged["skills"].update(req.skills)
+        merged["experiences"].update(req.experiences)
+        merged["qualifications"].update(req.qualifications)
 
-    # Count total requirements
-    total_count = sum(len(items) for items in all_requirements.values())
-    print(f"\n===== Extracted {total_count} Job Requirements =====")
+    unique_requirements: Dict[str, List[str]] = {k: sorted(v) for k, v in merged.items()}
 
-    # Create the final structured JSON object
-    result_obj = {
-        "skills": all_requirements["skills"],
-        "experience": all_requirements["experience"],
-        "qualifications": all_requirements["qualifications"]
-    }
+    print(f"\n===== Extracted {sum(len(v) for v in unique_requirements.values())} Unique Requirement Items =====")
 
+    result_obj = {"requirements": unique_requirements}
     result_json = json.dumps(result_obj, indent=2)
     print(result_json)
 
@@ -234,9 +151,10 @@ def main():
     print(f"Results saved to {OUTPUT_FILE}")
 
     # Clean up
-    del model, tokenizer
+    del hf_model, tokenizer
     gc.collect()
-    torch.cuda.empty_cache()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 if __name__ == "__main__":

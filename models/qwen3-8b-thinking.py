@@ -19,19 +19,13 @@ OUTPUT_FILE = 'job_requirements.json'
 
 
 def process_chunk(model, chunk) -> Requirements:
-    """Structured extraction for a markdown chunk into Requirements."""
+    """Process a single chunk of Markdown with the LLM."""
     template = Template.from_file("prompt_template.txt")
     prompt: str = template(chunk=chunk)
     try:
         response = model(prompt, output_type=Requirements, max_new_tokens=200)
-        try:
-            return Requirements.model_validate_json(response)
-        except Exception:
-            if isinstance(response, Requirements):
-                return response
-            if isinstance(response, dict):
-                return Requirements(**response)
-            return Requirements()
+        print(response)
+        return Requirements.model_validate_json(response)
     except Exception as e:
         print(f"Error during generation: {e}")
         return Requirements()

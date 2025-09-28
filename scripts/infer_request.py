@@ -13,10 +13,6 @@ payload = {
     "input": {
         "markdown": markdown_content
     },
-    "params": {
-        "temperature": 0.2
-    },
-    "stream": False
 }
 
 headers = {

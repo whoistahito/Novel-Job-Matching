@@ -6,8 +6,8 @@ from outlines import Template, from_transformers, Generator
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from app.api_schema import Requirements
-from app.utils import chunk_markdown
+from api_schema import Requirements
+from utils import chunk_markdown
 
 MODELS_CONFIG = {
     "glm4-9b": {

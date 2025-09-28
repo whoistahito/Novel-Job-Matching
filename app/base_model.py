@@ -86,14 +86,14 @@ class LLMExtractor:
         unique_requirements = {k: sorted(list(v)) for k, v in merged.items()}
         return Requirements(**unique_requirements)
 
-    def process_chunk(self, chunk):
+    def process_chunk(self, chunk) -> Requirements:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         template_path = os.path.join(current_dir, "prompt_template.txt")
         template = Template.from_file(template_path)
         prompt = template(chunk=chunk)
         try:
             response = self.generator(prompt, max_new_tokens=200)
-            return response
+            return Requirements.model_validate_json(response)
         except Exception as e:
             print(f"Error during generation: {e}")
             return Requirements()

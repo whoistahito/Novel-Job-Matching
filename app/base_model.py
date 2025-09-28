@@ -12,7 +12,7 @@ from app.utils import chunk_markdown
 MODELS_CONFIG = {
     "glm4-9b": {
         "model_id": "THUDM/GLM-4-9B-0414",
-        "chunk_size": "12000",
+        "chunk_size": 12000,
         "device_kwargs": {
             "device_map": "balanced",
             "max_memory": {0: "10GiB", 1: "10GiB"},
@@ -21,7 +21,7 @@ MODELS_CONFIG = {
     },
     "llama3.1-nemotron-8b": {
         "model_id": "nvidia/Llama-3.1-Nemotron-Nano-8B-v1",
-        "chunk_size": "12000",
+        "chunk_size": 12000,
         "device_kwargs": {
             "device_map": "auto",
             "dtype": torch.bfloat16,
@@ -29,7 +29,7 @@ MODELS_CONFIG = {
     },
     "mistral-nemo": {
         "model_id": "mistralai/Mistral-Nemo-Instruct-2407",
-        "chunk_size": "12000",
+        "chunk_size": 12000,
         "device_kwargs": {
             "device_map": "auto",
             "dtype": torch.bfloat16,
@@ -37,7 +37,7 @@ MODELS_CONFIG = {
     },
     "qwen3-8b": {
         "model_id": "Qwen/Qwen3-8B",
-        "chunk_size": "12000",
+        "chunk_size": 12000,
         "device_kwargs": {
             "device_map": "auto",
             "dtype": torch.bfloat16,

@@ -14,8 +14,7 @@ MODELS_CONFIG = {
         "model_id": "THUDM/GLM-4-9B-0414",
         "chunk_size": 12000,
         "device_kwargs": {
-            "device_map": "balanced",
-            "max_memory": {0: "10GiB", 1: "10GiB"},
+            "device_map": "auto",
             "dtype": torch.bfloat16,
         },
     },
@@ -31,7 +30,8 @@ MODELS_CONFIG = {
         "model_id": "mistralai/Mistral-Nemo-Instruct-2407",
         "chunk_size": 12000,
         "device_kwargs": {
-            "device_map": "auto",
+            "device_map": "balanced",
+            "max_memory": {0: "10GiB", 1: "10GiB"},
             "dtype": torch.bfloat16,
         }
     },

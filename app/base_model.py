@@ -68,7 +68,6 @@ class LLMExtractor:
             self.model_id,
             **self.device_kwargs,
             trust_remote_code=True,
-            dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         )
         outlines_model = from_transformers(self.model, self.tokenizer)
         self.generator = Generator(outlines_model, Requirements)

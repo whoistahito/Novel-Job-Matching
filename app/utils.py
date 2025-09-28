@@ -1,10 +1,7 @@
 import re
 
-from outlines import Template
-from schema import Requirements  # Your pydantic or similar schema
 
-
-def chunk_markdown(markdown_text):
+def chunk_markdown(markdown_text, chunk_size):
     chars_per_chunk = chunk_size * 4
     chunks = re.split(r'(#{1,6}\s+.*?\n)', markdown_text)
     result_chunks = []

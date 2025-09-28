@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 
+from api_schema import JobExtractionInput, JobExtractionOutput
 from base_model import get_extractor_for
 
 app = FastAPI()

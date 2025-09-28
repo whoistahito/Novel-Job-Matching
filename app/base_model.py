@@ -2,13 +2,12 @@ from collections import defaultdict
 import gc
 import os
 
-import outlines
-from outlines import Template
-from schema import Requirements
+from outlines import Template, from_transformers, Generator
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from utils import chunk_markdown
+from app.api_schema import Requirements
+from app.utils import chunk_markdown
 
 MODELS_CONFIG = {
     "glm4-9b": {
@@ -55,7 +54,7 @@ class LLMExtractor:
         self.model_id = model_id
         self.chunk_size = chunk_size
         self.device_kwargs = device_kwargs or {}
-        self.structured_model = None
+        self.generator = None
         self._load_model()
 
     def _load_model(self):
@@ -71,7 +70,8 @@ class LLMExtractor:
             trust_remote_code=True,
             dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         )
-        self.structured_model = outlines.from_transformers(self.model, self.tokenizer)
+        outlines_model = from_transformers(self.model, self.tokenizer)
+        self.generator = Generator(outlines_model, Requirements)
 
     def process_text(self, text):
         chunks = chunk_markdown(text, self.chunk_size)
@@ -85,14 +85,16 @@ class LLMExtractor:
             merged["experiences"].update(req.experiences)
             merged["qualifications"].update(req.qualifications)
         unique_requirements = {k: sorted(list(v)) for k, v in merged.items()}
-        return unique_requirements
+        return Requirements(**unique_requirements)
 
     def process_chunk(self, chunk):
-        template = Template.from_file("prompt_template.txt")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        template_path = os.path.join(current_dir, "prompt_template.txt")
+        template = Template.from_file(template_path)
         prompt = template(chunk=chunk)
         try:
-            response = self.structured_model(prompt, output_type=Requirements, max_new_tokens=200)
-            return Requirements.model_validate_json(response)
+            response = self.generator(prompt, max_new_tokens=200)
+            return response
         except Exception as e:
             print(f"Error during generation: {e}")
             return Requirements()

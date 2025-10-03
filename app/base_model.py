@@ -26,8 +26,33 @@ MODELS_CONFIG = {
             "dtype": torch.bfloat16,
         }
     },
+    "llama3-8b-instruct": {
+        "model_id": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "chunk_size": 12000,
+        "device_kwargs": {
+            "device_map": "auto",
+            "dtype": torch.bfloat16,
+        }
+    },
+"llama3.1-8b-instruct": {
+        "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "chunk_size": 12000,
+        "device_kwargs": {
+            "device_map": "auto",
+            "dtype": torch.bfloat16,
+        }
+    },
     "mistral-nemo": {
         "model_id": "mistralai/Mistral-Nemo-Instruct-2407",
+        "chunk_size": 12000,
+        "device_kwargs": {
+            "device_map": "balanced",
+            "max_memory": {0: "10GiB", 1: "10GiB"},
+            "dtype": torch.bfloat16,
+        }
+    },
+    "mistral-7B-instruct": {
+        "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
         "chunk_size": 12000,
         "device_kwargs": {
             "device_map": "balanced",

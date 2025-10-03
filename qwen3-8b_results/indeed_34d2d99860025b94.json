@@ -1,0 +1,42 @@
+{
+    "modelId": "qwen3-8b",
+    "inputText": "sr.Blockchain Developer ( Remote, 5+ years, Rust & Substrate, good compensation) - Remote - Indeed.com\nHome\nCompany reviews\nSalary guide\nSign in\nEmployers / Post Job\n1 new update\nStart of main content\nWhatWhereFind Jobs\nsr.Blockchain Developer ( Remote, 5+ years, Rust & Substrate, good compensation)\n================================================================================\nOptim Hire (LAD Software Solutions Pvt LTd)\nRemote\n₹15,00,000 - ₹30,00,000 a year\nJob details\n-----------\n### Pay\n* ₹15,00,000 - ₹30,00,000 a year\n### Job type\n* Permanent\n* Full-time\n### Shift and schedule\n* Fixed shift\n&nbsp;\nLocation\n--------\nRemote\n&nbsp;\nFull job description\n--------------------\nAs a Senior Blockchain Engineer (Rust and Substrate) specializing to lead the design and development of blockchain protocols and applications. Your expertise will be critical in building scalable and secure decentralized systems that leverage the power of the Substrate framework.\n\\*\\*Main purpose of the role:\nCompliance Innovation is pioneering the next generation of blockchain technology. We are seeking a highly skilled Senior Blockchain Engineer with expertise in Rust, Substrate, and protocol engineering to join our innovative team. In this role, you will be responsible for creating custom blockchain nodes and developing scalable blockchain protocols, driving the design and implementation of decentralized infrastructure from the ground up.\n\\*Key Responsibilities :\\*\n- Lead the design, development, and deployment of custom blockchain nodes using Substrate..\n- Develop and engineer blockchain protocols, consensus algorithms, peer-to-peer networking, and data storage layers.\n- Write high-quality, maintainable, and efficient code in \\*Rust\\* to ensure secure and performant blockchain systems.\n- Architect, design, and implement decentralized infrastructure with a focus on scalability, security, and high availability.\n- Build and optimize custom blockchain frameworks and ensure seamless integration with decentralized applications (dApps).\n- Implement custom consensus mechanisms, governance models, and token standards tailored to specific project requirements.\n- Develop, test, and deploy smart contracts and decentralized applications in a secure manner.\n- Collaborate with cryptographers, security experts, and other engineers to maintain the highest levels of security and reliability.\n- Perform rigorous testing, debugging, and refactoring of code to ensure protocol resilience and functionality.\n- Provide technical leadership and mentorship to junior developers and blockchain engineers.\n\\*Skills and Experience :\\*\n- 5+ years of professional experience in Rust programming.\n- 3+ years of hands-on experience with Substrate and blockchain protocol development.\n- Strong knowledge of protocol engineering: design, development, and optimization of blockchain protocols.\n- Proven experience creating and maintaining custom blockchain nodes.\n- Deep understanding of blockchain architecture, cryptographic principles, peer-to-peer networking, and distributed ledger technology.\n- Experience designing custom consensus mechanisms, such as Proof of Stake (PoS), Proof of Authority (PoA), or others.\n- Experience with smart contract development, including familiarity with Solidity, WebAssembly (Wasm), or equivalent technologies.\n- Strong understanding of decentralized networks, node architecture, and blockchain infrastructure.\n- Familiarity with blockchain security vulnerabilities, attack vectors, and best practices for secure protocol design.\n- Excellent problem-solving skills and experience working on high-performance, scalable systems.\n- Strong communication skills and ability to work in a collaborative, fast-paced environment.\n\\*Personal Requirements :\\*\n- Experience with governance models, decentralized autonomous organizations (DAOs), and multi-chain interoperability.\n- Contributions to open-source blockchain projects or active involvement in blockchain communities.\n- Experience with cloud infrastructure, containerization (Docker/Kubernetes), and DevOps best practices.\n- Familiarity with WebAssembly (Wasm) and its role in blockchain environments.\nJob Types: Full-time, Permanent\nPay: ₹1,500,000.00 - ₹3,000,000.00 per year\nSchedule:\n* Fixed shift\nEducation:\n* Bachelor's (Required)\nExperience:\n* blockchain: 4 years (Required)\n* total work: 5 years (Required)\nWork Location: Remote\n&nbsp;\nloading\nsave-icon\n&nbsp;\nReport job\n&nbsp;\nElementary School Teacher jobs in Remote\nJobs at Optim Hire in Remote\nElementary School Teacher salaries in Remote\n* Career advice\n* Browse jobs\n* Browse companies\n* Salaries\n* Indeed Events\n* Work at Indeed\n* Countries\n* About\n* Help\n* ESG at Indeed\n* Guidelines for safe job search\n* © 2025 Indeed\n* Accessibility at Indeed\n* Privacy Centre and Ad Choices\n* Terms",
+    "result": {
+        "requirements": {
+            "skills": [
+                "Rust programming",
+                "Solidity",
+                "Substrate",
+                "WebAssembly (Wasm)",
+                "attack vectors",
+                "blockchain architecture",
+                "blockchain infrastructure",
+                "blockchain protocol development",
+                "blockchain security vulnerabilities",
+                "collaborative environment",
+                "communication skills",
+                "consensus mechanisms (PoS, PoA)",
+                "cryptographic principles",
+                "custom blockchain nodes",
+                "decentralized networks",
+                "distributed ledger technology",
+                "high-performance systems",
+                "node architecture",
+                "peer-to-peer networking",
+                "problem-solving skills",
+                "secure protocol design",
+                "smart contract development"
+            ],
+            "experiences": [
+                "3+ years of hands-on experience with Substrate and blockchain protocol development",
+                "4 years of blockchain experience (required)",
+                "5 years of total work experience (required)",
+                "5+ years of professional experience in Rust programming",
+                "proven experience creating and maintaining custom blockchain nodes"
+            ],
+            "qualifications": [
+                "Bachelor's degree"
+            ]
+        }
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "modelId": "llama3-8b-instruct",
+    "inputText": "Senior Embedded Software Engineer - Spire\n* Space Jobs\n* Companies\n* Salaries\n* Blog\n+ Login / Signup\nHire With Us\nSpire\nSenior Embedded Software Engineer\n=================================\nJob Expired\nMunich, Bavaria, Germany\nFull Time\na year ago\nBack to jobs\nJob description\n---------------\n*We improve life on Earth with data from space.*\nSpire Global is a space-to-cloud analytics company that owns and operates the largest multi-purpose constellation of satellites. Its proprietary data and algorithms provide the most advanced maritime, aviation, and weather tracking in the world. In addition to its constellation, Spire’s data infrastructure includes a global ground station network and 24/7 operations that provide real-time global coverage of every point on Earth.\nSpire Global is currently embarking on an ambitious project that will redefine what is possible in the field of safety for critical infrastructure from space. Our team comprises passionate individuals who thrive on challenges and are committed to driving excellence in everything we do. We depend on each other to continuously up our game. When you have great ideas about how we can do that, we don’t just listen; we implement. You will enjoy a high level of autonomy to solve a problem the best way you see fit. We work as a team and depend on each other to learn quickly and put the new skills to good use.\n**Responsibilities of your role:**\nWe are seeking a highly skilled Embedded Software Engineer to join our team. The successful candidate will play a crucial role in integrating cutting-edge radio hardware for commanding and operational purposes.\n**As part of your role, you will:**\n* Lead the firmware design and development of a cutting-edge satellite radio communication receiver.\n* Collaborate effectively with cross-functional teams spanning multiple time zones, including RF, DSP and FPGA engineers to define system requirements and architecture.\n* Design, develop, code, test and troubleshoot the system software to control and operate the radio hardware, ensuring compatibility, reliability and performance.\n* Design and implement the software tools required for performance simulation and calibration of the hardware.\n* Create and maintain software documentation, including requirements, specifications and test plans.\n* Optimize software performance and resource utilization for embedded systems with limited processing power and memory.\n* Stay updated with industry trends and emerging technologies, contributing to the continuous improvement of our processes and methodologies.\n**Qualifications / Experience:**\n* Extensive experience with embedded C/C++: interrupt handlers, concurrency, etc.\n* Strong Linux skills: extensive CLI/scripting familiarity, kernel mods, drivers, etc.\n* Experience with sensor integration over I2C, SPI, CAN, UART, etc.\n* Software Design with memory, processor, and real-time constraints.\n* Embedded Operating Systems (Petalinux, FreeRTOS, Yocto Embedded Linux).\n* Scripting Familiarity: Python, Bash, etc.\n* Experience with board bring-up.\n* Data-driven and evidence-based work methodology.\n**Strong candidates will also possess skills in one or more of the following areas:**\n* Proficiency in general hardware skills including understanding of Electrical Engineering principles, able to interpret electronic schematics with a solid understanding of digital electronics concepts.\n* Knowledge of ARM/RISC profiling and optimizations for efficient embedded system performance.\n* Understanding of networking protocols such as TCP/IP, UDP, and experience in protocol design for seamless and efficient communications.\n* Experience with time synchronization protocols and techniques, such as NTP or PTP, for ensuring accurate and reliable timing in embedded systems.\n* Previous experience in a high-reliability industry such as Automotive, Aerospace, Defence, Medical or in an embedded industry like IoT, Mobile Communications, or Distributed Sensor Networks.\n* Domain Knowledge in Space technology and Radio Communications.\n* Expertise in FPGA languages such as Verilog, VHDL, or HLS and ability to interface effectively with FPGA engineers.\n* Familiarity with RF programming concepts, Software-Defined Radio (SDR) platforms, the USRP devices and GNU Radio for signal processing and communication applications.\nSpire operates a hybrid work model, and this position will require you to work a minimum of three days per week in office.\nAccess to US export controlled software and/or technology may be required. #LI-DC1\nSpire is Global and our success draws upon the diverse viewpoints, skills and experiences of our employees. We are proud to be an equal opportunity employer and are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, marital status, disability, gender identity or veteran status.\nApplying from California? Please review the CCPA Applicant Privacy Policy.\nApplying from the EU? Please review Spire's Privacy Policy.\nRelated Jobs\n------------\nPlanet\nSolutions Architect, Professional Services Federal\n📍 Berlin, Germany\n🕒 Full Time\n📌 17 days ago\nSoftware DevelopmentPythonReact.jsJava\nView\nPlanet\nSoftware Engineer, Tasking\n📍 Berlin, Germany\n🕒 Full Time\n📌 a month ago\nSoftware DevelopmentJavascriptPythonTypescript\nView\nPlanet\nSoftware Engineer, Tasking\n📍 Berlin, Germany\n🕒 Full Time\n📌 a month ago\nSoftware DevelopmentPythonSatellites ConstellationSatellite\nView\nPlanet\nIT Systems Engineer\n📍 Berlin, Germany\n🕒 Full Time\n📌 a month ago\nSoftware DevelopmentPythonSatelliteSystems\nView\nJob Expired\nCreate job alert for similar roles\nContactSearch All Jobs\nFeedback\nAerospace Engineering Jobs Space Developer Jobs Space Electrical Jobs Space Mechanical Jobs Space Technician Jobs Space Legal Jobs Space Robotic Jobs Space Marketing Jobs Space Finance Jobs\nSpace Internship Jobs Space Junior Jobs Space Senior Jobs United States Space Jobs Europe Space Jobs France Space Jobs United Kingdom Space Jobs Remote Space Jobs Space People & HR Jobs Space Product Jobs\nNext Rocket Launches NASA Jobs SpaceX Jobs Blue Origin Jobs Rocket Lab Jobs Relativity Space Jobs Engineer Salary United States Mechanical Engineer Salary Software Engineer Salary Blue Origin Salary SpaceX Salary Lockheed Martin Salary Northrop grumman Salary NASA Salary",
+    "result": {
+        "requirements": {
+            "skills": [
+                "Bash",
+                "CAN",
+                "Embedded C/C++",
+                "FreeRTOS",
+                "I2C",
+                "Linux",
+                "Petalinux",
+                "Python",
+                "SPI",
+                "UART",
+                "Yocto Embedded Linux"
+            ],
+            "experiences": [
+                "Board bring-up",
+                "Data-driven and evidence-based work methodology",
+                "Experience with sensor integration",
+                "Extensive experience with embedded C/C++",
+                "Software Design with memory, processor, and real-time constraints"
+            ],
+            "qualifications": [
+                "ARM/RISC profiling and optimizations",
+                "Bachelor's in CS",
+                "Domain Knowledge in Space technology and Radio Communications",
+                "FPGA languages",
+                "Networking protocols",
+                "PMP certification",
+                "RF programming concepts",
+                "Software-Defined Radio (SDR) platforms",
+                "Time synchronization protocols",
+                "USRP devices and GNU Radio for signal processing and communication applications"
+            ]
+        }
+    }
+}

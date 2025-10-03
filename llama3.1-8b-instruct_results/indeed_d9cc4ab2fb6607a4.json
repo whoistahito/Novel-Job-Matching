@@ -1,0 +1,26 @@
+{
+    "modelId": "llama3.1-8b-instruct",
+    "inputText": "Embedded Firmware Engineer - München - Indeed.com\nStartseite\nUnternehmensbewertungen\nGehälter finden\nAnmelden\nAnmelden\nArbeitgeber/Jobschaltung\n1 new update\nBeginn des Hauptinhalts\nWasWoJobs finden\nDiese Stellenanzeige ist auf Indeed abgelaufen\nMögliche Gründe: Der Arbeitgeber akzeptiert keine Bewerbungen, ist nicht aktiv auf der Suche nach neuen Mitarbeitern oder prüft derzeit die eingegangen Bewerbungen\nEmbedded Firmware Engineer\n==========================\nIC Resources\n4.74.7 von 5 Sternen\nMünchen\nFestanstellung\nIC Resources\n------------\n14 Bewertungen\nLesen Sie, was andere Nutzer über diesen Arbeitgeber sagen.\nArbeitsort\n----------\nMünchen\n&nbsp;\nVollständige Stellenbeschreibung\n--------------------------------\nThis leading semiconductor company urgently seeks Embedded Firmware Engineers to be based at their R+D Centre in Munich. The Embedded Firmware Engineers will be working as part of a small, high calibre, team developing software and firmware for high speed PHYs (SERDES) used worldwide in the automotive industry.\nThe Embedded Firmware Engineers will be involved in the complete development lifecycle from initial definition, through simulation to delivery.\nYou will have completed your degree in Computer Science, Electrical and Electronic Engineering or similar. Since graduating you will have been developing firmware or embedded software in C, C++, SystemC or Assembler at hardware interface gaining experience with different MCU’s and microprocessors of all sizes. Bare metal development experience of small micro-controllers would also be beneficial. You should have some understanding of SerDes building blocks (PLL, Sampler, FIR, DFE) and any exposure to high speed PHYs (HDMI, Displayport etc) would also be a benefit. You must have excellent English, German language proficiency (B2 / C1) and be already living in, and fully authorised to work in, the European Union.\nYou can expect an excellent base salary coupled with a bonus and a full benefit package. You can also expect flexible working, a great team and a first-class working environment.\nTo find out more about this exciting opportunity contact Adrian Wagstaff on +44 1189 840948 or email him your CV and references.\n&nbsp;\n&nbsp;\nDiesen Job melden\n&nbsp;\nFirmware Engineer Jobs in München\nIC Resources Jobs in München\nFirmware Engineer Gehälter in München\n* Hiring Lab\n* Karriere-Guide\n* Jobs finden\n* Unternehmen suchen\n* Gehalt\n* Indeed Events\n* Karriere bei Indeed\n* Länder\n* Über uns\n* Hilfe\n* © 2025 Indeed\n* Barrierefreiheit bei Indeed\n* Datenschutzzentrum und Ad Choices\n* Meldung gemäß dem Gesetz über digitale Dienste\n* Seite zur Online-Sicherheit\n* Cookies\n* Nutzungsbedingungen",
+    "result": {
+        "requirements": {
+            "skills": [
+                "Assembler programming",
+                "Bare metal development of small micro-controllers",
+                "C programming",
+                "C++ programming",
+                "SystemC programming",
+                "Understanding of SerDes building blocks (PLL, Sampler, FIR, DFE)"
+            ],
+            "experiences": [
+                "Developing firmware or embedded software",
+                "Experience with different MCU's and microprocessors of all sizes"
+            ],
+            "qualifications": [
+                "Authorized to work in the European Union",
+                "Degree in Computer Science, Electrical and Electronic Engineering or similar",
+                "English language proficiency (B2 / C1)",
+                "German language proficiency (B2 / C1)"
+            ]
+        }
+    }
+}

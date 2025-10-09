@@ -36,5 +36,6 @@
                 "USRP devices and GNU Radio for signal processing and communication applications"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.402
 }

@@ -24,5 +24,6 @@
                 "Bachelor's degree in Computer Science, Software Engineering, or a related discipline"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.928
 }

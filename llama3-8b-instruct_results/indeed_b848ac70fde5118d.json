@@ -26,5 +26,6 @@
                 "Bachelor’s or master’s degree in computer science, Electrical Engineering, or a related field"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.221
 }

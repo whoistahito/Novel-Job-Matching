@@ -1,8 +1,3 @@
-"""
-Evaluation framework for benchmarking LLMs at extracting job requirements.
-Uses DeepEval with Gemini as the LLM judge.
-"""
-
 import json
 from pathlib import Path
 from typing import List, Dict, Any

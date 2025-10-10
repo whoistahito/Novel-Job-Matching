@@ -4,7 +4,6 @@ Uses DeepEval with Gemini as the LLM judge.
 """
 
 import json
-import os
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -150,11 +149,6 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
 
 def run_evaluation(model_id: str, results_dir: str, gemini_api_key: str = None, sample_size: int = None):
     """Run evaluation for a specific model's results."""
-
-    # Set up Gemini API key if provided
-    if gemini_api_key:
-        os.environ["GEMINI_API_KEY"] = gemini_api_key
-
     # Initialize Gemini model
     gemini_model = GeminiModel(
         model_name="gemini-2.5-flash-lite",

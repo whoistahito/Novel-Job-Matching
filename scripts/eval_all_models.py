@@ -163,7 +163,7 @@ if __name__ == "__main__":
     evaluate_all_models(["llama3-8b-instruct",
                          "llama3.1-8b-instruct",
                          "mistral-7B-instruct",
-                         "qwen3-8b"],
+                         "qwen3-8b", "glm4-9b"],
                         gemini_api_key=gemini_api_key)
 
     print("\n" + "=" * 60)

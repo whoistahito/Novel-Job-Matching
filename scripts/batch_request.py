@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 import requests
 
@@ -26,7 +27,10 @@ for filename in os.listdir(INPUT_DIR):
             "inputText": markdown_content
         }
 
+        start_time = time.time()
         response = requests.post(API_URL, headers=headers, data=json.dumps(payload))
+        end_time = time.time()
+        processing_time_in_seconds = end_time - start_time
 
         print(f"Processing {filename}...")
         print("Status code:", response.status_code)
@@ -35,7 +39,8 @@ for filename in os.listdir(INPUT_DIR):
             result = {
                 "modelId": MODEL_ID,
                 "inputText": markdown_content,
-                "result": response.json()
+                "result": response.json(),
+                "processingTimeInSeconds": processing_time_in_seconds
             }
             output_filename = os.path.splitext(filename)[0] + ".json"
             output_filepath = os.path.join(OUTPUT_DIR, output_filename)

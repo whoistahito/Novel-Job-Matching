@@ -15,7 +15,9 @@ dependencies = [
     "accelerate>=0.33.0",
     "markdownify>=0.13.1",
     "outlines[transformers]",
-    "protobuf>=6.32.1",
+    "protobuf>=4.25,<6",
+    "google-generativeai>=0.8.5,<0.9",
+    "deepeval>=1.2.5",
 ]
 
 [tool.pytest.ini_options]

@@ -27,5 +27,6 @@
                 "German language proficiency (at least B level)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.002
 }

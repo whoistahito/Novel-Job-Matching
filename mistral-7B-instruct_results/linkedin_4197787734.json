@@ -20,5 +20,6 @@
                 "bachelor’s degree in Computer Science or a related discipline"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.022
 }

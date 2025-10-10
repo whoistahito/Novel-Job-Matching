@@ -20,5 +20,6 @@
                 "University degree in computer science or related discipline"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.03
 }

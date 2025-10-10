@@ -11,5 +11,6 @@
                 "Master's (Required)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 1.634
 }

@@ -15,5 +15,6 @@
                 "German (desirable but not mandatory)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.527
 }

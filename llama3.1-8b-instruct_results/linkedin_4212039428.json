@@ -41,5 +41,6 @@
                 "Strong proficiency in Rust"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 6.058
 }

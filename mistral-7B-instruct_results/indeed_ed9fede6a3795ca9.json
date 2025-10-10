@@ -21,5 +21,6 @@
                 "At least a bachelor’s degree in computer science / software engineering (or similar)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.721
 }

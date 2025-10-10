@@ -22,5 +22,6 @@
                 "Bachelor's degree is not explicitly mentioned but it is assumed as a standard for the role"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.433
 }

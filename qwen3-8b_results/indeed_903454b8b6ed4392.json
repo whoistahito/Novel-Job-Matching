@@ -12,5 +12,6 @@
                 "Bachelor's in CS or related field (implied but not explicitly stated)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 2.562
 }

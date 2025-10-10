@@ -27,5 +27,6 @@
                 "Must be legally authorized to work in the United States for any employer without sponsorship"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.56
 }

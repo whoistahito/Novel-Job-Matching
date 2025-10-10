@@ -20,5 +20,6 @@
                 "Bachelor's, Master's, or Ph.D. in Computer Science or related technical discipline"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.88
 }

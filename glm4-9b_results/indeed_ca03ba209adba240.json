@@ -31,5 +31,6 @@
                 "Bachelor's degree or higher in Computer Science, Embedded System Engineering, or Electrical/Information Engineering"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 8.651
 }

@@ -13,5 +13,6 @@
                 "bachelor’s degree in computer science or related field"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.06
 }

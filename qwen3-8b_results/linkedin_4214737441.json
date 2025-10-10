@@ -23,5 +23,6 @@
                 "University degree in computer science, information technology, or related discipline"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 6.305
 }

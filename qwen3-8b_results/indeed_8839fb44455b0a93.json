@@ -15,5 +15,6 @@
                 "Valid driver’s license (qualify for fleet insurance criteria)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.145
 }

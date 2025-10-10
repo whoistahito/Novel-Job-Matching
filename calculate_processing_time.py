@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from typing import List, Tuple, Optional
 
-DIR = "llama3-8b-instruct_results"                              # Directory containing JSON files
+DIR = "glm4-9b_results"                              # Directory containing JSON files
 FIELD_NAME = "processingTimeSeconds"        # Name of field to add
 PRECISION = 3                          # Decimal places for seconds
 DRY_RUN = False                        # Compute/show changes, don't write files

@@ -31,5 +31,6 @@
                 "Bachelor or Master in Computer Science, Embedded System Engineering, or Electrical/Information Engineering"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 8.402
 }

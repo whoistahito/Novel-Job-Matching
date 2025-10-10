@@ -28,5 +28,6 @@
                 "Zertifizierungen im Entwicklungs- und im Cloud-Bereich (z.B. AWS, Azure)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.98
 }

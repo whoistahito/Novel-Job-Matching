@@ -25,5 +25,6 @@
                 "Bachelor or Master or higher degree in Computer Science, Embedded System Engineering, or Electrical/Information Engineering"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.765
 }

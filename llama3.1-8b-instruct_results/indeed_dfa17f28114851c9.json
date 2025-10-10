@@ -20,5 +20,6 @@
                 "Bachelor's degree in Engineering"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 2.718
 }

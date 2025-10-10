@@ -19,5 +19,6 @@
                 "At least a Bachelor’s degree in Engineering"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.085
 }

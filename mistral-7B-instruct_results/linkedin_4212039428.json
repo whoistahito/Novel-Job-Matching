@@ -19,5 +19,6 @@
                 "Not specified"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.98
 }

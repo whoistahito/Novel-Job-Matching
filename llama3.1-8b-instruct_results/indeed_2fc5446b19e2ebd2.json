@@ -27,5 +27,6 @@
                 "minimum BS Degree in Engineering (Computer Science, Electronics, Electrical, Chemical, etc.) or equivalent"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.442
 }

@@ -17,5 +17,6 @@
                 "Strong understanding of relational databases (e.g., MySQL, PostgreSQL)."
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.631
 }

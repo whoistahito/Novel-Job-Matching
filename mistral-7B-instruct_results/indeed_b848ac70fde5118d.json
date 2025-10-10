@@ -25,5 +25,6 @@
                 " Bachelor’s or master’s degree in computer science or a related field"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 4.488
 }

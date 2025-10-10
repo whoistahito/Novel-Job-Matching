@@ -26,5 +26,6 @@
                 "Bachelor's (Required)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.911
 }

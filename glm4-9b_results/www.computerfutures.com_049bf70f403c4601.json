@@ -22,5 +22,6 @@
                 "completed university degree or training in the field of Computer Science, Software Engineering, or similar"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.088
 }

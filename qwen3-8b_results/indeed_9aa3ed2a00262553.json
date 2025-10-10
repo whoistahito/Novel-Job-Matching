@@ -28,5 +28,6 @@
                 "Bachelor's or higher in Computer Science, Engineering, Maths, or related quantitative fields (or equivalent practical skills)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.451
 }

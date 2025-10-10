@@ -25,5 +25,6 @@
                 "Bachelor's degree in computer science/software engineering (or similar)"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.004
 }

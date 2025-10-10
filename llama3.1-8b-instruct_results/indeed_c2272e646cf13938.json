@@ -25,5 +25,6 @@
                 "Bachelor's degree in Computer Science, Engineering, Math, or equivalent"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 3.991
 }

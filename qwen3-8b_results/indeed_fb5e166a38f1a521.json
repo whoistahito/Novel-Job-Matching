@@ -16,5 +16,6 @@
                 "Bachelor’s degree in Computer Science, Electrical Engineering, Information Systems, or a related STEM field"
             ]
         }
-    }
+    },
+    "processingTimeSeconds": 5.938
 }

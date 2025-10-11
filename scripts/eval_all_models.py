@@ -4,7 +4,7 @@ from pathlib import Path
 import time
 from typing import List, Dict, Any
 
-from eval_framework import run_evaluation, save_evaluation_results, print_evaluation_summary
+from eval_framework import run_evaluation, save_evaluation_results
 
 AVAILABLE_MODELS = [
     "glm4-9b",
@@ -44,7 +44,6 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
             if eval_results:
                 # Save results
                 results_summary = save_evaluation_results(eval_results, model_id)
-                print_evaluation_summary(results_summary)
 
                 all_results[model_id] = results_summary
 

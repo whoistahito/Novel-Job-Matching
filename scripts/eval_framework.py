@@ -3,12 +3,13 @@ from pathlib import Path
 from typing import List, Dict, Any
 
 from deepeval import evaluate
-from deepeval.evaluate import AsyncConfig
+from deepeval.evaluate import AsyncConfig, DisplayConfig
 from deepeval.evaluate.types import EvaluationResult
 from deepeval.metrics import GEval
-from deepeval.models import GeminiModel
 from deepeval.models.base_model import DeepEvalBaseLLM
 from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+
+from custom_llm import CustomNvidiaModel
 
 
 def load_results_from_directory(results_dir: str) -> List[Dict[str, Any]]:
@@ -62,7 +63,7 @@ def create_test_cases(results: List[Dict[str, Any]], model_id: str) -> List[LLMT
     return test_cases
 
 
-def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
+def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
     """Create evaluation metrics using G-Eval with Gemini as judge."""
 
     # Metric 1: Correctness - Are the extracted requirements accurate?
@@ -80,7 +81,7 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
             LLMTestCaseParams.INPUT,
             LLMTestCaseParams.ACTUAL_OUTPUT
         ],
-        model=gemini_model,
+        model=model,
         threshold=0.7,
     )
 
@@ -99,7 +100,7 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
             LLMTestCaseParams.INPUT,
             LLMTestCaseParams.ACTUAL_OUTPUT
         ],
-        model=gemini_model,
+        model=model,
         threshold=0.7,
     )
 
@@ -117,7 +118,7 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
             LLMTestCaseParams.INPUT,
             LLMTestCaseParams.ACTUAL_OUTPUT
         ],
-        model=gemini_model,
+        model=model,
         threshold=0.7,
     )
 
@@ -135,7 +136,7 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
         evaluation_params=[
             LLMTestCaseParams.ACTUAL_OUTPUT
         ],
-        model=gemini_model,
+        model=model,
         threshold=0.7,
     )
 
@@ -144,12 +145,12 @@ def create_evaluation_metrics(gemini_model: GeminiModel) -> List[GEval]:
 
 def run_evaluation(model_id: str, results_dir: str, gemini_api_key: str = None, sample_size: int = None):
     """Run evaluation for a specific model's results."""
-    # Initialize Gemini model
-    gemini_model = GeminiModel(
-        model_name="gemini-2.5-flash-lite",
-        api_key=gemini_api_key
-    )
 
+    model = CustomNvidiaModel(
+        api_key=gemini_api_key,
+        model="openai/gpt-oss-120b",  # or any other NVIDIA OpenAI-compatible model
+        temperature=1.0
+    )
     # Load results
     print(f"\n{'=' * 60}")
     print(f"Evaluating model: {model_id}")
@@ -157,9 +158,9 @@ def run_evaluation(model_id: str, results_dir: str, gemini_api_key: str = None, 
     print(f"{'=' * 60}\n")
 
     if sample_size is None or sample_size <= 0:
-        results = load_results_from_directory(results_dir)[:sample_size]
-    else:
         results = load_results_from_directory(results_dir)
+    else:
+        results = load_results_from_directory(results_dir)[:sample_size]
 
     print(f"Loaded {len(results)} result files")
 
@@ -172,12 +173,13 @@ def run_evaluation(model_id: str, results_dir: str, gemini_api_key: str = None, 
     print(f"Created {len(test_cases)} test cases")
 
     # Create evaluation metrics
-    metrics = create_evaluation_metrics(gemini_model)
+    metrics = create_evaluation_metrics(model)
     print(f"Created {len(metrics)} evaluation metrics:")
     for metric in metrics:
         print(f"  - {metric.name}")
 
-    eval_results = evaluate(async_config=AsyncConfig(run_async=True, max_concurrent=1, throttle_value=20),
+    eval_results = evaluate(display_config=DisplayConfig(verbose_mode=False, print_results=False),
+                            async_config=AsyncConfig(run_async=True, max_concurrent=4, throttle_value=2),
                             test_cases=test_cases, metrics=metrics)
 
     return eval_results
@@ -236,27 +238,3 @@ def save_evaluation_results(eval_results, model_id: str, output_dir: str = "../e
 
     print(f"\nEvaluation results saved to: {output_file}")
     return results_summary
-
-
-def print_evaluation_summary(results_summary: Dict[str, Any]):
-    """Print a formatted summary of evaluation results."""
-    print(f"\n{'=' * 60}")
-    print(f"EVALUATION SUMMARY FOR: {results_summary['model_id']}")
-    print(f"{'=' * 60}\n")
-
-    print(f"Total test cases: {results_summary['total_test_cases']}\n")
-
-    print("Metrics Performance:")
-    print("-" * 60)
-    for metric_name, metric_data in results_summary["metrics_summary"].items():
-        avg_score = metric_data["average_score"]
-        passed = metric_data["passed_count"]
-        total = results_summary["total_test_cases"]
-
-        print(f"\n{metric_name}:")
-        print(f"  Average Score: {avg_score:.3f}")
-        print(f"  Min Score: {metric_data['min_score']:.3f}")
-        print(f"  Max Score: {metric_data['max_score']:.3f}")
-        print(f"  Passed (≥0.7): {passed}/{total} ({100 * passed / total:.1f}%)")
-
-    print(f"\n{'=' * 60}\n")

@@ -5,7 +5,7 @@ import requests
 API_URL = "http://127.0.0.1:8000/extract"
 
 # Read the entire input_markdown_linkedin.txt file
-with open("../datasets/input_markdown_linkedin.txt", "r", encoding="utf-8") as f:
+with open("../requirements_extraction/datasets/input_markdown_linkedin.txt", "r", encoding="utf-8") as f:
     markdown_content = f.read()
 
 payload = {

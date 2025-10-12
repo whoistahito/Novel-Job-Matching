@@ -6,7 +6,7 @@ import requests
 
 API_URL = "http://127.0.0.1:8000/extract"
 MODEL_ID = "glm4-9b"
-INPUT_DIR = "../markdown_dataset"
+INPUT_DIR = "../requirements_extraction/datasets/markdown_dataset"
 OUTPUT_DIR = f"../{MODEL_ID}_results"
 
 if not os.path.exists(OUTPUT_DIR):

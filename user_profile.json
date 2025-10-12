@@ -1,26 +1,28 @@
 {
-  "skills": [
-    "Java",
-    "Python",
-    "Django",
-    "Flask",
-    "SQL",
-    "PostgreSQL",
-    "Hibernate",
-    "RESTful APIs",
-    "Microservices",
-    "Docker",
-    "Jooq",
-    "Spring Boot",
-    "Git"
-  ],
-  "experiences": [
-    "2+ years working as student software developer ",
-    "2 + years Experience with backend frameworks in java like Spring Boot",
-    "2 + Experience with backend frameworks like Django, or Flask"
-  ],
-  "qualifications": [
-    "Bachelor's degree in Computer Science, Information Technology, or a related field",
-    "Domain driven design"
-  ]
+  "profile": {
+    "skills": [
+      "Java",
+      "Python",
+      "Django",
+      "Flask",
+      "SQL",
+      "PostgreSQL",
+      "Hibernate",
+      "RESTful APIs",
+      "Microservices",
+      "Docker",
+      "Jooq",
+      "Spring Boot",
+      "Git"
+    ],
+    "experiences": [
+      "2+ years working as student software developer ",
+      "2 + years Experience with backend frameworks in java like Spring Boot",
+      "2 + Experience with backend frameworks like Django, or Flask"
+    ],
+    "qualifications": [
+      "Bachelor's degree in Computer Science, Information Technology, or a related field",
+      "Domain driven design"
+    ]
+  }
 }

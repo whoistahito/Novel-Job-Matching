@@ -8,5 +8,4 @@ __pycache__/
 # Local secrets
 huggingface-token
 /tunnel.ps1
-/uv.lock
 /requirements_extraction/evaluation/.deepeval/

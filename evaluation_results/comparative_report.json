@@ -1,64 +1,98 @@
 {
   "evaluated_models": [
+    "llama3-8b-instruct",
     "llama3.1-8b-instruct",
     "mistral-7B-instruct",
-    "qwen3-8b"
+    "qwen3-8b",
+    "glm4-9b"
   ],
   "metrics_comparison": {
     "Structure Quality [GEval]": {
+      "llama3-8b-instruct": {
+        "average_score": 0.25789473684210523,
+        "passed_rate": 0.16267942583732056
+      },
       "llama3.1-8b-instruct": {
-        "average_score": 0.4379014608154176,
-        "passed_rate": 0.23444976076555024
+        "average_score": 0.4942583732057416,
+        "passed_rate": 0.4019138755980861
       },
       "mistral-7B-instruct": {
-        "average_score": 0.5118728082853354,
-        "passed_rate": 0.21052631578947367
+        "average_score": 0.5516746411483253,
+        "passed_rate": 0.4449760765550239
       },
       "qwen3-8b": {
-        "average_score": 0.5307629488835666,
-        "passed_rate": 0.2631578947368421
-      }
-    },
-    "Precision [GEval]": {
-      "llama3.1-8b-instruct": {
-        "average_score": 0.56035280137738,
-        "passed_rate": 0.3349282296650718
+        "average_score": 0.6066985645933014,
+        "passed_rate": 0.5263157894736842
       },
-      "mistral-7B-instruct": {
-        "average_score": 0.558726573169314,
-        "passed_rate": 0.24880382775119617
-      },
-      "qwen3-8b": {
-        "average_score": 0.6587144569624854,
-        "passed_rate": 0.45933014354066987
-      }
-    },
-    "Correctness [GEval]": {
-      "llama3.1-8b-instruct": {
-        "average_score": 0.4926441461930523,
-        "passed_rate": 0.3923444976076555
-      },
-      "mistral-7B-instruct": {
-        "average_score": 0.551798731450044,
-        "passed_rate": 0.2679425837320574
-      },
-      "qwen3-8b": {
-        "average_score": 0.5454169441497115,
-        "passed_rate": 0.40669856459330145
+      "glm4-9b": {
+        "average_score": 0.5842105263157894,
+        "passed_rate": 0.5167464114832536
       }
     },
     "Completeness [GEval]": {
+      "llama3-8b-instruct": {
+        "average_score": 0.10382775119617224,
+        "passed_rate": 0.06220095693779904
+      },
       "llama3.1-8b-instruct": {
-        "average_score": 0.38739529165427466,
-        "passed_rate": 0.1722488038277512
+        "average_score": 0.36889952153110045,
+        "passed_rate": 0.22488038277511962
       },
       "mistral-7B-instruct": {
-        "average_score": 0.43592682844973096,
-        "passed_rate": 0.07655502392344497
+        "average_score": 0.4043062200956938,
+        "passed_rate": 0.18660287081339713
       },
       "qwen3-8b": {
-        "average_score": 0.45557396724693466,
-        "passed_rate": 0.19617224880382775
+        "average_score": 0.4511961722488038,
+        "passed_rate": 0.27751196172248804
+      },
+      "glm4-9b": {
+        "average_score": 0.4789473684210526,
+        "passed_rate": 0.36363636363636365
+      }
+    },
+    "Correctness [GEval]": {
+      "llama3-8b-instruct": {
+        "average_score": 0.11961722488038277,
+        "passed_rate": 0.05741626794258373
+      },
+      "llama3.1-8b-instruct": {
+        "average_score": 0.38229665071770336,
+        "passed_rate": 0.23444976076555024
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.4363636363636364,
+        "passed_rate": 0.19138755980861244
+      },
+      "qwen3-8b": {
+        "average_score": 0.44545454545454544,
+        "passed_rate": 0.23923444976076555
+      },
+      "glm4-9b": {
+        "average_score": 0.4287081339712918,
+        "passed_rate": 0.24401913875598086
+      }
+    },
+    "Precision [GEval]": {
+      "llama3-8b-instruct": {
+        "average_score": 0.20813397129186603,
+        "passed_rate": 0.07177033492822966
+      },
+      "llama3.1-8b-instruct": {
+        "average_score": 0.392822966507177,
+        "passed_rate": 0.24401913875598086
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.45885167464114834,
+        "passed_rate": 0.2966507177033493
+      },
+      "qwen3-8b": {
+        "average_score": 0.49617224880382776,
+        "passed_rate": 0.3492822966507177
+      },
+      "glm4-9b": {
+        "average_score": 0.42727272727272725,
+        "passed_rate": 0.27751196172248804
       }
     }
   },
@@ -67,85 +101,135 @@
       {
         "rank": 1,
         "model_id": "qwen3-8b",
-        "score": 0.5307629488835666
+        "score": 0.6066985645933014
+      },
+      {
+        "rank": 2,
+        "model_id": "glm4-9b",
+        "score": 0.5842105263157894
+      },
+      {
+        "rank": 3,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.5516746411483253
+      },
+      {
+        "rank": 4,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.4942583732057416
+      },
+      {
+        "rank": 5,
+        "model_id": "llama3-8b-instruct",
+        "score": 0.25789473684210523
+      }
+    ],
+    "Completeness [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "glm4-9b",
+        "score": 0.4789473684210526
+      },
+      {
+        "rank": 2,
+        "model_id": "qwen3-8b",
+        "score": 0.4511961722488038
+      },
+      {
+        "rank": 3,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.4043062200956938
+      },
+      {
+        "rank": 4,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.36889952153110045
+      },
+      {
+        "rank": 5,
+        "model_id": "llama3-8b-instruct",
+        "score": 0.10382775119617224
+      }
+    ],
+    "Correctness [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "qwen3-8b",
+        "score": 0.44545454545454544
       },
       {
         "rank": 2,
         "model_id": "mistral-7B-instruct",
-        "score": 0.5118728082853354
+        "score": 0.4363636363636364
       },
       {
         "rank": 3,
+        "model_id": "glm4-9b",
+        "score": 0.4287081339712918
+      },
+      {
+        "rank": 4,
         "model_id": "llama3.1-8b-instruct",
-        "score": 0.4379014608154176
+        "score": 0.38229665071770336
+      },
+      {
+        "rank": 5,
+        "model_id": "llama3-8b-instruct",
+        "score": 0.11961722488038277
       }
     ],
     "Precision [GEval]": [
       {
         "rank": 1,
         "model_id": "qwen3-8b",
-        "score": 0.6587144569624854
-      },
-      {
-        "rank": 2,
-        "model_id": "llama3.1-8b-instruct",
-        "score": 0.56035280137738
-      },
-      {
-        "rank": 3,
-        "model_id": "mistral-7B-instruct",
-        "score": 0.558726573169314
-      }
-    ],
-    "Correctness [GEval]": [
-      {
-        "rank": 1,
-        "model_id": "mistral-7B-instruct",
-        "score": 0.551798731450044
-      },
-      {
-        "rank": 2,
-        "model_id": "qwen3-8b",
-        "score": 0.5454169441497115
-      },
-      {
-        "rank": 3,
-        "model_id": "llama3.1-8b-instruct",
-        "score": 0.4926441461930523
-      }
-    ],
-    "Completeness [GEval]": [
-      {
-        "rank": 1,
-        "model_id": "qwen3-8b",
-        "score": 0.45557396724693466
+        "score": 0.49617224880382776
       },
       {
         "rank": 2,
         "model_id": "mistral-7B-instruct",
-        "score": 0.43592682844973096
+        "score": 0.45885167464114834
       },
       {
         "rank": 3,
+        "model_id": "glm4-9b",
+        "score": 0.42727272727272725
+      },
+      {
+        "rank": 4,
         "model_id": "llama3.1-8b-instruct",
-        "score": 0.38739529165427466
+        "score": 0.392822966507177
+      },
+      {
+        "rank": 5,
+        "model_id": "llama3-8b-instruct",
+        "score": 0.20813397129186603
       }
     ],
     "overall": [
       {
         "rank": 1,
         "model_id": "qwen3-8b",
-        "average_score": 0.5476170793106745
+        "average_score": 0.4998803827751196
       },
       {
         "rank": 2,
-        "model_id": "mistral-7B-instruct",
-        "average_score": 0.5145812353386061
+        "model_id": "glm4-9b",
+        "average_score": 0.47978468899521526
       },
       {
         "rank": 3,
+        "model_id": "mistral-7B-instruct",
+        "average_score": 0.462799043062201
+      },
+      {
+        "rank": 4,
         "model_id": "llama3.1-8b-instruct",
-        "average_score": 0.46957342501003113
+        "average_score": 0.4095693779904306
+      },
+      {
+        "rank": 5,
+        "model_id": "llama3-8b-instruct",
+        "average_score": 0.17236842105263156
       }
     ]
   }

@@ -1,0 +1,58 @@
+{
+  "model_id": "glm4-9b",
+  "total_test_cases": 1,
+  "metrics_summary": {
+    "Correctness [GEval]": {
+      "average_score": 0.8463566657718806,
+      "min_score": 0.8463566657718806,
+      "max_score": 0.8463566657718806,
+      "passed_count": 1
+    },
+    "Completeness [GEval]": {
+      "average_score": 0.6597894539798561,
+      "min_score": 0.6597894539798561,
+      "max_score": 0.6597894539798561,
+      "passed_count": 0
+    },
+    "Precision [GEval]": {
+      "average_score": 0.7154697907085412,
+      "min_score": 0.7154697907085412,
+      "max_score": 0.7154697907085412,
+      "passed_count": 1
+    },
+    "Structure Quality [GEval]": {
+      "average_score": 0.8,
+      "min_score": 0.8,
+      "max_score": 0.8,
+      "passed_count": 1
+    }
+  },
+  "test_results": [
+    {
+      "filename": "berlinstartupjobs.com_83b7d0728930bc60.json",
+      "processing_time": 0,
+      "metrics": {
+        "Correctness [GEval]": {
+          "score": 0.8463566657718806,
+          "success": true,
+          "reason": "Most extracted items are skills accurately categorized, including specific technologies and communication abilities. However, 'knowledge in or eager to learn a CSS preprocessor' is slightly misrepresented from the original 'CSS3 (and a CSS preprocessor of your choice)', and experiences are correctly identified but qualifications categorization is appropriate as empty."
+        },
+        "Completeness [GEval]": {
+          "score": 0.6597894539798561,
+          "success": false,
+          "reason": "The extraction comprehensively captures the mandatory skills and experiences from the list, including expert JavaScript, framework experience, communication skills, and English proficiency. The only minor shortcoming is the inclusion of 'knowledge in or eager to learn a CSS preprocessor' as a skill, which is listed as a mandatory requirement ('CSS3 (and a CSS preprocessor of your choice)') but phrased slightly loosely. All other essential requirements are present."
+        },
+        "Precision [GEval]": {
+          "score": 0.7154697907085412,
+          "success": true,
+          "reason": "The output correctly distinguishes between mandatory and optional requirements, ignoring the bonus qualifications. However, it unnecessarily deconstructs the mandatory 'extensive experience' item into 'knowledge in or eager to learn' for tooling and CSS preprocessors, which was not specified in the input."
+        },
+        "Structure Quality [GEval]": {
+          "score": 0.8,
+          "success": true,
+          "reason": "The categorization is mostly appropriate, but 'extensive experience in frameworks like React.js, semantic HTML5, CSS3' is incorrectly placed in 'skills' instead of 'experiences'. Requirements are specific and concise, clearly stated without ambiguity, and the overall organization is logical and readable."
+        }
+      }
+    }
+  ]
+}

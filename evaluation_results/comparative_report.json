@@ -1,0 +1,152 @@
+{
+  "evaluated_models": [
+    "llama3.1-8b-instruct",
+    "mistral-7B-instruct",
+    "qwen3-8b"
+  ],
+  "metrics_comparison": {
+    "Structure Quality [GEval]": {
+      "llama3.1-8b-instruct": {
+        "average_score": 0.4379014608154176,
+        "passed_rate": 0.23444976076555024
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.5118728082853354,
+        "passed_rate": 0.21052631578947367
+      },
+      "qwen3-8b": {
+        "average_score": 0.5307629488835666,
+        "passed_rate": 0.2631578947368421
+      }
+    },
+    "Precision [GEval]": {
+      "llama3.1-8b-instruct": {
+        "average_score": 0.56035280137738,
+        "passed_rate": 0.3349282296650718
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.558726573169314,
+        "passed_rate": 0.24880382775119617
+      },
+      "qwen3-8b": {
+        "average_score": 0.6587144569624854,
+        "passed_rate": 0.45933014354066987
+      }
+    },
+    "Correctness [GEval]": {
+      "llama3.1-8b-instruct": {
+        "average_score": 0.4926441461930523,
+        "passed_rate": 0.3923444976076555
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.551798731450044,
+        "passed_rate": 0.2679425837320574
+      },
+      "qwen3-8b": {
+        "average_score": 0.5454169441497115,
+        "passed_rate": 0.40669856459330145
+      }
+    },
+    "Completeness [GEval]": {
+      "llama3.1-8b-instruct": {
+        "average_score": 0.38739529165427466,
+        "passed_rate": 0.1722488038277512
+      },
+      "mistral-7B-instruct": {
+        "average_score": 0.43592682844973096,
+        "passed_rate": 0.07655502392344497
+      },
+      "qwen3-8b": {
+        "average_score": 0.45557396724693466,
+        "passed_rate": 0.19617224880382775
+      }
+    }
+  },
+  "rankings": {
+    "Structure Quality [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "qwen3-8b",
+        "score": 0.5307629488835666
+      },
+      {
+        "rank": 2,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.5118728082853354
+      },
+      {
+        "rank": 3,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.4379014608154176
+      }
+    ],
+    "Precision [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "qwen3-8b",
+        "score": 0.6587144569624854
+      },
+      {
+        "rank": 2,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.56035280137738
+      },
+      {
+        "rank": 3,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.558726573169314
+      }
+    ],
+    "Correctness [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.551798731450044
+      },
+      {
+        "rank": 2,
+        "model_id": "qwen3-8b",
+        "score": 0.5454169441497115
+      },
+      {
+        "rank": 3,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.4926441461930523
+      }
+    ],
+    "Completeness [GEval]": [
+      {
+        "rank": 1,
+        "model_id": "qwen3-8b",
+        "score": 0.45557396724693466
+      },
+      {
+        "rank": 2,
+        "model_id": "mistral-7B-instruct",
+        "score": 0.43592682844973096
+      },
+      {
+        "rank": 3,
+        "model_id": "llama3.1-8b-instruct",
+        "score": 0.38739529165427466
+      }
+    ],
+    "overall": [
+      {
+        "rank": 1,
+        "model_id": "qwen3-8b",
+        "average_score": 0.5476170793106745
+      },
+      {
+        "rank": 2,
+        "model_id": "mistral-7B-instruct",
+        "average_score": 0.5145812353386061
+      },
+      {
+        "rank": 3,
+        "model_id": "llama3.1-8b-instruct",
+        "average_score": 0.46957342501003113
+      }
+    ]
+  }
+}

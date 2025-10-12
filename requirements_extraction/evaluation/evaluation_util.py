@@ -42,10 +42,7 @@ def create_test_cases(results: List[Dict[str, Any]], model_id: str) -> List[LLMT
     for result in results:
         data = result["data"]
 
-        # Extract the requirements
         requirements = data.get("result", {}).get("requirements", {})
-
-        # Format the actual output as a readable string
         actual_output = json.dumps(requirements, indent=2)
 
         # Create test case
@@ -64,7 +61,7 @@ def create_test_cases(results: List[Dict[str, Any]], model_id: str) -> List[LLMT
 
 
 def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
-    """Create evaluation metrics using G-Eval with Gemini as judge."""
+    """Create evaluation metrics using G-Eval with a LLM as judge."""
 
     # Metric 1: Correctness - Are the extracted requirements accurate?
     correctness_metric = GEval(
@@ -143,36 +140,27 @@ def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
     return [correctness_metric, completeness_metric, precision_metric, structure_metric]
 
 
-def run_evaluation(model_id: str, results_dir: str, gemini_api_key: str = None, sample_size: int = None):
+def run_evaluation(model_id: str, results_dir: str, api_key: str = None, sample_size: int = None):
     """Run evaluation for a specific model's results."""
 
     model = CustomNvidiaModel(
-        api_key=gemini_api_key,
+        api_key=api_key,
         model="openai/gpt-oss-120b",  # or any other NVIDIA OpenAI-compatible model
         temperature=1.0
     )
-    # Load results
-    print(f"\n{'=' * 60}")
+
     print(f"Evaluating model: {model_id}")
-    print(f"Results directory: {results_dir}")
-    print(f"{'=' * 60}\n")
 
     if sample_size is None or sample_size <= 0:
         results = load_results_from_directory(results_dir)
     else:
         results = load_results_from_directory(results_dir)[:sample_size]
 
-    print(f"Loaded {len(results)} result files")
-
     if not results:
         print("No results found. Skipping evaluation.")
         return None
 
-    # Create test cases
     test_cases = create_test_cases(results, model_id)
-    print(f"Created {len(test_cases)} test cases")
-
-    # Create evaluation metrics
     metrics = create_evaluation_metrics(model)
     print(f"Created {len(metrics)} evaluation metrics:")
     for metric in metrics:
@@ -223,7 +211,7 @@ def save_evaluation_results(eval_results, model_id: str, output_dir: str = "../r
             }
         })
 
-    # Calculate average scores
+    # Average scores
     for metric_name, scores in metric_scores.items():
         results_summary["metrics_summary"][metric_name] = {
             "average_score": sum(scores) / len(scores),
@@ -232,7 +220,6 @@ def save_evaluation_results(eval_results, model_id: str, output_dir: str = "../r
             "passed_count": sum(1 for score in scores if score >= 0.7)
         }
 
-    # Save to file
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results_summary, f, indent=2, ensure_ascii=False)
 

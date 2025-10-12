@@ -4,45 +4,28 @@ from pathlib import Path
 import time
 from typing import List, Dict, Any
 
-from eval_framework import run_evaluation, save_evaluation_results
-
-AVAILABLE_MODELS = [
-    "glm4-9b",
-    "llama3-8b-instruct",
-    "llama3.1-8b-instruct",
-    "llama3.1-nemotron-8b",
-    "mistral-7B-instruct",
-    "mistral-nemo",
-    "qwen3-8b"
-]
-
+from evaluation_util import run_evaluation, save_evaluation_results
 
 def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sample_size: int = None):
-    if models is None:
-        models = AVAILABLE_MODELS
+    if not models:
+        raise ValueError("No models specified for evaluation.")
+
 
     all_results = {}
 
     for model_id in models:
         results_dir = f"../{model_id}_results"
 
-        # Check if results directory exists
         if not Path(results_dir).exists():
             print(f"\nSkipping {model_id}: Results directory not found")
             continue
 
         try:
-            print(f"\n{'#' * 60}")
-            print(f"Starting evaluation for: {model_id}")
-            print(f"{'#' * 60}")
-
             start_time = time.time()
 
-            # Run evaluation
             eval_results = run_evaluation(model_id, results_dir, gemini_api_key, sample_size)
 
             if eval_results:
-                # Save results
                 results_summary = save_evaluation_results(eval_results, model_id)
 
                 all_results[model_id] = results_summary
@@ -68,7 +51,6 @@ def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
     output_dir = Path("../response_evaluation")
     output_file = output_dir / "comparative_report.json"
 
-    # Prepare comparative data
     comparative_report = {
         "evaluated_models": list(all_results.keys()),
         "metrics_comparison": {},
@@ -124,7 +106,6 @@ def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
         for i, (model_id, score) in enumerate(overall_ranking)
     ]
 
-    # Save report
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(comparative_report, f, indent=2, ensure_ascii=False)
 
@@ -150,21 +131,3 @@ def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
     print(f"Full comparative report saved to: {output_file}")
     print(f"{'=' * 60}\n")
 
-
-if __name__ == "__main__":
-    gemini_api_key = os.environ["GOOGLE_API_KEY"]
-
-    # Run evaluation for all models
-    print("\n" + "=" * 60)
-    print("STARTING COMPREHENSIVE MODEL EVALUATION")
-    print("=" * 60)
-
-    evaluate_all_models(["llama3-8b-instruct",
-                         "llama3.1-8b-instruct",
-                         "mistral-7B-instruct",
-                         "qwen3-8b", "glm4-9b"],
-                        gemini_api_key=gemini_api_key)
-
-    print("\n" + "=" * 60)
-    print("EVALUATION COMPLETE")
-    print("=" * 60)

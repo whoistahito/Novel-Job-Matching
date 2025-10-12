@@ -1,7 +1,3 @@
-# If this file lives next to your GPTModel class, you can import it relatively.
-# Otherwise, replace the import below with the correct path to GPTModel.
-# from .gpt_model import GPTModel
-
 from typing import Optional, Dict
 
 from deepeval.models import DeepEvalBaseLLM  # to call its __init__
@@ -10,7 +6,7 @@ from deepeval.models import GPTModel  # <- replace with your actual import
 
 class CustomNvidiaModel(GPTModel):
     """
-    A minimal DeepEval LLM that reuses GPTModel but targets NVIDIA's OpenAI-compatible API.
+    A Custom LLM that inherits from GPTModel for Nvidia Api.
     """
 
     def __init__(
@@ -26,7 +22,7 @@ class CustomNvidiaModel(GPTModel):
     ):
         """
         Args:
-            model: NVIDIA model name (OpenAI-compatible), e.g. "openai/gpt-oss-120b"
+            model: NVIDIA model name (OpenAI-compatible)
             api_key: NVIDIA API key
             base_url: NVIDIA integrate endpoint
             temperature: default temperature (NVIDIA examples often use 1.0)

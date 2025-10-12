@@ -9,8 +9,4 @@ __pycache__/
 huggingface-token
 /tunnel.ps1
 /uv.lock
-/scripts/.deepeval/.deepeval-cache.json
-/scripts/.deepeval/.deepeval_telemetry.txt
-/scripts/.deepeval/.latest_test_run.json
-/scripts/.deepeval/.temp-deepeval-cache.json
-/scripts/.deepeval/.temp_test_run_data.json
+/requirements_extraction/evaluation/.deepeval/

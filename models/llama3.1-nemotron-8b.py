@@ -14,7 +14,7 @@ from schema import Requirements
 
 # Constants
 MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
-INPUT_FILE = "../input_markdown_linkedin.txt"
+INPUT_FILE = "../datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 

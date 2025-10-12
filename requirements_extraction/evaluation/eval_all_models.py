@@ -65,7 +65,7 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
 def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
     """Generate a comparative report across all evaluated models."""
 
-    output_dir = Path("../evaluation_results")
+    output_dir = Path("../response_evaluation")
     output_file = output_dir / "comparative_report.json"
 
     # Prepare comparative data

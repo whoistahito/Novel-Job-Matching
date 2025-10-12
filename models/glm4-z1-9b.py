@@ -15,7 +15,7 @@ from schema import Requirements
 
 # Define constants
 MODEL_ID = "THUDM/GLM-Z1-9B-0414"
-INPUT_FILE = "../input_markdown_linkedin.txt"
+INPUT_FILE = "../datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 

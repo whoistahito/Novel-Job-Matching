@@ -145,7 +145,7 @@ def run_evaluation(model_id: str, results_dir: str, api_key: str = None, sample_
 
     model = CustomNvidiaModel(
         api_key=api_key,
-        model="openai/gpt-oss-120b",  # or any other NVIDIA OpenAI-compatible model
+        model="openai/gpt-oss-120b",
         temperature=1.0
     )
 

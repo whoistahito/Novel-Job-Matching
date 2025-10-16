@@ -1,7 +1,7 @@
 from typing import Optional, Dict
 
-from deepeval.models import DeepEvalBaseLLM  # to call its __init__
-from deepeval.models import GPTModel  # <- replace with your actual import
+from deepeval.models import DeepEvalBaseLLM
+from deepeval.models import GPTModel
 
 
 class CustomNvidiaModel(GPTModel):

@@ -1,4 +1,5 @@
 from batch_evaluation import evaluate_all_models
+import os
 
 gemini_api_key = os.environ["EXTERNAL_LLM_API_KEY"]
 

@@ -14,7 +14,7 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
     all_results = {}
 
     for model_id in models:
-        results_dir = f"../{model_id}_results"
+        results_dir = f"../llm_responses/{model_id}_results"
 
         if not Path(results_dir).exists():
             print(f"\nSkipping {model_id}: Results directory not found")
@@ -26,7 +26,7 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
             eval_results = run_evaluation(model_id, results_dir, gemini_api_key, sample_size)
 
             if eval_results:
-                results_summary = save_evaluation_results(eval_results, model_id)
+                results_summary = save_evaluation_results(eval_results, model_id,results_dir)
 
                 all_results[model_id] = results_summary
 
@@ -48,8 +48,11 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
 def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
     """Generate a comparative report across all evaluated models."""
 
-    output_dir = Path("../response_evaluation")
+    output_dir = Path("response_evaluation")
     output_file = output_dir / "comparative_report.json"
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     comparative_report = {
         "evaluated_models": list(all_results.keys()),

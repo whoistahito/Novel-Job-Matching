@@ -23,19 +23,9 @@ def get_requirements(obj: Dict) -> Dict[str, List[str]]:
 
 
 def create_embeddings(model: SentenceTransformer, requirements: Dict[str, List[str]]) -> Dict[str, List[float]]:
-    embeddings = {}
-    print("requirements",requirements)
-
-    for field, values in requirements.items():
-        text = to_text(values)
-        if not text:
-            text = ""
-
-        encoded = model.encode([text], normalize_embeddings=True)
-
-        embeddings[field] = encoded[0]
-
-    return embeddings
+    return { field: model.encode([to_text(values) or " "],normalize_embeddings=True)[0]
+             for field, values in requirements.items()
+             }
 
 
 def calculate_cosine_similarity(embedding1: List[float], embedding2: List[float]) -> float:
@@ -56,10 +46,16 @@ def compare_profiles(
     encoder_model = SentenceTransformer("all-MiniLM-L6-v2")
 
     start = time.time()
+    # Build texts per-field once
+    user_texts = {field: to_text(user_req.get(field, [])) for field in common_fields}
+    job_texts = {field: to_text(job_req.get(field, [])) for field in common_fields}
+    empty_fields = {field for field in common_fields if not user_texts[field].strip() or not job_texts[field].strip()}
+
     user_embeddings = create_embeddings(encoder_model, user_req)
     job_embeddings = create_embeddings(encoder_model, job_req)
     cosine_scores = {
-        field: calculate_cosine_similarity(user_embeddings[field], job_embeddings[field])
+        # Short-circuit empty vs non-empty (or both empty) to 0.0 for consistency
+        field: 0.0 if field in empty_fields else calculate_cosine_similarity(user_embeddings[field], job_embeddings[field])
         for field in common_fields
     }
     end = time.time()
@@ -69,9 +65,10 @@ def compare_profiles(
 
     start = time.time()
     cross_encoder_scores = {
-        field: calculate_cross_encoder_similarity(
-            to_text(user_req.get(field, [])),
-            to_text(job_req.get(field, [])),
+        # Avoid model call when either side is empty; keep consistent with cosine rule
+        field: 0.0 if field in empty_fields else calculate_cross_encoder_similarity(
+            user_texts[field],
+            job_texts[field],
             cross_model
         )
         for field in common_fields
@@ -87,6 +84,9 @@ def print_detailed_comparison(filename: str, field_scores: Dict[str, float], met
 
     for field, score in sorted(field_scores.items()):
         print(f"{field:20s}: {score:.4f}")
+
+    print(len(field_scores))
+    print(field_scores)
 
     if field_scores:
         overall = sum(field_scores.values()) / len(field_scores)

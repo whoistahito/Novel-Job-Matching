@@ -173,7 +173,7 @@ def run_evaluation(model_id: str, results_dir: str, api_key: str = None, sample_
     return eval_results
 
 
-def save_evaluation_results(eval_results, model_id: str, output_dir: str = "../response_evaluation"):
+def save_evaluation_results(eval_results, model_id: str, output_dir: str = "response_evaluation"):
     """Save evaluation results to a JSON file."""
     output_path = Path(output_dir)
     output_path.mkdir(exist_ok=True)

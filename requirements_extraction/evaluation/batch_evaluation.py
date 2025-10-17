@@ -10,7 +10,7 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
     if not models:
         raise ValueError("No models specified for evaluation.")
 
-
+    output_dir = "response_evaluation"
     all_results = {}
 
     for model_id in models:
@@ -26,7 +26,7 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
             eval_results = run_evaluation(model_id, results_dir, gemini_api_key, sample_size)
 
             if eval_results:
-                results_summary = save_evaluation_results(eval_results, model_id,results_dir)
+                results_summary = save_evaluation_results(eval_results, model_id,output_dir)
 
                 all_results[model_id] = results_summary
 
@@ -40,15 +40,15 @@ def evaluate_all_models(models: List[str] = None, gemini_api_key: str = None, sa
 
     # Generate comparative report
     if all_results:
-        generate_comparative_report(all_results)
+        generate_comparative_report(all_results,output_dir)
 
     return all_results
 
 
-def generate_comparative_report(all_results: Dict[str, Dict[str, Any]]):
+def generate_comparative_report(all_results: Dict[str, Dict[str, Any]],output_dir: str = "response_evaluation"):
     """Generate a comparative report across all evaluated models."""
 
-    output_dir = Path("response_evaluation")
+    output_dir = Path(output_dir)
     output_file = output_dir / "comparative_report.json"
 
     if not os.path.exists(output_dir):

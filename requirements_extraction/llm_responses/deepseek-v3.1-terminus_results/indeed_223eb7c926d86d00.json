@@ -1,0 +1,29 @@
+{
+    "modelId": "deepseek-ai/deepseek-v3.1-terminus",
+    "inputText": "Cellular Firmware - München - Indeed.com\nStartseite\nUnternehmensbewertungen\nGehälter finden\nAnmelden\nAnmelden\nArbeitgeber/Jobschaltung\n1 new update\nBeginn des Hauptinhalts\nWasWoJobs finden\nDiese Stellenanzeige ist auf Indeed abgelaufen\nMögliche Gründe: Der Arbeitgeber akzeptiert keine Bewerbungen, ist nicht aktiv auf der Suche nach neuen Mitarbeitern oder prüft derzeit die eingegangen Bewerbungen\nCellular Firmware\n=================\nApple\n4.14.1 von 5 Sternen\nMünchen\nApple\n-----\n13,833 Bewertungen\nLesen Sie, was andere Nutzer über diesen Arbeitgeber sagen.\nJobUnternehmen\nArbeitsort\n----------\nMünchen\n&nbsp;\nLeistungen Aus der vollständigen Stellenbeschreibung\n----------------------------------------------------\n* Aufstiegsmöglichkeiten\n&nbsp;\nVollständige Stellenbeschreibung\n--------------------------------\nDo you love working on state-of-the-art technologies? Are you forward-thinking and love solving technological and architectural challenges? oin this team and you’ll collaborate with engineers across Apple to develop algorithms and architectures that help build the seamless experiences we are known for worldwide! In this role, you will be developing state-of-the-art algorithms for image and video processing and will be collaborating with architecture, design and software to enable features and algorithms on our products .\n**Description**\nAs a firmware engineer, you will be part of global team that is responsible for phy firmware development for state of the art mobile wireless communication system. You will: Implement key signal processing algorithms with tight memory/timing requirement Work with different teams on interface design and requirements Work with system engineering team on features and performance optimization Participate in design and code reviews\n**Minimum Qualifications**\n93335091\n**Key Qualifications**\n* Experience with embedded C/C++ and know-how on matlab, python for development\n* Solid Foundation in signal processing and communication theory, such as signal/parameter estimation and detection\n* Strong analytical and problem solving skills\n* Strong teamwork spirit, respect for diverse viewpoints, ability to effectively communicate and work with global located teams across different time zones\n* Eagerness to learn new things and take up new challenges\n* Availability for 6months or longer\n* English language proficiency is required\nUnderstanding of 4G/5G 3GPP protocols\n**Education & Experience**\nCurrently enrolled in a M.S or Ph.d degree programme in electrical or communication engineering or equivalent.\n**Additional Requirements**\nApple is an equal opportunity employer that is committed to inclusion and diversity. We also take affirmative action to offer employment and advancement opportunities to all applicants, including minorities, women, protected veterans, and individuals with disabilities. Apple will not discriminate or retaliate against applicants who inquire about, disclose, or discuss their compensation or that of other applicants.\nLebenslauf senden\n&nbsp;\nDiesen Job melden\n### Fügen Sie Gehaltsangaben hinzu\nBewerten Sie Apple\nApple Bewertung für München, BY ansehen\nCellular Firmware Bewertung für Apple ansehen\nReview for Cellular Firmware at Apple, München, BY\nGehaltslink für Apple\nSalaries for Apple, München, BY\nSalaries for Cellular Firmware at Apple\nSalaries for Cellular Firmware at Apple, München, BY\nGehaltslink für Cellular Firmware\nSalaries for Cellular Firmware, München, BY\n### Karriere-Guide-Artikel\n22 Jobs für empathische Menschen\nAlles Wissenswerte zum Fotografie-Studium\nArbeitgeberwechsel-Checkliste: Daran müssen Sie denken\nFahrzeuglackierer-Weiterbildung: Alle Infos\nGesundheitsmanager-Gehalt: So hoch ist es\nInnenarchitekt (m/w/d) und Innendesigner (m/w/d): Unterschiede\nWas verdient man in der Sportwissenschaft?\nWerkvertrag und Dienstvertrag: Unterschiede & Details\nWie wird man medizinisch-technischer Assistent?\n* Hiring Lab\n* Karriere-Guide\n* Jobs finden\n* Unternehmen suchen\n* Gehalt\n* Indeed Events\n* Karriere bei Indeed\n* Länder\n* Über uns\n* Hilfe\n* © 2025 Indeed\n* Barrierefreiheit bei Indeed\n* Datenschutzzentrum und Ad Choices\n* Meldung gemäß dem Gesetz über digitale Dienste\n* Seite zur Online-Sicherheit\n* Cookies\n* Nutzungsbedingungen",
+    "result": {
+        "requirements": {
+            "skills": [
+                "embedded C/C++",
+                "matlab",
+                "python",
+                "signal processing",
+                "communication theory",
+                "signal/parameter estimation and detection",
+                "analytical and problem solving skills",
+                "teamwork spirit",
+                "effective communication",
+                "work with global teams",
+                "English language proficiency",
+                "understanding of 4G/5G 3GPP protocols"
+            ],
+            "experiences": [
+                "availability for 6months or longer"
+            ],
+            "qualifications": [
+                "Currently enrolled in a M.S or Ph.D degree programme in electrical or communication engineering or equivalent"
+            ]
+        }
+    },
+    "processingTimeInSeconds": 1.8383283615112305
+}

@@ -1,6 +1,5 @@
 {
   "evaluated_models": [
-    "llama3-8b-instruct",
     "llama3.1-8b-instruct",
     "mistral-7B-instruct",
     "qwen3-8b",
@@ -8,10 +7,6 @@
   ],
   "metrics_comparison": {
     "Structure Quality [GEval]": {
-      "llama3-8b-instruct": {
-        "average_score": 0.25789473684210523,
-        "passed_rate": 0.16267942583732056
-      },
       "llama3.1-8b-instruct": {
         "average_score": 0.4942583732057416,
         "passed_rate": 0.4019138755980861
@@ -30,10 +25,6 @@
       }
     },
     "Completeness [GEval]": {
-      "llama3-8b-instruct": {
-        "average_score": 0.10382775119617224,
-        "passed_rate": 0.06220095693779904
-      },
       "llama3.1-8b-instruct": {
         "average_score": 0.36889952153110045,
         "passed_rate": 0.22488038277511962
@@ -52,10 +43,6 @@
       }
     },
     "Correctness [GEval]": {
-      "llama3-8b-instruct": {
-        "average_score": 0.11961722488038277,
-        "passed_rate": 0.05741626794258373
-      },
       "llama3.1-8b-instruct": {
         "average_score": 0.38229665071770336,
         "passed_rate": 0.23444976076555024
@@ -74,10 +61,6 @@
       }
     },
     "Precision [GEval]": {
-      "llama3-8b-instruct": {
-        "average_score": 0.20813397129186603,
-        "passed_rate": 0.07177033492822966
-      },
       "llama3.1-8b-instruct": {
         "average_score": 0.392822966507177,
         "passed_rate": 0.24401913875598086
@@ -117,11 +100,6 @@
         "rank": 4,
         "model_id": "llama3.1-8b-instruct",
         "score": 0.4942583732057416
-      },
-      {
-        "rank": 5,
-        "model_id": "llama3-8b-instruct",
-        "score": 0.25789473684210523
       }
     ],
     "Completeness [GEval]": [
@@ -144,11 +122,6 @@
         "rank": 4,
         "model_id": "llama3.1-8b-instruct",
         "score": 0.36889952153110045
-      },
-      {
-        "rank": 5,
-        "model_id": "llama3-8b-instruct",
-        "score": 0.10382775119617224
       }
     ],
     "Correctness [GEval]": [
@@ -171,11 +144,6 @@
         "rank": 4,
         "model_id": "llama3.1-8b-instruct",
         "score": 0.38229665071770336
-      },
-      {
-        "rank": 5,
-        "model_id": "llama3-8b-instruct",
-        "score": 0.11961722488038277
       }
     ],
     "Precision [GEval]": [
@@ -198,11 +166,6 @@
         "rank": 4,
         "model_id": "llama3.1-8b-instruct",
         "score": 0.392822966507177
-      },
-      {
-        "rank": 5,
-        "model_id": "llama3-8b-instruct",
-        "score": 0.20813397129186603
       }
     ],
     "overall": [
@@ -225,11 +188,6 @@
         "rank": 4,
         "model_id": "llama3.1-8b-instruct",
         "average_score": 0.4095693779904306
-      },
-      {
-        "rank": 5,
-        "model_id": "llama3-8b-instruct",
-        "average_score": 0.17236842105263156
       }
     ]
   }

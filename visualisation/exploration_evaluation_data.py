@@ -6,7 +6,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
 DEFAULT_DATA = """{
   "evaluated_models": [
     "llama3.1-8b-instruct",
@@ -214,61 +213,9 @@ for metric, models_data in data['metrics_comparison'].items():
             'passed_rate': scores['passed_rate']
         })
 
-df_metrics = pd.DataFrame(records)
 df_overall = pd.DataFrame(data['rankings']['overall'])
-
-# --- 2. Visualization using Seaborn ---
-sns.set_theme(style="whitegrid", palette="viridis")
-
-
-# --- Plot 1: Grouped Bar Chart for Average Scores ---
-g = sns.catplot(
-    data=df_metrics,
-    kind="bar",
-    x="model",
-    y="average_score",
-    hue="metric",
-    height=7,
-    aspect=1.8,
-    legend_out=True
-)
-
-# Set the numerical axis limit to 1.0 for context
-g.set(ylim=(0, 1))
-
-g.set_axis_labels("Model", "Average Score")
-g.set_xticklabels(rotation=45, ha='right')
-g.legend.set_title("Evaluation Metric")
-
-plt.savefig('average_scores_comparison.png', dpi=300, bbox_inches='tight')
-plt.show()
-
-
-# --- Plot 2: Grouped Bar Chart for Passed Rates ---
-g = sns.catplot(
-    data=df_metrics,
-    kind="bar",
-    x="model",
-    y="passed_rate",
-    hue="metric",
-    height=7,
-    aspect=1.8,
-    legend_out=True
-)
-
-# Set the numerical axis limit to 1.0 for context
-g.set(ylim=(0, 1))
-
-g.set_axis_labels("Model", "Passed Rate")
-g.set_xticklabels(rotation=45, ha='right')
-g.legend.set_title("Evaluation Metric")
-
-plt.savefig('passed_rates_comparison.png', dpi=300, bbox_inches='tight')
-plt.show()
-
-
-# --- Plot 3: Horizontal Bar Chart for Overall Ranking ---
 df_overall_sorted = df_overall.sort_values(by='average_score', ascending=False)
+sns.set_theme(style="whitegrid", palette="viridis_r")
 
 plt.figure(figsize=(12, 7))
 
@@ -280,14 +227,12 @@ barplot = sns.barplot(
 )
 
 for index, value in enumerate(df_overall_sorted['average_score']):
-    plt.text(value + 0.01, index, f'{value:.3f}', va='center', fontsize=11, color='black')
+    plt.text(value + 0.01, index, f'{value:.2f}', va='center', fontsize=11, color='black')
 
-# Set the numerical axis limit to 1.0 for context
 plt.xlim(0, 1)
-
 plt.xlabel('Overall Average Score (out of 1.0)', fontsize=12)
 plt.ylabel('Model', fontsize=12)
 
 plt.tight_layout()
 plt.savefig('overall_model_ranking.png', dpi=300, bbox_inches='tight')
-plt.show()
+# plt.show()

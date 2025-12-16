@@ -30,20 +30,29 @@ for json_file in data_dir.glob("*.json"):
         print(f"Error loading {json_file}: {e}")
 
 sources = [d['filename'].split('_')[0] for d in all_data]
+# Group sources other than linkedin and indeed into 'Other'
+sources = [s if s in ['linkedin', 'indeed'] else 'Other' for s in sources]
 source_counts = Counter(sources)
 output_dir = Path(__file__).parent
 
+# Prepare data for Pie Chart
 fig, ax = plt.subplots(figsize=(10, 8))
 source_names = list(source_counts.keys())
 source_values = list(source_counts.values())
-colors_source = plt.cm.Pastel1(np.linspace(0, 1, len(source_names)))
+
+# Sort by value for better layout
+sorted_indices = np.argsort(source_values)[::-1]
+source_names = [source_names[i] for i in sorted_indices]
+source_values = [source_values[i] for i in sorted_indices]
+
+colors_source = sns.color_palette("Set2")
 
 wedges, texts, autotexts = ax.pie(source_values,
                                      labels=source_names,
                                      autopct='%1.1f%%',
                                      startangle=90,
                                      colors=colors_source,
-                                     shadow=True,
+                                     shadow=False,
                                      explode=[0.05] * len(source_names),
                                      textprops={'fontsize': 11})
 

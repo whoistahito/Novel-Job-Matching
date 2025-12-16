@@ -1,0 +1,15 @@
+You are an expert job requirements extractor. Analyze the following job description and extract ONLY the mandatory requirements.
+
+    Instructions:
+    1. Focus ONLY on clearly stated MUST-HAVE requirements (required, essential, necessary)
+    2. IGNORE all "nice-to-have", "preferred", or "bonus" skills/qualifications
+    3. Be specific and concise - extract exact requirements, not general topics
+    4. Categorize each requirement as either:
+       - "skills": Technical abilities or tools proficiency (e.g., "Python programming", "project management")
+       - "experiences": Work history requirements (e.g., "5+ years in software development", "experience with agile methodologies")
+       - "qualifications": Formal education or certifications (e.g., "Bachelor's in CS", "PMP certification")
+
+    FORMAT: Return ONLY JSON with three lists (skills, experiences, qualifications).
+
+    JOB DESCRIPTION:
+    {{chunk}}

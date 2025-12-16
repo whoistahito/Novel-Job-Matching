@@ -1,3 +1,9 @@
+"""
+This code is used to compare a cross-encoder vs. simply computing cosine similarity.
+It also explores how these techniques could be integrated in a job matching system given
+two JSONs: one representing a user profile and one with job requirements.
+"""
+
 import json
 from pathlib import Path
 from typing import Dict, List

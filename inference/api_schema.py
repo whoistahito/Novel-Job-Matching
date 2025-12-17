@@ -41,5 +41,6 @@ class JobExtractionInput(BaseModel):
                                      )
 
 
-class JobExtractionOutput(BaseModel):
-    requirements: Requirements
+class SimilarityScore(BaseModel):
+    score: int = Field(...,
+                       description="Similarity score")

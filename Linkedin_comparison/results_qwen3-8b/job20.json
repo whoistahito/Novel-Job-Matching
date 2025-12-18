@@ -1,0 +1,46 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Client-/Server-/Datenbank- oder Application-Server-Umgebungen",
+                "Cluster-Systemen (Kubernetes, Docker)",
+                "Deutsch- und Englischkenntnisse",
+                "IT-Affinität",
+                "Kenntnisse in IT-Infrastrukturen",
+                "Netzwerken",
+                "Umgang und Austausch mit Menschen"
+            ],
+            "experiences": [
+                "Erfahrungen mit Cluster-Systemen (Kubernetes, Docker)",
+                "Hohe IT-Affinität, idealerweise gepaart mit einschlägiger Berufserfahrung"
+            ],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.10147003456950188
+        }
+    },
+    "processingTimeInSeconds": 6.367530822753906
+}

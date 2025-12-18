@@ -1,0 +1,51 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Angular",
+                "CI/CD-Pipelines",
+                "CSS",
+                "Cloud-Technologien",
+                "Docker",
+                "HTML5",
+                "Java / Kotlin",
+                "Kubernetes",
+                "RESTful Services",
+                "Spring Boot",
+                "TypeScript / JavaScript",
+                "relationalen Datenbanken"
+            ],
+            "experiences": [
+                "Abgeschlossenes Studium der (Wirtschafts-)Informatik oder vergleichbare Qualifikation",
+                "Verhandlungssicheres Deutsch"
+            ],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.2211477443575859
+        }
+    },
+    "processingTimeInSeconds": 5.387709856033325
+}

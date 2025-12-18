@@ -1,0 +1,45 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Java",
+                "TypeScript"
+            ],
+            "experiences": [
+                "Begeisterung für Themen rund um die IT, Software und Hardware",
+                "Bock auf Teamwork und eine Menge Spaß am Arbeitsplatz",
+                "Kreative Ideen für technische Lösungen",
+                "Lust in den verschiedensten Teams jeden Tag etwas Neues zu lernen"
+            ],
+            "qualifications": [
+                "Einen guten Schulabschluss - Mittlere Reife, Abitur oder vergleichbares"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.4114361107349396
+        }
+    },
+    "processingTimeInSeconds": 4.912644386291504
+}

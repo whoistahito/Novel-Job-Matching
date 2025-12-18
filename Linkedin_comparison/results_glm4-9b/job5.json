@@ -1,0 +1,58 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                ".net 8",
+                "API Entwicklung (WCF/REST)",
+                "Azure",
+                "C#",
+                "CSS",
+                "Cloud-Technologien (Containerisierung von .net Anwendungen)",
+                "HTML",
+                "Javascript (Angular/React/NodeJS)",
+                "SAML",
+                "SQL Server",
+                "Secure Programming",
+                "VS2022"
+            ],
+            "experiences": [
+                "Internationale Zusammenarbeit",
+                "Lösungsorientiertes Denken",
+                "Methodische Kenntnisse",
+                "Praxiserfahrung mit Engineering Konzepten wie (Testautomatisierung und Infrastructure as Code)",
+                "Wachstumsmentalität",
+                "akademischer Hintergrund",
+                "mehrjährige Berufserfahrung in einem vergleichbaren Bereich"
+            ],
+            "qualifications": [
+                "Studium in einem relevanten Fachgebiet (z. B. Informatik, Versicherungswesen)"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.24752258956432344
+        }
+    },
+    "processingTimeInSeconds": 8.901140689849854
+}

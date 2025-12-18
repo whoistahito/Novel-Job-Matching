@@ -1,0 +1,44 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Abgeschlossenes Studium der Elektrotechnik, Industrieautomatisierung oder in einem ähnlichen Bereich"
+            ],
+            "experiences": [
+                "Erfahrung mit (Siemens S7-1500) SPS",
+                "Erfahrung mit PC-Netzwerken und Integrationen",
+                "Gelegentliche Reisebereitschaft (auch international)",
+                "Mehrjährige Berufserfahrung als SPS-Programmierer (m/w/d) ist von Vorteil"
+            ],
+            "qualifications": [
+                "Abgeschlossenes Studium der Elektrotechnik, Industrieautomatisierung oder in einem ähnlichen Bereich"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.24232650697231292
+        }
+    },
+    "processingTimeInSeconds": 6.374692440032959
+}

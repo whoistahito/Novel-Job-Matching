@@ -1,0 +1,47 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Java",
+                "React",
+                "SpringBoot",
+                "TypeScript"
+            ],
+            "experiences": [
+                "Development and operation of applications on cloud technologies, preferably AWS",
+                "Development and optimization of sales system for life insurance products in the context of Sparkassen",
+                "Experience with Scrum and SAFe, modern development methods, and targeted pair programming",
+                "Migration of our application to the cloud and taking over responsibility for further development and architectural realignment"
+            ],
+            "qualifications": [
+                "Completed degree in Computer Science, Information Technology, Engineering sciences, or comparable training or comparable practical professional experience"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.4291622549295425
+        }
+    },
+    "processingTimeInSeconds": 5.49672794342041
+}

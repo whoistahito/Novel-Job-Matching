@@ -1,0 +1,46 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Erfahrungen mit Cluster-Systemen (Kubernetes, Docker)",
+                "Freude am Umgang und Austausch mit Menschen",
+                "IT-Expertise",
+                "Umfassende Kenntnisse in IT-Infrastrukturen",
+                "sehr gute Deutsch- und Englischkenntnisse in Wort und Schrift",
+                "tiefes Verständnis für komplexe Infrastrukturen"
+            ],
+            "experiences": [
+                "Einarbeitung in neue und komplexe Softwareprodukte",
+                "eigenverantwortliches Arbeiten",
+                "einschlägige Berufserfahrung"
+            ],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.14577409923076629
+        }
+    },
+    "processingTimeInSeconds": 6.488170623779297
+}

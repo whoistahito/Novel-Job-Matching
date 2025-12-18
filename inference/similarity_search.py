@@ -1,10 +1,10 @@
 
-from typing import List, Dic
+from typing import List, Dict
 
 from sentence_transformers import SentenceTransformer, util
 import torch
 
-from inference.api_schema import UserProfile, Requirements
+from api_schema import UserProfile, Requirements, SimilarityScore
 
 # Global model instance to avoid reloading on every call
 _model = None
@@ -38,7 +38,7 @@ def compute_similarity(
         user_profile: UserProfile,
         extracted_requirements: Requirements,
         weights: Dict[str, float] = None
-) -> float:
+) -> SimilarityScore:
     if weights is None:
         weights = {"skills": 0.5, "experiences": 0.3, "qualifications": 0.2}
 
@@ -62,4 +62,4 @@ def compute_similarity(
         for field in requirement_fields
     )
 
-    return weighted_score
+    return SimilarityScore(score=weighted_score)

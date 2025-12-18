@@ -1,0 +1,37 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [],
+            "qualifications": [
+                "Abgeschlossenes Studium der (Wirtschafts-)Informatik, Mathematik, Physik oder einem vergleichbaren MINT-Studiengang oder eine fundierte Ausbildung in Informatik."
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.12065435647964479
+        }
+    },
+    "processingTimeInSeconds": 2.9582479000091553
+}

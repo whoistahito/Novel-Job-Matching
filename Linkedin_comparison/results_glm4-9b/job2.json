@@ -1,0 +1,43 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Python programming",
+                "project management"
+            ],
+            "experiences": [
+                "5+ years in software development",
+                "experience with agile methodologies"
+            ],
+            "qualifications": [
+                "Bachelor's in CS"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.7337594568729401
+        }
+    },
+    "processingTimeInSeconds": 2.770979642868042
+}

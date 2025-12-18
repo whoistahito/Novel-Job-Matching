@@ -1,0 +1,43 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [
+                "Abgeschlossenes Studium der Elektrotechnik, Industrieautomatisierung oder in einem ähnlichen Bereich"
+            ],
+            "qualifications": [
+                "Abgeschlossenes Studium der Elektrotechnik, Industrieautomatisierung oder in einem ähnlichen Bereich",
+                "Erfahrung mit (Siemens S7-1500) SPS",
+                "Gelegentliche Reisebereitschaft (auch international)",
+                "Mehrerjährige Berufserfahrung als SPS-Programmierer (m/w/d) ist von Vorteil",
+                "Valid driver’s license"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.11947889477014542
+        }
+    },
+    "processingTimeInSeconds": 6.161057472229004
+}

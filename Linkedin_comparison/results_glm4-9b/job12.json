@@ -1,0 +1,38 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [],
+            "qualifications": [
+                " relevante Zertifikate wie Salesforce Administrator oder B2B Commerce Developer",
+                "Studium in Informatik, Wirtschaftsinformatik oder einer vergleichbaren Qualifikation"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.11448197364807129
+        }
+    },
+    "processingTimeInSeconds": 2.7539730072021484
+}

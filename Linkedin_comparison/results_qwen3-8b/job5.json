@@ -1,0 +1,56 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                ".net 4.8 Webforms Verständnis",
+                ".net 8",
+                "API Entwicklung (WCF/REST)",
+                "Azure",
+                "C#",
+                "CSS",
+                "Cloud-Technologien (Containerisierung von .net Anwendungen)",
+                "HTML",
+                "Javascript (Angular/React/NodeJS)",
+                "SAML",
+                "SQL Server",
+                "Secure Programming",
+                "VS2022"
+            ],
+            "experiences": [
+                "Berufserfahrung in einem vergleichbaren Bereich",
+                "DevOps Praktiken",
+                "Engineering Konzepte (Testautomatisierung und Infrastructure as Code)",
+                "agile Entwicklungsmethoden (Scrum und Kanban)"
+            ],
+            "qualifications": [
+                "Akademischer Hintergrund in einem relevanten Fachgebiet (z. B. Informatik, Versicherungswesen)"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.2782969310879707
+        }
+    },
+    "processingTimeInSeconds": 8.269466400146484
+}

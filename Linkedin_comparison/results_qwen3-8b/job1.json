@@ -1,0 +1,38 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [],
+            "qualifications": [
+                "Erfolgreich absolviertes Informatikstudium oder vergleichbare Ausbildung mit Berufserfahrung",
+                "Sehr gute Deutsch- (C1+ oder vergleichbar) und gute Englischkenntnisse (B1+ oder vergleichbar) sind ein Muss"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.058999967575073246
+        }
+    },
+    "processingTimeInSeconds": 17.633397340774536
+}

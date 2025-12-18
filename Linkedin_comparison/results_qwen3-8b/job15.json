@@ -1,0 +1,45 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Angular",
+                "C#",
+                "Git",
+                "Java",
+                "SQL"
+            ],
+            "experiences": [
+                "agile methodologies"
+            ],
+            "qualifications": [
+                "(Wirtschafts-) Informatik or comparable study program"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.5129519313573837
+        }
+    },
+    "processingTimeInSeconds": 2.767476797103882
+}

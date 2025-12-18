@@ -1,0 +1,38 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [],
+            "qualifications": [
+                "abgeschlossenes Studium der Natur- oder Ingenieurwissenschaften",
+                "sehr gut Deutsch sprechen, das heißt auch ohne Zertifikat mindestens auf C1-Niveau"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.07313690185546876
+        }
+    },
+    "processingTimeInSeconds": 2.7464537620544434
+}

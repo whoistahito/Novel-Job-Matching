@@ -1,0 +1,53 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Agile",
+                "Angular",
+                "Apache Kafka",
+                "DevOps",
+                "Docker",
+                "Java",
+                "JavaFX",
+                "Kubernetes",
+                "React",
+                "Spring"
+            ],
+            "experiences": [
+                "2 years in Full-Stack Development",
+                "agile methodologies",
+                "experience with Microservices"
+            ],
+            "qualifications": [
+                "Bachelor's in Computer Science, Business Informatics, Mathematics, Natural Sciences or equivalent",
+                "security clearance"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.38170314729213717
+        }
+    },
+    "processingTimeInSeconds": 4.632516145706177
+}

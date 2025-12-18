@@ -1,0 +1,48 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Assembler",
+                "C/C++",
+                "Continuous Integration",
+                "Debugging",
+                "Scriptsprachen",
+                "Sourceverwaltung"
+            ],
+            "experiences": [
+                "Erfahrung im Development Lifecycle (inkl. Sourceverwaltung und Continuous Integration)",
+                "erfolgreich abgeschlossenes Studium (z.B. der Informatik) oder vergleichbare Berufsausbildung im IT-Umfeld",
+                "erste Berufserfahrung in der Software-Entwicklung"
+            ],
+            "qualifications": [
+                "erfolgreich abgeschlossenes Studium (z.B. der Informatik) oder vergleichbare Berufsausbildung im IT-Umfeld"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.3114794701337814
+        }
+    },
+    "processingTimeInSeconds": 7.013409376144409
+}

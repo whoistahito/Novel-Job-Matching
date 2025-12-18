@@ -1,0 +1,47 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Java",
+                "React",
+                "SpringBoot",
+                "TypeScript"
+            ],
+            "experiences": [
+                "Erfolgreich abgeschlossenes Studium in Informatik, Informationstechnologie, Ingenieurwissenschaften oder einer vergleichbaren Ausbildung"
+            ],
+            "qualifications": [
+                "Java",
+                "React",
+                "SpringBoot",
+                "TypeScript"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.3878012090921402
+        }
+    },
+    "processingTimeInSeconds": 3.943549394607544
+}

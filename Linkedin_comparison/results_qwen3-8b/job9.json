@@ -1,0 +1,61 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                ".NET 8",
+                "Angular",
+                "C#",
+                "Docker",
+                "EF Core",
+                "Electron",
+                "FastAPI",
+                "Git",
+                "GitLab CI",
+                "Grafana",
+                "Kubernetes",
+                "PostgreSQL",
+                "Prometheus",
+                "Pydantic",
+                "Pytest",
+                "Python",
+                "React",
+                "SQL",
+                "SqlAlchemy",
+                "Vue.js",
+                "xUnit"
+            ],
+            "experiences": [
+                "3+ years as a Full-Stack Developer with comprehensive knowledge of the entire development process"
+            ],
+            "qualifications": [
+                "Immunization status against measles virus"
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.38960491120815277
+        }
+    },
+    "processingTimeInSeconds": 5.919324636459351
+}

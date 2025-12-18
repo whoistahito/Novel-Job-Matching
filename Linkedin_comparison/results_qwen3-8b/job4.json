@@ -1,0 +1,42 @@
+{
+    "modelId": "qwen3-8b",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [
+                "3 Jahre Erfahrung in der Entwicklung von Power Apps und Power Automate Flows.",
+                "Erfahrung mit Canvas- & Model-driven Apps sowie Power Platform Solutions (>80 PT).",
+                "Kenntnis agiler Methoden und Projektarbeit (z.B. SCRUM).",
+                "Sehr gute Deutsch- und Englischkenntnisse."
+            ],
+            "qualifications": [
+                "PL-400 Zertifizierung (Power Platform Developer) oder vergleichbare Zertifikate."
+            ]
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.09205015599727631
+        }
+    },
+    "processingTimeInSeconds": 5.215173721313477
+}

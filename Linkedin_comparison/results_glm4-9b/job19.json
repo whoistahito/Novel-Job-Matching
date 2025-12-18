@@ -1,0 +1,50 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "AWS",
+                "Kotlin",
+                "Python",
+                "SpringBoot",
+                "Terraform",
+                "TypeScript",
+                "Vue.js"
+            ],
+            "experiences": [
+                "Erfahrung in mindestens einem der Themengebiete: Frontend, Backend, Infrastruktur oder Data",
+                "Freude an Pair- und Mob-Programming",
+                "Offenheit, Verantwortung, Mut und eine sozial ausgerichtete Denkweise, plus die Fähigkeit, deine Gedanken klar zu artikulieren und zu argumentieren (together we succeed)",
+                "Selbstverständliche Nutzung von AI-Tools für Aufgaben und Prozesse in deinem Fachgebiet",
+                "Sprachniveau: Deutsch B2 (selbstständige Sprachverwendung) und Englisch B2 (selbstständige Sprachverwendung)",
+                "agile Denkweise und Offenheit für agile Methoden wie Continuous Delivery und gemeinsame Verantwortung für den Code"
+            ],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.28343269526958464
+        }
+    },
+    "processingTimeInSeconds": 9.70711064338684
+}

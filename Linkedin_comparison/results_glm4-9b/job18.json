@@ -1,0 +1,41 @@
+{
+    "modelId": "glm4-9b",
+    "result": {
+        "jobRequirements": {
+            "skills": [
+                "Abgeschlossenes Studium der Informatik oder eine vergleichbare Ausbildung",
+                "Erfahrung in der Implementierung und Verwaltung von CI/CD-Prozessen, insbesondere mit GitLab CI",
+                "Fundierte Erfahrung in der Administration und Entwicklung auf Azure oder anderen Cloud-Plattformen wie AWS oder GCP",
+                "Kenntnis und Praxis in der Anwendung von Container-Technologien wie Docker und Kubernetes",
+                "Versiert in Infrastructure as Code-Prinципи, insbesondere mit Tools wie Terraform oder OpenTofu"
+            ],
+            "experiences": [],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.10210198163986206
+        }
+    },
+    "processingTimeInSeconds": 6.14368462562561
+}

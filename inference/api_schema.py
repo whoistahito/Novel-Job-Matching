@@ -42,5 +42,14 @@ class JobExtractionInput(BaseModel):
 
 
 class SimilarityScore(BaseModel):
-    score: int = Field(...,
-                       description="Similarity score")
+    score: float = Field(...,
+                         description="Similarity score")
+
+
+class JobMatchingResponse(BaseModel):
+    jobRequirements: Requirements = Field(...,
+                                          description="Job requirements")
+    userProfile: UserProfile = Field(...,
+                                     description="User profile data")
+    similarityScore: SimilarityScore = Field(...,
+                                             description="Similarity score")

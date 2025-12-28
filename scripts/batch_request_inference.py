@@ -7,7 +7,7 @@ import requests
 API_URL = "http://127.0.0.1:8000/extract"
 MODEL_ID = "qwen3-8b"
 INPUT_DIR = "../Linkedin_comparison/markdown_dataset"
-OUTPUT_DIR = f"../linkedin_comparison/results"
+OUTPUT_DIR = f"../Linkedin_comparison/results_{MODEL_ID}"
 USER_PROFILE = {
     "skills": [
         "Machine Learning",

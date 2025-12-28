@@ -1,0 +1,36 @@
+{
+    "modelId": "gpt-oss-120b",
+    "inputText": "",
+    "result": {
+        "jobRequirements": {
+            "skills": [],
+            "experiences": [],
+            "qualifications": []
+        },
+        "userProfile": {
+            "skills": [
+                "Machine Learning",
+                "Domain-Driven Design (DDD)",
+                "Data Science",
+                "Spring Boot",
+                "Java",
+                "Python",
+                "Hibernate",
+                "PostgreSQL",
+                "R (Programming Language)",
+                "Project Management"
+            ],
+            "experiences": [
+                "4 Years of Software development"
+            ],
+            "qualifications": [
+                "Domain Driven Design",
+                "Bsc. Wirtschaftsinformatik"
+            ]
+        },
+        "similarityScore": {
+            "score": 0.0
+        }
+    },
+    "processingTimeInSeconds": 0.0035021305084228516
+}

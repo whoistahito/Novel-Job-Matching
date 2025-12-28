@@ -1,13 +1,22 @@
 import os
-from markdownify import markdownify as md
+from markdownify import MarkdownConverter
 
 HTML_DIR = "html_dataset"
 MD_DIR = "markdown_dataset"
 
 
+class Clean(MarkdownConverter):
+    def convert_script(self, el, text, parent_tags):
+        return ''
+    def convert_code(self, el, text, parent_tags):
+        style = el.get('style', '') or ''
+        if 'display' in style and 'none' in style:
+            return ''
+        return super().convert_code(el, text, parent_tags)
+
+
 def convert_html_to_markdown(html_text: str) -> str:
-    data = md(html_text, strip=['a','href','img', 'svg'])
-    # Clean up the markdown content: remove empty lines and trim whitespace
+    data = Clean(strip=['a','href','img','svg']).convert(html_text)
     return "\n".join(line.strip() for line in data.splitlines() if line.strip())
 
 

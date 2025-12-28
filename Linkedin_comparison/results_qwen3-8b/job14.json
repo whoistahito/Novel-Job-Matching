@@ -1,5 +1,6 @@
 {
     "modelId": "qwen3-8b",
+    "inputText": "",
     "result": {
         "jobRequirements": {
             "skills": [],
@@ -31,5 +32,5 @@
             "score": 0.0
         }
     },
-    "processingTimeInSeconds": 0.0014460086822509766
+    "processingTimeInSeconds": 0.0015406608581542969
 }

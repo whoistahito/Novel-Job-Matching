@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException,Response,status
-from fastapi.responses import JSONResponse
-from api_schema import JobExtractionInput, SimilarityScore,JobMatchingResponse
-from base_model import get_extractor_for
-from similarity_search import compute_similarity
+from fastapi import FastAPI, HTTPException, Response, status
+
+from .api_schema import JobExtractionInput, JobMatchingResponse
+from .base_model import get_extractor_for
+from .similarity_search import compute_similarity
 
 app = FastAPI()
 

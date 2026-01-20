@@ -91,7 +91,6 @@ def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
             "Look for keywords like 'required', 'must have', 'essential', 'necessary'",
             "Check if the actual output includes all these mandatory requirements",
             "Assess whether any critical requirements were omitted",
-            "Verify that the extraction is comprehensive"
         ],
         evaluation_params=[
             LLMTestCaseParams.INPUT,
@@ -101,9 +100,9 @@ def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
         threshold=0.7,
     )
 
-    # Metric 3: Precision - Did the model avoid extracting non-mandatory requirements?
+    # Metric 3: Alignment - Did the model avoid extracting non-mandatory requirements?
     precision_metric = GEval(
-        name="Precision",
+        name="Alignment",
         criteria="Evaluate whether the model correctly avoided extracting 'nice-to-have', 'preferred', or 'bonus' requirements. Only mandatory requirements should be included.",
         evaluation_steps=[
             "Identify any 'preferred', 'nice-to-have', 'bonus', or optional requirements in the input",
@@ -119,15 +118,13 @@ def create_evaluation_metrics(model: DeepEvalBaseLLM) -> List[GEval]:
         threshold=0.7,
     )
 
-    # Metric 4: Structure Quality - Is the output well-organized and properly categorized?
+    # Metric 4: Readability - Is the output well-organized and properly categorized?
     structure_metric = GEval(
-        name="Structure Quality",
+        name="Readability",
         criteria="Evaluate whether the extracted requirements are properly categorized into skills, experiences, and qualifications, and whether the output is well-structured and easy to understand.",
         evaluation_steps=[
             "Review the categorization of requirements into skills, experiences, and qualifications",
             "Check if each requirement is placed in the appropriate category",
-            "Assess whether the requirements are specific and concise",
-            "Verify that each requirement is clearly stated without ambiguity",
             "Evaluate the overall organization and readability of the output"
         ],
         evaluation_params=[

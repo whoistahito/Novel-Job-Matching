@@ -6,7 +6,7 @@
     "glm4-9b"
   ],
   "metrics_comparison": {
-    "Structure Quality [GEval]": {
+    "Readability [GEval]": {
       "llama3.1-8b-instruct": {
         "average_score": 0.4942583732057416,
         "passed_rate": 0.4019138755980861
@@ -60,7 +60,7 @@
         "passed_rate": 0.24401913875598086
       }
     },
-    "Precision [GEval]": {
+    "Alignment [GEval]": {
       "llama3.1-8b-instruct": {
         "average_score": 0.392822966507177,
         "passed_rate": 0.24401913875598086
@@ -80,7 +80,7 @@
     }
   },
   "rankings": {
-    "Structure Quality [GEval]": [
+    "Readability [GEval]": [
       {
         "rank": 1,
         "model_id": "qwen3-8b",
@@ -146,7 +146,7 @@
         "score": 0.38229665071770336
       }
     ],
-    "Precision [GEval]": [
+    "Alignment [GEval]": [
       {
         "rank": 1,
         "model_id": "qwen3-8b",

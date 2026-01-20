@@ -280,7 +280,7 @@ barplot = sns.barplot(
 )
 
 for index, value in enumerate(df_overall_sorted['average_score']):
-    plt.text(value + 0.01, index, f'{value:.3f}', va='center', fontsize=11, color='black')
+    plt.text(value + 0.01, index, f'{value:.2f}', va='center', fontsize=11, color='black')
 
 # Set the numerical axis limit to 1.0 for context
 plt.xlim(0, 1)

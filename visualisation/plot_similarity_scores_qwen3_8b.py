@@ -15,19 +15,12 @@ plt.rcParams["legend.fontsize"] = 10
 plt.rcParams["figure.titlesize"] = 15
 
 
-def _extract_score(data: dict) -> float | None:
+def _extract_score(data: dict) -> float :
     try:
         score = data["result"]["similarityScore"]["score"]
-    except Exception:
-        return None
-
-    if score is None:
-        return None
-
-    try:
         return float(score)
     except Exception:
-        return None
+        return 0
 
 
 def main() -> None:
@@ -39,12 +32,8 @@ def main() -> None:
     missing: list[str] = []
 
     for json_file in sorted(data_dir.glob("*.json")):
-        try:
-            with open(json_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"Error loading {json_file.name}: {e}")
-            continue
+        with open(json_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
         score = _extract_score(data)
         if score is None:
@@ -58,8 +47,6 @@ def main() -> None:
 
     scores_arr = np.asarray(scores, dtype=float)
 
-
-    print(f"Loaded {len(scores)} scores from {data_dir}")
     if missing:
         print(f"Missing/invalid similarityScore in {len(missing)} files: {', '.join(missing)}")
 

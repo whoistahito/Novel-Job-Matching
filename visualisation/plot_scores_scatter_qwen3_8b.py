@@ -44,9 +44,9 @@ def _extract_score(d: dict[str, Any]) -> float | None:
         return None
 
 
-def _extract_suitable(d: dict[str, Any]) -> bool | None:
+def _extract_suitable(d: dict[str, Any]) -> bool :
     val = d.get("suitable")
-    return val if isinstance(val, bool) else None
+    return val if isinstance(val, bool) else false
 
 
 def _job_sort_key(name: str) -> tuple[int, str]:
@@ -100,18 +100,8 @@ def main() -> None:
             "and users_preference contains suitable: true/false."
         )
 
-    if missing_scores:
-        print(
-            f"Missing/invalid similarityScore in {len(missing_scores)} files: {', '.join(missing_scores)}"
-        )
-    if missing_prefs:
-        print(
-            f"Missing users_preference files for {len(missing_prefs)} jobs: {', '.join(missing_prefs)}"
-        )
-    if invalid_prefs:
-        print(
-            f"Missing/invalid 'suitable' flag in {len(invalid_prefs)} files: {', '.join(invalid_prefs)}"
-        )
+    if missing_scores or missing_prefs or invalid_prefs:
+        raise("Missing/invalid data ")
 
     x = np.arange(1, len(points) + 1)
     y = np.array([p.score for p in points], dtype=float)

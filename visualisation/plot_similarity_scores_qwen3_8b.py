@@ -54,7 +54,7 @@ def main() -> None:
     
     # Bucketed Scores
     bucket_edges = np.array([0.0, 0.1, 0.2, 0.3, 0.4, 1.0], dtype=float)
-    bucket_labels = ["0.0–0.1", "0.1–0.2", "0.2–0.3", "0.3–0.4", "≥0.4"]
+    bucket_labels = ["[0.0, 0.1)", "[0.1, 0.2)", "[0.2, 0.3)", "[0.3, 0.4)", "[0.4, 1.0]"]
     
     counts, _ = np.histogram(scores_arr, bins=bucket_edges)
     perc = counts / len(scores_arr) * 100.0

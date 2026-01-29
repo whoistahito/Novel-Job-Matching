@@ -81,7 +81,7 @@ ax.set_xticks(range(1, len(plot_labels) + 1))
 ax.set_xticklabels(plot_labels, rotation=45, ha='right')
 ax.set_xlabel('Source', fontsize=13, fontweight='bold')
 ax.set_ylabel('Character Count', fontsize=13, fontweight='bold')
-ax.set_title('Distribution of Job Posting Character Counts by Source',
+ax.set_title('Distribution of Job Description Lengths by Source',
              fontsize=16, fontweight='bold', pad=20)
 
 ax.yaxis.grid(True, alpha=0.3, linestyle='--')

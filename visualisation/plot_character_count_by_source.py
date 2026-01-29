@@ -42,13 +42,17 @@ for d in all_data:
 
 source_medians = {source: np.median(counts) for source, counts in source_data.items()}
 sorted_sources = sorted(source_medians.keys(), key=lambda x: source_medians[x], reverse=True)
-
+source_labels = {
+    "indeed": "Indeed",
+    "linkedin": "LinkedIn",
+    "Others": "Others",
+}
 plot_data = []
 plot_labels = []
 for source in sorted_sources:
     counts = source_data[source]
     plot_data.append(counts)
-    label = f"{source}\n(n={len(counts)})"
+    label = f"{source_labels.get(source)}\n(n={len(counts)})"
     plot_labels.append(label)
 
 fig, ax = plt.subplots(figsize=(14, 8))
@@ -91,7 +95,7 @@ legend_elements = [
 ]
 ax.legend(handles=legend_elements, loc='upper right', framealpha=0.9)
 
-textstr = f'Total sources: 11 \nTotal job postings: {len(all_data)}'
+textstr = f'Total job postings: {len(all_data)}'
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
 ax.text(0.02, 0.98, textstr, transform=ax.transAxes, fontsize=10,
         verticalalignment='top', bbox=props)

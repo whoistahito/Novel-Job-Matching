@@ -42,7 +42,7 @@ source_values = list(source_counts.values())
 
 # Sort by value for better layout
 sorted_indices = np.argsort(source_values)[::-1]
-source_names = [source_names[i] for i in sorted_indices]
+source_names = ['Indeed','LinkedIn','Others']
 source_values = [source_values[i] for i in sorted_indices]
 
 colors_source = sns.color_palette("Set2")

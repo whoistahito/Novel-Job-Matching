@@ -51,11 +51,10 @@ ax.axvline(mean_val, color='red', linestyle='--',
 ax.axvline(median_val, color='green', linestyle='--',
             label=f'Median: {median_val:.0f}', linewidth=2.5)
 
-stats_text = f'Total: {len(character_counts)}\n'
-stats_text += f'Std Dev: {np.std(character_counts):.0f}\n'
-stats_text += f'Min: {np.min(character_counts):.0f}\n'
+
+stats_text = f'Min: {np.min(character_counts):.0f}\n'
 stats_text += f'Max: {np.max(character_counts):.0f}'
-ax.text(0.98, 0.97, stats_text, transform=ax.transAxes,
+ax.text(0.1, 0.97, stats_text, transform=ax.transAxes,
          fontsize=10, verticalalignment='top', horizontalalignment='right',
          bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
 

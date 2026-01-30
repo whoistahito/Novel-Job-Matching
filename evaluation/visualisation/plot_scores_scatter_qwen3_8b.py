@@ -61,8 +61,8 @@ def _job_sort_key(name: str) -> tuple[int, str]:
 
 def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    results_dir = repo_root / "Linkedin_comparison" / "results_qwen3-8b"
-    prefs_dir = repo_root / "Linkedin_comparison" / "users_preference"
+    results_dir = repo_root /"evaluation"/ "Linkedin_comparison" / "results_qwen3-8b"
+    prefs_dir = repo_root / "evaluation"/"Linkedin_comparison" / "users_preference"
     output_dir = Path(__file__).parent
 
     points: list[JobPoint] = []

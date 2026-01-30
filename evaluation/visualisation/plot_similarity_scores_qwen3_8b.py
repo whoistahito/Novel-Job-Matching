@@ -25,7 +25,7 @@ def _extract_score(data: dict) -> float :
 
 def main() -> None:
     repo_root = Path(__file__).resolve().parents[1]
-    data_dir = repo_root / "Linkedin_comparison" / "results_qwen3-8b"
+    data_dir = repo_root /"evaluation"/ "Linkedin_comparison" / "results_qwen3-8b"
     output_dir = Path(__file__).parent
 
     scores: list[float] = []

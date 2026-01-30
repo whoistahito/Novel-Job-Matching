@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-markdown_folder = Path(__file__).parent.parent / "requirements_extraction/datasets/markdown_dataset"
+markdown_folder = Path(__file__).parent.parent.parent / "implementation/evaluation_framework/datasets/markdown_dataset"
 results_folder = Path(__file__).parent / "job_description_characteristics"
 
 def add_character_counts():

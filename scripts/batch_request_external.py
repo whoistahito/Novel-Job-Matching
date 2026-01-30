@@ -27,7 +27,7 @@ class Requirements(BaseModel):
 API_BASE_URL = "https://integrate.api.nvidia.com/v1"
 API_KEY = os.environ["EXTERNAL_LLM_API_KEY"]
 MODEL_NAME = "deepseek-ai/deepseek-v3.1-terminus"
-INPUT_DIR = "../requirements_extraction/datasets/markdown_dataset"
+INPUT_DIR = "../implementation/evaluation_framework/datasets/markdown_dataset"
 OUTPUT_DIR = f"../{MODEL_NAME.replace('/', '_')}_results"
 
 if not os.path.exists(OUTPUT_DIR):

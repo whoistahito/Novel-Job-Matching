@@ -13,7 +13,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from schema import Requirements
 
 MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
-INPUT_FILE = "../../requirements_extraction/datasets/input_markdown_linkedin.txt"
+INPUT_FILE = "../../implementation/evaluation_framework/datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 

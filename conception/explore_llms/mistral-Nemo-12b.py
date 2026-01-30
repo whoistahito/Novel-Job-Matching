@@ -14,7 +14,7 @@ from schema import Requirements
 
 # Define constants
 MODEL_ID = "mistralai/Mistral-Nemo-Instruct-2407"
-INPUT_FILE = "../../requirements_extraction/datasets/input_markdown_linkedin.txt"
+INPUT_FILE = "../../implementation/evaluation_framework/datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 

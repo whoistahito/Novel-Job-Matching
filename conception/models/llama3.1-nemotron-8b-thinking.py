@@ -12,20 +12,26 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from schema import Requirements
 
-MODEL_ID = "Qwen/Qwen3-8B"
-INPUT_FILE = "../datasets/input_markdown_linkedin.txt"
+MODEL_ID = "nvidia/Llama-3.1-Nemotron-Nano-8B-v1"
+INPUT_FILE = "../../requirements_extraction/datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
 def process_chunk(model, chunk) -> Requirements:
-    """Process a single chunk of Markdown with the LLM."""
+    """Structured extraction for a markdown chunk into Requirements."""
     template = Template.from_file("prompt_template.txt")
     prompt: str = template(chunk=chunk)
     try:
         response = model(prompt, output_type=Requirements, max_new_tokens=200)
-        print(response)
-        return Requirements.model_validate_json(response)
+        try:
+            return Requirements.model_validate_json(response)
+        except Exception:
+            if isinstance(response, Requirements):
+                return response
+            if isinstance(response, dict):
+                return Requirements(**response)
+            return Requirements()
     except Exception as e:
         print(f"Error during generation: {e}")
         return Requirements()
@@ -56,12 +62,16 @@ def get_markdown_content(input_file) -> str:
     try:
         with open(input_file, 'r', encoding='utf-8') as f:
             return f.read()
+    except FileNotFoundError:
+        print(f"Error: Input file '{input_file}' not found.")
+        exit(1)
     except Exception as e:
         print(f"Error reading input file: {e}")
         exit(1)
 
 
 def main():
+    print(f"Reading input from: {INPUT_FILE}")
     markdown_content = get_markdown_content(INPUT_FILE)
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
@@ -71,20 +81,23 @@ def main():
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
     print(f"Loading tokenizer and model from {MODEL_ID}...")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+    if tokenizer.pad_token_id is None and tokenizer.eos_token_id is not None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
         device_map="auto",
-        trust_remote_code=True,
         dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
     )
+
     structured_model = outlines.from_transformers(model, tokenizer)
 
     all_requirements: List[Requirements] = []
     for i, chunk in enumerate(chunks):
-        print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        all_requirements.append(process_chunk(structured_model, chunk))
+        print(f"\n--- Processing chunk {i + 1}/{len(chunks)} ---")
+        req_obj = process_chunk(structured_model, chunk)
+        all_requirements.append(req_obj)
 
     merged: Dict[str, Set[str]] = defaultdict(set)
     for req in all_requirements:
@@ -93,12 +106,11 @@ def main():
         merged["qualifications"].update(req.qualifications)
 
     unique_requirements: Dict[str, List[str]] = {k: sorted(v) for k, v in merged.items()}
-    print(f"\n===== Extracted {sum(len(v) for v in unique_requirements.values())} Unique Requirement Items =====")
+    total_count = sum(len(v) for v in unique_requirements.values())
+    print(f"\n===== Extracted {total_count} Unique Job Requirements =====")
 
-    result_obj = {"requirements": unique_requirements}
-    result_json = json.dumps(result_obj, indent=2)
+    result_json = json.dumps({"requirements": unique_requirements}, indent=2)
     print(result_json)
-
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(result_json)
     print(f"Results saved to {OUTPUT_FILE}")

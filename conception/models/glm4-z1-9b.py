@@ -1,8 +1,10 @@
 from collections import defaultdict
+from datetime import datetime, timezone
 import gc
 import json
 import os
 import re
+from typing import List, Dict, Set
 
 import outlines
 from outlines import Template
@@ -11,26 +13,35 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from schema import Requirements
 
-MODEL_ID = "THUDM/GLM-4-9B-0414"
-INPUT_FILE = "../datasets/input_markdown_linkedin.txt"
+# Define constants
+MODEL_ID = "THUDM/GLM-Z1-9B-0414"
+INPUT_FILE = "../../requirements_extraction/datasets/input_markdown_linkedin.txt"
 CHUNK_SIZE = 12000
 OUTPUT_FILE = 'job_requirements.json'
 
 
 def process_chunk(model, chunk) -> Requirements:
-    """Process a single chunk of Markdown with the LLM."""
+    """Process a single chunk using structured generation into Requirements schema."""
     template = Template.from_file("prompt_template.txt")
     prompt: str = template(chunk=chunk)
     try:
         response = model(prompt, output_type=Requirements, max_new_tokens=200)
-        print(response)
-        return Requirements.model_validate_json(response)
+        # In glm4-9b.py they attempt to re-validate JSON; we mirror that pattern for consistency
+        try:
+            return Requirements.model_validate_json(response)
+        except Exception:
+            # If response already is a Requirements instance or dict
+            if isinstance(response, Requirements):
+                return response
+            if isinstance(response, dict):
+                return Requirements(**response)
+            return Requirements()
     except Exception as e:
         print(f"Error during generation: {e}")
         return Requirements()
 
 
-def chunk_markdown(markdown_text, chunk_size=3000) -> list[str]:
+def chunk_markdown(markdown_text, chunk_size=3000) -> List[str]:
     """
     Split markdown text into chunks for processing.
 
@@ -43,12 +54,14 @@ def chunk_markdown(markdown_text, chunk_size=3000) -> list[str]:
     """
     print("Breaking down the Markdown into manageable chunks...")
 
+    # Rough estimate: 1 token ≈ 4 characters for English text
     chars_per_chunk = chunk_size * 4
 
     # Try to split on major Markdown elements (headers)
     chunks = re.split(r'(#{1,6}\s+.*?\n)', markdown_text)
 
-    result_chunks = []
+    # Recombine to stay under token limit
+    result_chunks: List[str] = []
     current_chunk = ""
 
     for chunk in chunks:
@@ -84,6 +97,9 @@ def get_markdown_content(input_file) -> str:
 
 
 def main():
+    # Current date and user info
+    print(f"Current Date and Time (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
+
     # Get input Markdown from file
     print(f"Reading input from: {INPUT_FILE}")
     markdown_content = get_markdown_content(INPUT_FILE)
@@ -91,48 +107,41 @@ def main():
     # Chunk the markdown content
     chunks = chunk_markdown(markdown_content, chunk_size=CHUNK_SIZE)
 
-    # Clean up memory before loading hf_model
+    # Clean up memory before loading model
     gc.collect()
-    torch.cuda.empty_cache()
-
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
-    # Load tokenizer and hf_model
-    model_kwargs = {
-        "device_map": "balanced",
-        "max_memory": {0: "10GiB", 1: "10GiB"},
-        "dtype": torch.bfloat16,
-    }
+    # Load tokenizer and model
+    print(f"Loading tokenizer and model from {MODEL_ID}...")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
     hf_model = AutoModelForCausalLM.from_pretrained(
         MODEL_ID,
-        **model_kwargs
+        device_map="auto",
+        trust_remote_code=True,
+        dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
     )
     model = outlines.from_transformers(hf_model, tokenizer)
 
+    # Process each chunk
     all_requirements: List[Requirements] = []
     for i, chunk in enumerate(chunks):
         print(f"Processing chunk {i + 1}/{len(chunks)}...")
-        chunk_requirements = process_chunk(model, chunk)
-        all_requirements.append(chunk_requirements)
+        req_obj = process_chunk(model, chunk)
+        all_requirements.append(req_obj)
 
-    merged_requirements: Dict[str, Set[str]] = defaultdict(set)
+    merged: Dict[str, Set[str]] = defaultdict(set)
     for req in all_requirements:
-        merged_requirements["skills"].update(req.skills)
-        merged_requirements["experiences"].update(req.experiences)
-        merged_requirements["qualifications"].update(req.qualifications)
+        merged["skills"].update(req.skills)
+        merged["experiences"].update(req.experiences)
+        merged["qualifications"].update(req.qualifications)
 
-    # Convert sets back to lists for JSON serialization
-    unique_requirements: Dict[str, List[str]] = {
-        key: sorted(list(values)) for key, values in merged_requirements.items()
-    }
+    unique_requirements: Dict[str, List[str]] = {k: sorted(v) for k, v in merged.items()}
 
-    print(f"\n===== Extracted {len(unique_requirements)} Job Requirements =====")
+    print(f"\n===== Extracted {sum(len(v) for v in unique_requirements.values())} Unique Requirement Items =====")
 
-    result_obj = {
-        "requirements": unique_requirements,
-    }
-
+    result_obj = {"requirements": unique_requirements}
     result_json = json.dumps(result_obj, indent=2)
     print(result_json)
 
@@ -144,7 +153,8 @@ def main():
     # Clean up
     del hf_model, tokenizer
     gc.collect()
-    torch.cuda.empty_cache()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
 
 if __name__ == "__main__":

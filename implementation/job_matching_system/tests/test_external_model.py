@@ -2,14 +2,14 @@ import pytest
 
 
 def test_get_extractor_for_unknown_key_raises():
-    from inference.external_model import get_extractor_for
+    from external_model import get_extractor_for
 
     with pytest.raises(ValueError):
         get_extractor_for("does-not-exist")
 
 
 def test_get_extractor_for_caches_instances(monkeypatch):
-    from inference import external_model
+    import external_model
 
     monkeypatch.setenv("EXTERNAL_LLM_API_KEY", "x")
     monkeypatch.setattr(external_model.ExternalLLMExtractor, "_load_model", lambda self: None)
@@ -20,7 +20,7 @@ def test_get_extractor_for_caches_instances(monkeypatch):
 
 
 def test_missing_external_api_key_raises(monkeypatch):
-    from inference.external_model import ExternalLLMExtractor
+    from external_model import ExternalLLMExtractor
 
     monkeypatch.delenv("EXTERNAL_LLM_API_KEY", raising=False)
     with pytest.raises(KeyError):
@@ -28,8 +28,8 @@ def test_missing_external_api_key_raises(monkeypatch):
 
 
 def test_process_text_merges_chunks(monkeypatch):
-    from inference import external_model
-    from inference.api_schema import Requirements
+    import external_model
+    from api_schema import Requirements
 
     monkeypatch.setenv("EXTERNAL_LLM_API_KEY", "x")
     monkeypatch.setattr(external_model.ExternalLLMExtractor, "_load_model", lambda self: None)
@@ -51,7 +51,7 @@ def test_process_text_merges_chunks(monkeypatch):
 
 
 def test_process_chunk_cleans_response(monkeypatch):
-    from inference import external_model
+    import external_model
 
     monkeypatch.setenv("EXTERNAL_LLM_API_KEY", "x")
     monkeypatch.setattr(external_model.ExternalLLMExtractor, "_load_model", lambda self: None)

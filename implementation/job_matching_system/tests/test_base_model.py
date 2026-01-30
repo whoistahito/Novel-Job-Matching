@@ -1,5 +1,5 @@
 def test_get_extractor_for_unknown_key_raises():
-    from inference.base_model import get_extractor_for
+    from base_model import get_extractor_for
 
     try:
         get_extractor_for("does-not-exist")
@@ -10,7 +10,7 @@ def test_get_extractor_for_unknown_key_raises():
 
 
 def test_get_extractor_for_caches_instances(monkeypatch):
-    from inference import base_model
+    import base_model
 
     monkeypatch.setattr(base_model.LLMExtractor, "_load_model", lambda self: None)
 
@@ -20,8 +20,8 @@ def test_get_extractor_for_caches_instances(monkeypatch):
 
 
 def test_process_text_merges_and_sorts(monkeypatch):
-    from inference import base_model
-    from inference.api_schema import Requirements
+    import base_model
+    from api_schema import Requirements
 
     monkeypatch.setattr(base_model.LLMExtractor, "_load_model", lambda self: None)
     monkeypatch.setattr(base_model, "chunk_markdown", lambda text, size: ["c1", "c2"])

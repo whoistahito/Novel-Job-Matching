@@ -2,8 +2,8 @@ from fastapi.testclient import TestClient
 
 
 def test_extract_endpoint_happy_path(monkeypatch):
-    from inference import app as app_module
-    from inference.api_schema import Requirements, SimilarityScore
+    import app as app_module
+    from api_schema import Requirements, SimilarityScore
 
     class StubExtractor:
         def process_text(self, text):
@@ -28,7 +28,7 @@ def test_extract_endpoint_happy_path(monkeypatch):
 
 
 def test_extract_endpoint_returns_500_on_exception(monkeypatch):
-    from inference import app as app_module
+    import app as app_module
 
     def boom(_):
         raise RuntimeError("bad")

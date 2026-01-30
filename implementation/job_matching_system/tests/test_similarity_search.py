@@ -2,7 +2,7 @@ import torch
 
 
 def test_compute_maxsim_empty_lists_returns_zero():
-    from inference.similarity_search import compute_maxsim
+    from similarity_search import compute_maxsim
 
     class FakeModel:
         def encode(self, items, convert_to_tensor=True):
@@ -14,7 +14,7 @@ def test_compute_maxsim_empty_lists_returns_zero():
 
 
 def test_compute_maxsim_uses_rowwise_max_then_mean(monkeypatch):
-    from inference import similarity_search
+    import similarity_search
 
     class FakeModel:
         def encode(self, items, convert_to_tensor=True):
@@ -36,8 +36,8 @@ def test_compute_maxsim_uses_rowwise_max_then_mean(monkeypatch):
 
 
 def test_compute_similarity_default_weights(monkeypatch):
-    from inference import similarity_search
-    from inference.api_schema import Requirements, UserProfile
+    import similarity_search
+    from api_schema import Requirements, UserProfile
 
     monkeypatch.setattr(similarity_search, "get_model", lambda: object())
 
@@ -59,8 +59,8 @@ def test_compute_similarity_default_weights(monkeypatch):
 
 
 def test_compute_similarity_custom_weights_missing_keys(monkeypatch):
-    from inference import similarity_search
-    from inference.api_schema import Requirements, UserProfile
+    import similarity_search
+    from api_schema import Requirements, UserProfile
 
     monkeypatch.setattr(similarity_search, "get_model", lambda: object())
     monkeypatch.setattr(similarity_search, "compute_maxsim", lambda *args, **kwargs: 1.0)

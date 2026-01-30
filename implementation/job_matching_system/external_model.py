@@ -5,8 +5,8 @@ from openai import OpenAI
 import outlines
 from outlines import Template
 
-from .api_schema import Requirements
-from .utils import chunk_markdown
+from api_schema import Requirements
+from utils import chunk_markdown
 
 
 EXTERNAL_MODELS_CONFIG = {

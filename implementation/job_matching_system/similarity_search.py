@@ -3,7 +3,7 @@ from typing import List, Dict
 from sentence_transformers import SentenceTransformer, util
 import torch
 
-from .api_schema import UserProfile, Requirements, SimilarityScore
+from api_schema import UserProfile, Requirements, SimilarityScore
 
 # Global model instance to avoid reloading on every call
 _model = None

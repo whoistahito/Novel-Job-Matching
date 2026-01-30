@@ -1,4 +1,4 @@
-from inference.utils import chunk_markdown
+from job_matching_system.utils import chunk_markdown
 
 
 def test_chunk_markdown_empty():
